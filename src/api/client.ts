@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import type { ApiError, NewSessionResponse } from '@/types';
+// 👇 1. استيراد المخزن عشان نجيب منه التوكن صح
+import { useAuthStore } from '@/store/authStore';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
@@ -11,6 +13,18 @@ class ApiClient {
       baseURL,
       timeout: 15000,
       headers: { 'Content-Type': 'application/json' },
+    });
+
+    // 👇 2. إصلاح المصادقة هنا
+    this.axiosInstance.interceptors.request.use((config) => {
+      // بدل ما نقرأ من اللوكال ستوريج الغلط، ناخده من المخزن مباشرة
+      const sessionId = useAuthStore.getState().sessionId;
+
+      if (sessionId && config.headers) {
+        config.headers.Authorization = `Bearer ${sessionId}`;
+      }
+
+      return config;
     });
 
     this.axiosInstance.interceptors.response.use(
@@ -34,7 +48,6 @@ class ApiClient {
     } as any; 
   }
 
-  // الإصلاح هنا: نرجع any[] لنتوافق مع الـ Store
   async getInbox(email: string): Promise<any[]> {
     const response = await this.axiosInstance.get<any[]>('/api/inbox', {
       params: { email: email }, 
