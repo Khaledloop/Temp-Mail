@@ -1,12 +1,7 @@
-/**
- * Axios HTTP client instance with base configuration
- * Handles all API requests to the Cloudflare Worker backend
- */
-
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import type { ApiError, NewSessionResponse, InboxResponse } from '@/types';
 
-// Get API URL from environment variable
+// تأكد من قراءة رابط الوركر من البيئة
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
 class ApiClient {
@@ -15,34 +10,14 @@ class ApiClient {
   constructor(baseURL: string = API_BASE_URL) {
     this.axiosInstance = axios.create({
       baseURL,
-      timeout: 10000,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client': 'temp-mail-web',
-      },
+      timeout: 15000,
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    // Add request interceptor to include session token
-    this.axiosInstance.interceptors.request.use((config) => {
-      const sessionId = typeof window !== 'undefined' 
-        ? localStorage.getItem('temp_mail_session_id')
-        : null;
-
-      if (sessionId && config.headers) {
-        config.headers.Authorization = `Bearer ${sessionId}`;
-      }
-
-      return config;
-    });
-
-    // Add response error interceptor for consistent error handling
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error: AxiosError<ApiError>) => {
-        // Re-throw with consistent error structure
-        if (error.response?.data) {
-          return Promise.reject(error.response.data);
-        }
+        if (error.response?.data) return Promise.reject(error.response.data);
         return Promise.reject({
           statusCode: error.response?.status || 500,
           message: error.message || 'Unknown error occurred',
@@ -51,74 +26,34 @@ class ApiClient {
     );
   }
 
-  /**
-   * Create a new temporary mail session
-   */
+  // 1. إنشاء جلسة (مع الترجمة)
   async createNewSession(): Promise<NewSessionResponse> {
-    const response = await this.axiosInstance.post<NewSessionResponse>('/api/new_session');
-    return response.data;
+    // الوركر يرجع { email, token } لكننا نحتاج صيغة أخرى للواجهة
+    const response = await this.axiosInstance.post<any>('/api/new_session');
+    
+    return {
+      // هنا نقوم بالترجمة:
+      sessionId: response.data.token,      // token -> sessionId
+      tempMailAddress: response.data.email,// email -> tempMailAddress
+      expiresAt: Date.now() + 86400000     // نضيف وقت انتهاء وهمي (24 ساعة)
+    } as any; 
   }
 
-  /**
-   * Fetch inbox emails for current session
-   */
-  async getInbox(sessionId: string): Promise<InboxResponse> {
+  // 2. جلب الرسائل (إرسال الإيميل بدلاً من الجلسة)
+  async getInbox(email: string): Promise<InboxResponse> {
+    // الوركر يحتاج "email" كباراميتر
     const response = await this.axiosInstance.get<InboxResponse>('/api/inbox', {
-      params: { sessionId },
+      params: { email: email }, 
     });
     return response.data;
   }
 
-  /**
-   * Get details of a specific email
-   */
-  async getEmailDetail(emailId: string): Promise<any> {
-    const response = await this.axiosInstance.get(`/api/email/${emailId}`);
-    return response.data;
-  }
-
-  /**
-   * Delete an email
-   */
-  async deleteEmail(emailId: string): Promise<void> {
-    await this.axiosInstance.delete(`/api/email/${emailId}`);
-  }
-
-  /**
-   * Refresh/extend session expiration
-   */
-  async refreshSession(sessionId: string): Promise<NewSessionResponse> {
-    const response = await this.axiosInstance.post<NewSessionResponse>('/api/refresh_session', {
-      sessionId,
-    });
-    return response.data;
-  }
-
-  /**
-   * Generic GET request
-   */
-  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.get<T>(url, config);
-    return response.data;
-  }
-
-  /**
-   * Generic POST request
-   */
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.post<T>(url, data, config);
-    return response.data;
-  }
-
-  /**
-   * Generic DELETE request
-   */
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.delete<T>(url, config);
-    return response.data;
+  // دوال إضافية (اختياري)
+  async refreshSession(sessionId: string): Promise<any> {
+     // للتجديد نطلب جلسة جديدة وخلاص
+     return this.createNewSession();
   }
 }
 
-// Export singleton instance
 export const apiClient = new ApiClient();
 export default apiClient;
