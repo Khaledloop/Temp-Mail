@@ -11,10 +11,11 @@ import { useUiStore } from '@/store/uiStore';
 
 interface HeroProps {
   onRefresh?: () => Promise<void>;
+  onFetchEmails?: () => Promise<void>;
   isLoading?: boolean;
 }
 
-export function Hero({ onRefresh, isLoading = false }: HeroProps) {
+export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps) {
   const { tempMailAddress, clearSession } = useAuthStore();
   const { addToast } = useUiStore();
   const [isCopying, setIsCopying] = useState(false);
@@ -114,6 +115,24 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
 
         {/* small actions under the pill */}
         <div className="flex justify-center gap-4 mt-6">
+          {/* Refresh Button - Simple */}
+          <button
+            onClick={onFetchEmails}
+            disabled={!onFetchEmails}
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg 
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            <span className="text-sm">Refresh</span>
+          </button>
+
           {/* Change Email Button */}
           <button
             onClick={handleRefresh}

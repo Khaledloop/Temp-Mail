@@ -55,6 +55,7 @@ export default function HomePage() {
           <Hero
             isLoading={isLoading}
             onRefresh={changeEmailAddress}
+            onFetchEmails={fetchEmails}
           />
         </div>
       </div>
@@ -63,7 +64,7 @@ export default function HomePage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
         {/* Inbox Section - Ultra Rounded & Clean */}
         <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 animate-slideUp">
-          <div className="flex items-center justify-between mb-12 border-b border-gray-100 pb-8">
+          <div className="mb-12 border-b border-gray-100 pb-8">
             <div className="flex items-center gap-4">
               <div className="bg-black p-3 rounded-2xl">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -84,24 +85,6 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-
-            {/* Manual Refresh Button */}
-            <button
-              onClick={() => fetchEmails()}
-              disabled={isRefreshing}
-              className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 font-bold text-sm hover:bg-gray-800 active:scale-95 transition-all disabled:opacity-50"
-            >
-              <svg
-                className={`h-4 w-4 transition-transform ${isRefreshing ? 'animate-spin' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              <span className="hidden sm:inline">Refresh</span>
-            </button>
           </div>
           
           <div className="min-h-[300px]">
