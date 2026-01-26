@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "env": {
+    "production": {
+      "vars": {
+        "NEXT_PUBLIC_API_URL": "https://api.tempmail.example.com"
+      }
+    }
+  },
+  "routes": [
+    {
+      "pattern": "/*",
+      "custom_domain": false,
+      "zone_name": "tempmail.example.com"
+    }
+  ]
+}
