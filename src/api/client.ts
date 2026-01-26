@@ -87,10 +87,32 @@ class ApiClient {
    * Fetch emails from inbox for current session
    * 
    * Authorization header is automatically added by interceptor
+   * Returns array of messages with: id, from, subject, timestamp, body
    */
   async getInbox(): Promise<any[]> {
-    const response = await this.axiosInstance.get<any[]>('/api/inbox');
-    return response.data;
+    try {
+      const response = await this.axiosInstance.get<any[]>('/api/inbox');
+      // Ensure we return an array
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error fetching inbox:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Fetch a single message by ID
+   * 
+   * Returns full message object with: id, from, subject, timestamp, body
+   */
+  async getMessage(messageId: string): Promise<any> {
+    try {
+      const response = await this.axiosInstance.get(`/api/message/${messageId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching message:', error);
+      throw error;
+    }
   }
 
   /**

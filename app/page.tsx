@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useTempMail } from '@/hooks/useTempMail';
 import { useFetchEmails } from '@/hooks/useFetchEmails';
 import { useAuthStore } from '@/store/authStore';
@@ -15,12 +16,29 @@ export default function HomePage() {
   const { changeEmailAddress } = useTempMail();
 
   // Fetch emails with polling
-  useFetchEmails();
+  const { fetchEmails } = useFetchEmails();
 
   // Get stores
   const { isLoading, isRefreshing, error, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
   const { isEmailViewerOpen, closeEmailViewer, openEmailViewer } = useUiStore();
+
+  // Auto-refresh emails every 5 seconds
+  useEffect(() => {
+    // Initial fetch
+    if (tempMailAddress) {
+      fetchEmails();
+    }
+
+    // Set up auto-refresh interval
+    const interval = setInterval(() => {
+      if (tempMailAddress) {
+        fetchEmails();
+      }
+    }, 5000); // Refresh every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [tempMailAddress, fetchEmails]);
 
   return (
     <div className="min-h-screen bg-white pb-24">
