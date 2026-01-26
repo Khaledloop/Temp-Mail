@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import type { ApiError, NewSessionResponse, InboxResponse } from '@/types';
+import type { ApiError, NewSessionResponse } from '@/types';
 
-// تأكد من قراءة رابط الوركر من البيئة
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
 class ApiClient {
@@ -26,31 +25,24 @@ class ApiClient {
     );
   }
 
-  // 1. إنشاء جلسة (مع الترجمة)
   async createNewSession(): Promise<NewSessionResponse> {
-    // الوركر يرجع { email, token } لكننا نحتاج صيغة أخرى للواجهة
     const response = await this.axiosInstance.post<any>('/api/new_session');
-    
     return {
-      // هنا نقوم بالترجمة:
-      sessionId: response.data.token,      // token -> sessionId
-      tempMailAddress: response.data.email,// email -> tempMailAddress
-      expiresAt: Date.now() + 86400000     // نضيف وقت انتهاء وهمي (24 ساعة)
+      sessionId: response.data.token,
+      tempMailAddress: response.data.email,
+      expiresAt: Date.now() + 86400000
     } as any; 
   }
 
-  // 2. جلب الرسائل (إرسال الإيميل بدلاً من الجلسة)
-  async getInbox(email: string): Promise<InboxResponse> {
-    // الوركر يحتاج "email" كباراميتر
-    const response = await this.axiosInstance.get<InboxResponse>('/api/inbox', {
+  // الإصلاح هنا: نرجع any[] لنتوافق مع الـ Store
+  async getInbox(email: string): Promise<any[]> {
+    const response = await this.axiosInstance.get<any[]>('/api/inbox', {
       params: { email: email }, 
     });
     return response.data;
   }
 
-  // دوال إضافية (اختياري)
   async refreshSession(sessionId: string): Promise<any> {
-     // للتجديد نطلب جلسة جديدة وخلاص
      return this.createNewSession();
   }
 }
