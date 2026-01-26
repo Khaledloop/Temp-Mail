@@ -30,21 +30,8 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
       setIsCopying(true);
       const email = tempMailAddress || 'test@example.com';
       
-      // Try modern clipboard API first
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(email);
-      } else {
-        // Fallback for older browsers or non-secure contexts
-        const textArea = document.createElement('textarea');
-        textArea.value = email;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-      }
+      // Use native clipboard API
+      await navigator.clipboard.writeText(email);
       
       addToast({
         message: 'Email copied to clipboard!',
@@ -52,10 +39,9 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
         duration: 2000,
       });
       
-      // Reset button after showing success
-      setTimeout(() => {
-        setIsCopying(false);
-      }, 1500);
+      // Reset button after 1.5 seconds
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setIsCopying(false);
     } catch (error) {
       console.error('Copy error:', error);
       addToast({
@@ -131,19 +117,21 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
           <button
             onClick={handleRefresh}
             disabled={!onRefresh || isRefreshing}
-            className="group inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 disabled:opacity-50"
+          <button
+            onClick={handleRefresh}
+            disabled={!onRefresh || isRefreshing}
+            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg 
-              id="refreshIcon"
-              className={`h-4 w-4 transition-transform ${isRefreshing ? 'animate-spin-smooth' : ''}`}
+              className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
               fill="none"
               stroke="currentColor"
-              strokeWidth="3"
+              strokeWidth="2"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
             </svg>
-            <span className="text-sm">{isRefreshing ? 'WAIT...' : 'Refresh'}</span>
+            <span className="text-sm">{isRefreshing ? 'Changing...' : 'Change Email'}</span>
           </button>
 
           <button
