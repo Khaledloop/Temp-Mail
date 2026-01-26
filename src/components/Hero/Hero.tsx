@@ -114,13 +114,11 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
 
         {/* small actions under the pill */}
         <div className="flex justify-center gap-4 mt-6">
+          {/* Change Email Button */}
           <button
             onClick={handleRefresh}
             disabled={!onRefresh || isRefreshing}
-          <button
-            onClick={handleRefresh}
-            disabled={!onRefresh || isRefreshing}
-            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg 
               className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -134,12 +132,13 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
             <span className="text-sm">{isRefreshing ? 'Changing...' : 'Change Email'}</span>
           </button>
 
+          {/* Logout Button */}
           <button
             onClick={() => {
               clearSession();
               addToast({ message: 'Logged out', type: 'info', duration: 1500 });
             }}
-            className="inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
           >
             <span className="text-sm">Logout</span>
           </button>
