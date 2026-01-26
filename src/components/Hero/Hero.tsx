@@ -100,11 +100,11 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
               <button
                 onClick={handleCopyEmail}
                 disabled={isCopying}
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-3 shadow-md hover:bg-gray-900 transition font-black text-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-3 shadow-md hover:bg-gray-900 active:scale-95 transition-all font-bold text-sm"
                 aria-label="Copy email"
               >
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 2H9c-1.1 0-2 .9-2 2v6H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-6h6c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4 12h-4v4H9v-4H5v-4h4V8h2v4h4v4z"/>
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                 </svg>
                 <span className="hidden sm:inline">{isCopying ? 'COPIED!' : 'Copy'}</span>
               </button>
@@ -118,10 +118,10 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
           <button
             onClick={handleRefresh}
             disabled={!onRefresh || isRefreshing}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg 
-              className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
+              className={`h-5 w-5 transition-transform ${isRefreshing ? 'animate-spin' : ''}`}
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -138,7 +138,7 @@ export function Hero({ onRefresh, isLoading = false }: HeroProps) {
               clearSession();
               addToast({ message: 'Logged out', type: 'info', duration: 1500 });
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 active:scale-95 transition-all hover:text-red-600 hover:border-red-600"
           >
             <span className="text-sm">Logout</span>
           </button>

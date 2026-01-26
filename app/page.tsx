@@ -23,7 +23,7 @@ export default function HomePage() {
   const { tempMailAddress } = useAuthStore();
   const { isEmailViewerOpen, closeEmailViewer, openEmailViewer } = useUiStore();
 
-  // Auto-refresh emails every 5 seconds
+  // Auto-refresh emails every 10 seconds
   useEffect(() => {
     // Initial fetch
     if (tempMailAddress) {
@@ -35,7 +35,7 @@ export default function HomePage() {
       if (tempMailAddress) {
         fetchEmails();
       }
-    }, 5000); // Refresh every 5 seconds
+    }, 10000); // Refresh every 10 seconds
 
     return () => clearInterval(interval);
   }, [tempMailAddress, fetchEmails]);
@@ -66,11 +66,13 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-12 border-b border-gray-100 pb-8">
             <div className="flex items-center gap-4">
               <div className="bg-black p-3 rounded-2xl">
-                <span className="text-2xl">📬</span>
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
               </div>
               <div>
                 <h2 className="text-3xl font-black text-gray-900 tracking-tight">
-                  Your Inbox
+                  Inbox
                 </h2>
                 {isRefreshing && (
                   <div className="flex items-center gap-2 mt-1">
@@ -87,10 +89,10 @@ export default function HomePage() {
             <button
               onClick={() => fetchEmails()}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 font-bold text-sm hover:bg-gray-800 transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 font-bold text-sm hover:bg-gray-800 active:scale-95 transition-all disabled:opacity-50"
             >
               <svg
-                className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`}
+                className={`h-4 w-4 transition-transform ${isRefreshing ? 'animate-spin' : ''}`}
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
