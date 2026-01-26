@@ -12,13 +12,13 @@ export const useFetchEmails = () => {
   const { tempMailAddress } = useAuthStore(); 
 
   const fetchEmails = useCallback(async () => {
-    // لو مفيش إيميل، منبحثش
+    // Check if session is active before fetching
     if (!tempMailAddress) return; 
 
     setLoading(true);
     try {
-      // نرسل الإيميل للـ API
-      const emails = await apiClient.getInbox(tempMailAddress);
+      // Fetch emails - sessionId is automatically added by interceptor via Authorization header
+      const emails = await apiClient.getInbox();
       setEmails(emails);
     } catch (error) {
       console.error('Failed to fetch emails:', error);
