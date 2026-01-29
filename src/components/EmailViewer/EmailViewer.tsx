@@ -18,9 +18,13 @@ interface EmailViewerProps {
 export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const rawHtml = email.htmlBody || '';
   const rawText = email.body || '';
-  const sanitizedHTML = sanitizeEmailHTML(rawHtml || rawText);
-  const fallbackText = stripHTMLTags(rawHtml || rawText).trim();
-  const hasRenderableHtml = sanitizedHTML.trim().length > 0;
+  const htmlText = stripHTMLTags(rawHtml).trim();
+  const bodyText = stripHTMLTags(rawText).trim();
+  const shouldUseBody = bodyText.length > htmlText.length + 20;
+  const contentSource = shouldUseBody ? rawText : (rawHtml || rawText);
+  const sanitizedHTML = sanitizeEmailHTML(contentSource);
+  const fallbackText = stripHTMLTags(contentSource).trim();
+  const hasRenderableHtml = stripHTMLTags(sanitizedHTML).trim().length > 0;
   const senderName = formatSenderName(email.from);
   const senderEmail = email.from;
   const displayDateTime = formatEmailDateTime(email.timestamp);

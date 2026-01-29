@@ -11,15 +11,15 @@ const ALLOWED_TAGS = [
   'ul', 'ol', 'li',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
   'blockquote', 'pre', 'code',
-  'img', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-  'div', 'span',
+  'img', 'hr', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col',
+  'div', 'span', 'center', 'font', 'small', 'big', 'sup', 'sub', 'u', 's', 'del', 'ins',
 ];
 
 const ALLOWED_ATTR = [
   'href', 'target', 'rel', 'title',
   'src', 'alt', 'width', 'height',
-  'align', 'class', 'id', 'style',
-  'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border',
+  'align', 'valign', 'bgcolor', 'class', 'id', 'style', 'dir', 'lang',
+  'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border', 'color', 'face', 'size',
 ];
 
 const FORBID_TAGS = ['script', 'iframe', 'object', 'embed', 'form', 'base'];
@@ -77,18 +77,24 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
   try {
     ensureDomPurifyHooks();
 
-    const html = String(dirtyHTML || '');
-    const hasEscapedTags = /&lt;[a-z!/][^&]*&gt;/i.test(html);
-    const hasRealTags = /<\s*[a-z!/]/i.test(html);
+    let normalizedHTML = String(dirtyHTML || '');
+    for (let i = 0; i < 2; i += 1) {
+      const hasEscapedTags = /&lt;[a-z!/][^&]*&gt;/i.test(normalizedHTML) || /&amp;lt;/.test(normalizedHTML);
+      const hasRealTags = /<\s*[a-z!/]/i.test(normalizedHTML);
+      if (!hasEscapedTags || hasRealTags) break;
 
-    const normalizedHTML = hasEscapedTags && !hasRealTags
-      ? html
-          .replace(/&lt;/gi, '<')
-          .replace(/&gt;/gi, '>')
-          .replace(/&quot;/gi, '"')
-          .replace(/&#39;/gi, "'")
-          .replace(/&amp;/gi, '&')
-      : html;
+      normalizedHTML = normalizedHTML
+        .replace(/&amp;lt;/gi, '&lt;')
+        .replace(/&amp;gt;/gi, '&gt;')
+        .replace(/&amp;quot;/gi, '&quot;')
+        .replace(/&amp;#39;/gi, '&#39;')
+        .replace(/&amp;amp;/gi, '&amp;')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/&amp;/gi, '&');
+    }
 
     return DOMPurify.sanitize(normalizedHTML, {
       ALLOWED_TAGS,
@@ -96,7 +102,7 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
       FORBID_TAGS,
       ALLOWED_URI_REGEXP,
       ALLOW_UNKNOWN_PROTOCOLS: false,
-      KEEP_CONTENT: false,
+      KEEP_CONTENT: true,
     });
   } catch (error) {
     console.error('Error sanitizing email HTML:', error);
