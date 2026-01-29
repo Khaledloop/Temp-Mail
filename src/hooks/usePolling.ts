@@ -18,13 +18,18 @@ export function usePolling(
 ): void {
   const { interval, enabled = true, immediate = true, onError } = options;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const callbackRef = useRef(callback);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     if (!enabled) return;
 
     const executePolling = async () => {
       try {
-        await callback();
+        await callbackRef.current();
       } catch (error) {
         console.error('Polling error:', error);
         if (onError && error instanceof Error) {
@@ -33,19 +38,47 @@ export function usePolling(
       }
     };
 
-    // Execute immediately if enabled
-    if (immediate) {
-      executePolling();
-    }
-
-    // Set up interval
-    intervalRef.current = setInterval(executePolling, interval);
-
-    // Cleanup
-    return () => {
+    const stopPolling = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
-  }, [callback, interval, enabled, immediate, onError]);
+
+    const startPolling = (runImmediate: boolean) => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        return;
+      }
+
+      if (runImmediate) {
+        executePolling();
+      }
+
+      intervalRef.current = setInterval(executePolling, interval);
+    };
+
+    const handleVisibilityChange = () => {
+      if (typeof document === 'undefined') return;
+
+      if (document.visibilityState === 'visible') {
+        stopPolling();
+        startPolling(true);
+      } else {
+        stopPolling();
+      }
+    };
+
+    startPolling(immediate);
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+
+    return () => {
+      stopPolling();
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
+    };
+  }, [interval, enabled, immediate, onError]);
 }

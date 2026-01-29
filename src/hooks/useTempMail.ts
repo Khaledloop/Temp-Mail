@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { useUiStore } from '@/store/uiStore';
@@ -97,35 +97,35 @@ export const useTempMail = () => {
     return () => clearTimeout(refreshTimeout);
   }, [sessionId]);
 
+  /**
+   * Change email address by creating a new session
+   */
+  const changeEmailAddress = useCallback(async () => {
+    try {
+      const response = await apiClient.createNewSession();
+      setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
+      setEmails([]); // Clear inbox for new address
+      
+      addToast({ 
+        message: 'Email address changed successfully', 
+        type: 'success', 
+        duration: 2000 
+      });
+    } catch (error) {
+      console.error('Failed to change email:', error);
+      addToast({ 
+        message: 'Failed to change email address', 
+        type: 'error', 
+        duration: 3000 
+      });
+    }
+  }, [addToast, setEmails, setSession]);
+
   return {
     sessionId,
     tempMailAddress,
     isSessionActive: isSessionActive(),
-    
-    /**
-     * Change email address by creating a new session
-     */
-    changeEmailAddress: async () => {
-      try {
-        const response = await apiClient.createNewSession();
-        setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
-        setEmails([]); // Clear inbox for new address
-        
-        addToast({ 
-          message: 'Email address changed successfully', 
-          type: 'success', 
-          duration: 2000 
-        });
-      } catch (error) {
-        console.error('Failed to change email:', error);
-        addToast({ 
-          message: 'Failed to change email address', 
-          type: 'error', 
-          duration: 3000 
-        });
-      }
-    },
-    
+    changeEmailAddress,
     clearSession,
   };
 };

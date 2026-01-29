@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Mail, Trash2 } from 'lucide-react';
 import { EmailSkeleton } from '@/components/common/Skeleton';
 import { useInboxStore } from '@/store/inboxStore';
@@ -54,8 +54,7 @@ export function InboxList({
     );
   }
 
-  const handleDeleteEmail = async (emailId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDeleteEmail = useCallback(async (emailId: string) => {
     if (!onDeleteEmail) return;
 
     try {
@@ -64,7 +63,7 @@ export function InboxList({
     } finally {
       setDeletingId(null);
     }
-  };
+  }, [onDeleteEmail]);
 
   return (
     <div className="space-y-2">
@@ -75,8 +74,8 @@ export function InboxList({
           isSelected={selectedEmailId === email.id}
           isDeleting={deletingId === email.id}
           isRefreshing={isRefreshing}
-          onClick={() => onSelectEmail?.(email.id)}
-          onDelete={(e) => handleDeleteEmail(email.id, e)}
+          onSelectEmail={onSelectEmail}
+          onDeleteEmail={handleDeleteEmail}
           index={index}
         />
       ))}
@@ -89,27 +88,58 @@ interface EmailRowProps {
   isSelected?: boolean;
   isDeleting?: boolean;
   isRefreshing?: boolean;
-  onClick?: () => void;
-  onDelete?: (e: React.MouseEvent) => Promise<void>;
+  onSelectEmail?: (emailId: string) => void;
+  onDeleteEmail?: (emailId: string) => Promise<void>;
   index?: number;
 }
 
-function EmailRow({
+const areEmailRowEqual = (prev: EmailRowProps, next: EmailRowProps) => {
+  const prevEmail = prev.email;
+  const nextEmail = next.email;
+
+  return (
+    prevEmail.id === nextEmail.id &&
+    prevEmail.subject === nextEmail.subject &&
+    prevEmail.from === nextEmail.from &&
+    prevEmail.timestamp === nextEmail.timestamp &&
+    prevEmail.body === nextEmail.body &&
+    prevEmail.htmlBody === nextEmail.htmlBody &&
+    prev.isSelected === next.isSelected &&
+    prev.isDeleting === next.isDeleting &&
+    prev.isRefreshing === next.isRefreshing &&
+    prev.index === next.index &&
+    prev.onSelectEmail === next.onSelectEmail &&
+    prev.onDeleteEmail === next.onDeleteEmail
+  );
+};
+
+const EmailRow = memo(function EmailRow({
   email,
   isSelected = false,
   isDeleting = false,
   isRefreshing = false,
-  onClick,
-  onDelete,
+  onSelectEmail,
+  onDeleteEmail,
   index = 0,
 }: EmailRowProps) {
   const senderName = formatSenderName(email.from);
   const preview = truncateText(stripHTMLTags(email.htmlBody || email.body), 80);
   const timeString = formatEmailTime(email.timestamp);
+  const handleClick = useCallback(() => {
+    onSelectEmail?.(email.id);
+  }, [onSelectEmail, email.id]);
+
+  const handleDeleteClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onDeleteEmail?.(email.id);
+    },
+    [onDeleteEmail, email.id]
+  );
 
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       style={{
         animation: `slideIn 0.3s ease-out ${index * 0.05}s both`,
       }}
@@ -162,9 +192,9 @@ function EmailRow({
           </div>
 
           {/* Delete button - Hero style */}
-          {onDelete && (
+          {onDeleteEmail && (
             <button
-              onClick={onDelete}
+              onClick={handleDeleteClick}
               disabled={isDeleting || isRefreshing}
               className="group inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
               aria-label="Delete email"
@@ -200,4 +230,4 @@ function EmailRow({
       </div>
     </div>
   );
-}
+}, areEmailRowEqual);

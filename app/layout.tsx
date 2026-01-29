@@ -1,6 +1,12 @@
 import type { Metadata } from 'next'
+import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Temp Mail - Your Temporary Email Address',
@@ -61,7 +67,7 @@ export default function RootLayout({
       <head>
         <JsonLd />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className={manrope.className}>{children}</body>
     </html>
   )
 }

@@ -1,16 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { useTempMail } from '@/hooks/useTempMail';
 import { useFetchEmails } from '@/hooks/useFetchEmails';
+import { usePolling } from '@/hooks/usePolling';
 import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { useUiStore } from '@/store/uiStore';
 import { Hero } from '@/components/Hero/Hero';
 import { InboxList } from '@/components/Inbox/InboxList';
-import { EmailViewerModal } from '@/components/modals/EmailViewerModal';
-import { AdSlot } from '@/components/common/AdSlot';
 import { SeoContent } from '@/components/home/SeoContent';
+
+const EmailViewerModal = dynamic(
+  () => import('@/components/modals/EmailViewerModal').then((mod) => mod.EmailViewerModal),
+  { ssr: false }
+);
+
 
 export default function HomePage() {
   // Initialize session
@@ -20,26 +26,26 @@ export default function HomePage() {
   const { fetchEmails } = useFetchEmails();
 
   // Get stores
-  const { isLoading, isRefreshing, error, selectEmail } = useInboxStore();
+  const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, closeEmailViewer, openEmailViewer } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer } = useUiStore();
 
-  // Auto-refresh emails every 10 seconds
-  useEffect(() => {
-    // Initial fetch
-    if (tempMailAddress) {
-      fetchEmails();
-    }
+  const handleRefresh = useCallback(() => changeEmailAddress(), [changeEmailAddress]);
+  const handleFetchEmails = useCallback(() => fetchEmails(), [fetchEmails]);
+  const handleSelectEmail = useCallback(
+    (id: string) => {
+      selectEmail(id);
+      openEmailViewer();
+    },
+    [selectEmail, openEmailViewer]
+  );
 
-    // Set up auto-refresh interval
-    const interval = setInterval(() => {
-      if (tempMailAddress) {
-        fetchEmails();
-      }
-    }, 10000); // Refresh every 10 seconds
-
-    return () => clearInterval(interval);
-  }, [tempMailAddress, fetchEmails]);
+  // Auto-refresh emails every 10 seconds (paused when tab is hidden)
+  usePolling(handleFetchEmails, {
+    interval: 10000,
+    enabled: Boolean(tempMailAddress),
+    immediate: true,
+  });
 
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -55,8 +61,8 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <Hero
             isLoading={isLoading}
-            onRefresh={changeEmailAddress}
-            onFetchEmails={fetchEmails}
+            onRefresh={handleRefresh}
+            onFetchEmails={handleFetchEmails}
           />
         </div>
       </div>
@@ -91,10 +97,7 @@ export default function HomePage() {
           <div className="min-h-[300px]">
             <InboxList
               isLoading={isLoading}
-              onSelectEmail={(id) => {
-                selectEmail(id);
-                openEmailViewer();
-              }}
+              onSelectEmail={handleSelectEmail}
             />
           </div>
         </div>
