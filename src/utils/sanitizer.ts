@@ -5,6 +5,68 @@
 
 import DOMPurify from 'isomorphic-dompurify';
 
+const ALLOWED_TAGS = [
+  'p', 'br', 'b', 'i', 'em', 'strong', 'a',
+  'ul', 'ol', 'li',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'blockquote', 'pre', 'code',
+  'img', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+  'div', 'span',
+];
+
+const ALLOWED_ATTR = [
+  'href', 'target', 'rel', 'title',
+  'src', 'alt', 'width', 'height',
+  'align', 'class', 'id', 'style',
+  'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border',
+];
+
+const FORBID_TAGS = ['script', 'iframe', 'object', 'embed', 'form', 'base'];
+const ALLOWED_URI_REGEXP = /^(?:(?:https?|mailto|tel):|#|\/|\.\/|\.\.\/|\/\/)/i;
+
+let hooksInstalled = false;
+
+function ensureDomPurifyHooks() {
+  if (hooksInstalled) return;
+
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    const nodeName = typeof node?.nodeName === 'string' ? node.nodeName.toLowerCase() : '';
+    if (nodeName === 'a') {
+      const href = node.getAttribute('href');
+      if (href) {
+        node.setAttribute('target', '_blank');
+        const existingRel = node.getAttribute('rel') || '';
+        const relParts = new Set(
+          existingRel
+            .split(/\s+/)
+            .map((entry) => entry.trim())
+            .filter(Boolean)
+        );
+        relParts.add('noopener');
+        relParts.add('noreferrer');
+        node.setAttribute('rel', Array.from(relParts).join(' '));
+      }
+    }
+  });
+
+  DOMPurify.addHook('uponSanitizeAttribute', (node, data) => {
+    const attrName = data.attrName?.toLowerCase() || '';
+    if (attrName.startsWith('on')) {
+      data.keepAttr = false;
+      return;
+    }
+
+    if (attrName === 'href' || attrName === 'src') {
+      const value = String(data.attrValue || '').trim().toLowerCase();
+      if (value.startsWith('javascript:') || value.startsWith('data:')) {
+        data.keepAttr = false;
+      }
+    }
+  });
+
+  hooksInstalled = true;
+}
+
 /**
  * Sanitizes HTML content from emails to prevent XSS attacks
  * @param dirtyHTML - Raw HTML content from email
@@ -12,21 +74,15 @@ import DOMPurify from 'isomorphic-dompurify';
  */
 export function sanitizeEmailHTML(dirtyHTML: string): string {
   try {
+    ensureDomPurifyHooks();
+
     return DOMPurify.sanitize(dirtyHTML, {
-      ALLOWED_TAGS: [
-        'p', 'br', 'b', 'i', 'em', 'strong', 'a',
-        'ul', 'ol', 'li',
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'blockquote', 'pre', 'code',
-        'img', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-        'div', 'span',
-      ],
-      ALLOWED_ATTR: [
-        'href', 'target', 'rel',
-        'src', 'alt', 'width', 'height',
-        'align', 'class', 'id',
-      ],
+      ALLOWED_TAGS,
+      ALLOWED_ATTR,
+      FORBID_TAGS,
+      ALLOWED_URI_REGEXP,
       ALLOW_UNKNOWN_PROTOCOLS: false,
+      KEEP_CONTENT: false,
     });
   } catch (error) {
     console.error('Error sanitizing email HTML:', error);

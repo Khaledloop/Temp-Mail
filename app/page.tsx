@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTempMail } from '@/hooks/useTempMail';
 import { useFetchEmails } from '@/hooks/useFetchEmails';
@@ -29,9 +29,14 @@ export default function HomePage() {
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
   const { isEmailViewerOpen, openEmailViewer } = useUiStore();
+  const [pollResetSignal, setPollResetSignal] = useState(0);
 
   const handleRefresh = useCallback(() => changeEmailAddress(), [changeEmailAddress]);
-  const handleFetchEmails = useCallback(() => fetchEmails(), [fetchEmails]);
+  const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
+  const handleFetchEmails = useCallback(async () => {
+    await fetchEmails({ source: 'manual' });
+    setPollResetSignal((value) => value + 1);
+  }, [fetchEmails]);
   const handleSelectEmail = useCallback(
     (id: string) => {
       selectEmail(id);
@@ -40,11 +45,22 @@ export default function HomePage() {
     [selectEmail, openEmailViewer]
   );
 
+  useEffect(() => {
+    if (!tempMailAddress) return;
+    const bootstrap = async () => {
+      await fetchEmails({ source: 'init' });
+      setPollResetSignal((value) => value + 1);
+    };
+
+    bootstrap();
+  }, [tempMailAddress, fetchEmails]);
+
   // Auto-refresh emails every 10 seconds (paused when tab is hidden)
-  usePolling(handleFetchEmails, {
+  usePolling(handleAutoFetch, {
     interval: 10000,
     enabled: Boolean(tempMailAddress),
-    immediate: true,
+    immediate: false,
+    resetSignal: pollResetSignal,
   });
 
   return (
@@ -97,6 +113,7 @@ export default function HomePage() {
           <div className="min-h-[300px]">
             <InboxList
               isLoading={isLoading}
+              isRefreshing={isRefreshing}
               onSelectEmail={handleSelectEmail}
             />
           </div>

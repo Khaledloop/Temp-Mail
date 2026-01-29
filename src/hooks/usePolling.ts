@@ -10,13 +10,14 @@ interface UsePollingOptions {
   enabled?: boolean;
   immediate?: boolean; // execute immediately on mount
   onError?: (error: Error) => void;
+  resetSignal?: number;
 }
 
 export function usePolling(
   callback: () => Promise<void>,
   options: UsePollingOptions
 ): void {
-  const { interval, enabled = true, immediate = true, onError } = options;
+  const { interval, enabled = true, immediate = true, onError, resetSignal = 0 } = options;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const callbackRef = useRef(callback);
 
@@ -80,5 +81,5 @@ export function usePolling(
         document.removeEventListener('visibilitychange', handleVisibilityChange);
       }
     };
-  }, [interval, enabled, immediate, onError]);
+  }, [interval, enabled, immediate, onError, resetSignal]);
 }
