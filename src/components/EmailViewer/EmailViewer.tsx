@@ -19,7 +19,8 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const rawHtml = email.htmlBody || '';
   const rawText = email.body || '';
   const sanitizedHTML = sanitizeEmailHTML(rawHtml || rawText);
-  const hasVisibleText = stripHTMLTags(sanitizedHTML).trim().length > 0;
+  const fallbackText = stripHTMLTags(rawHtml || rawText).trim();
+  const hasRenderableHtml = sanitizedHTML.trim().length > 0;
   const senderName = formatSenderName(email.from);
   const senderEmail = email.from;
   const displayDateTime = formatEmailDateTime(email.timestamp);
@@ -78,7 +79,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
 
       {/* Email content - Clean */}
       <div className="flex-1 min-h-0 overflow-auto px-6 py-8">
-        {hasVisibleText ? (
+        {hasRenderableHtml ? (
           <div
             className="prose prose-sm max-w-none text-gray-900 
               prose-p:text-gray-700 prose-p:leading-relaxed
@@ -93,7 +94,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
           />
         ) : (
           <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {rawText || 'No readable content.'}
+            {fallbackText || 'No readable content.'}
           </pre>
         )}
       </div>
