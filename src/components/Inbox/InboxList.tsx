@@ -30,6 +30,17 @@ export function InboxList({
   const { emails, selectedEmailId } = useInboxStore();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  const handleDeleteEmail = useCallback(async (emailId: string) => {
+    if (!onDeleteEmail) return;
+
+    try {
+      setDeletingId(emailId);
+      await onDeleteEmail(emailId);
+    } finally {
+      setDeletingId(null);
+    }
+  }, [onDeleteEmail]);
+
   if (isLoading) {
     return (
       <div className="divide-y divide-gray-200">
@@ -53,17 +64,6 @@ export function InboxList({
       </div>
     );
   }
-
-  const handleDeleteEmail = useCallback(async (emailId: string) => {
-    if (!onDeleteEmail) return;
-
-    try {
-      setDeletingId(emailId);
-      await onDeleteEmail(emailId);
-    } finally {
-      setDeletingId(null);
-    }
-  }, [onDeleteEmail]);
 
   return (
     <div className="space-y-2">
