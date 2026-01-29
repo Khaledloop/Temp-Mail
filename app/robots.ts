@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [],
     },
-    sitemap: 'https://tempmail.pages.dev/sitemap.xml',
+    sitemap: 'https://temp-mail-6xq.pages.dev/sitemap.xml',
   }
 }

@@ -116,6 +116,18 @@ class ApiClient {
   }
 
   /**
+   * Delete a message by ID
+   */
+  async deleteMessage(messageId: string): Promise<void> {
+    try {
+      await this.axiosInstance.delete(`/api/message/${messageId}`);
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Refresh session (creates a new one if expired)
    */
   async refreshSession(): Promise<NewSessionResponse> {

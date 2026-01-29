@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://tempmail.pages.dev/sitemap.xml
+Sitemap: https://temp-mail-6xq.pages.dev/sitemap.xml

@@ -4,7 +4,7 @@ export const dynamic = 'force-static'
 export const revalidate = 3600 // Revalidate every hour
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmail.pages.dev'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev/'
 
   return [
     {

@@ -9,7 +9,7 @@ import { playNewEmailSound } from '@/utils/notifications';
 export const useFetchEmails = () => {
   const [loading, setLoading] = useState(false);
   const [messageLoading, setMessageLoading] = useState(false);
-  const { setEmails, emails, setRefreshing } = useInboxStore();
+  const { setEmails, emails, setRefreshing, removeEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
   const hasFetchedRef = useRef(false);
   const seenIdsRef = useRef<Set<string>>(new Set());
@@ -88,11 +88,23 @@ export const useFetchEmails = () => {
     []
   );
 
+  /**
+   * Delete a message
+   */
+  const deleteEmail = useCallback(
+    async (messageId: string) => {
+      await apiClient.deleteMessage(messageId);
+      removeEmail(messageId);
+    },
+    [removeEmail]
+  );
+
   return {
     loading,
     messageLoading,
     emails,
     fetchEmails,
     fetchMessage,
+    deleteEmail,
   };
 };

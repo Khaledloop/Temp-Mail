@@ -23,12 +23,12 @@ export default function HomePage() {
   const { changeEmailAddress } = useTempMail();
 
   // Fetch emails with polling
-  const { fetchEmails } = useFetchEmails();
+  const { fetchEmails, deleteEmail } = useFetchEmails();
 
   // Get stores
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, openEmailViewer } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer, addToast } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
 
   const handleRefresh = useCallback(() => changeEmailAddress(), [changeEmailAddress]);
@@ -43,6 +43,20 @@ export default function HomePage() {
       openEmailViewer();
     },
     [selectEmail, openEmailViewer]
+  );
+
+  const handleDeleteEmail = useCallback(
+    async (id: string) => {
+      try {
+        await deleteEmail(id);
+        setPollResetSignal((value) => value + 1);
+        addToast({ message: 'Email deleted', type: 'success', duration: 1500 });
+      } catch (error) {
+        console.error('Delete email failed:', error);
+        addToast({ message: 'Failed to delete email', type: 'error', duration: 2000 });
+      }
+    },
+    [deleteEmail, addToast]
   );
 
   useEffect(() => {
@@ -115,6 +129,7 @@ export default function HomePage() {
               isLoading={isLoading}
               isRefreshing={isRefreshing}
               onSelectEmail={handleSelectEmail}
+              onDeleteEmail={handleDeleteEmail}
             />
           </div>
         </div>
