@@ -1,4 +1,5 @@
 User-Agent: *
 Allow: /
+Disallow: /admin
 
 Sitemap: https://temp-mail-6xq.pages.dev/sitemap.xml

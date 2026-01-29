@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: [],
+      disallow: ['/admin'],
     },
     sitemap: 'https://temp-mail-6xq.pages.dev/sitemap.xml',
   }
