@@ -76,9 +76,9 @@ export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps)
           <span className="inline-flex items-center rounded-full bg-black px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm">
             Temporary Email Address
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter">
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter">
             Your Private Inbox
-          </h2>
+          </h1>
         </div>
         <p className="text-sm text-gray-500 font-medium max-w-md mx-auto leading-relaxed">
           Forget about spam and hacking robots. Keep your real mailbox clean and secure. 

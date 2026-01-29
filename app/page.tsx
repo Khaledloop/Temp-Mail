@@ -10,6 +10,7 @@ import { Hero } from '@/components/Hero/Hero';
 import { InboxList } from '@/components/Inbox/InboxList';
 import { EmailViewerModal } from '@/components/modals/EmailViewerModal';
 import { AdSlot } from '@/components/common/AdSlot';
+import { SeoContent } from '@/components/home/SeoContent';
 
 export default function HomePage() {
   // Initialize session
@@ -117,6 +118,11 @@ export default function HomePage() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* SEO Content Section */}
+      <div className="py-12">
+        <SeoContent />
       </div>
 
       {/* Email Viewer Modal */}
