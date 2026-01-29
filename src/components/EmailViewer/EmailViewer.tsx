@@ -4,7 +4,7 @@
 
 'use client';
 
-import { sanitizeEmailHTML } from '@/utils/sanitizer';
+import { sanitizeEmailHTML, stripHTMLTags } from '@/utils/sanitizer';
 import { formatEmailDateTime } from '@/utils/formatters';
 import { formatSenderName } from '@/utils/formatters';
 import { X } from 'lucide-react';
@@ -16,7 +16,10 @@ interface EmailViewerProps {
 }
 
 export function EmailViewer({ email, onClose }: EmailViewerProps) {
-  const sanitizedHTML = sanitizeEmailHTML(email.htmlBody || email.body);
+  const rawHtml = email.htmlBody || '';
+  const rawText = email.body || '';
+  const sanitizedHTML = sanitizeEmailHTML(rawHtml || rawText);
+  const hasVisibleText = stripHTMLTags(sanitizedHTML).trim().length > 0;
   const senderName = formatSenderName(email.from);
   const senderEmail = email.from;
   const displayDateTime = formatEmailDateTime(email.timestamp);
@@ -75,18 +78,24 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
 
       {/* Email content - Clean */}
       <div className="flex-1 min-h-0 overflow-auto px-6 py-8">
-        <div
-          className="prose prose-sm max-w-none text-gray-900 
-            prose-p:text-gray-700 prose-p:leading-relaxed
-            prose-a:text-gray-900 prose-a:hover:text-gray-700 prose-a:underline
-            prose-strong:text-gray-900 prose-strong:font-bold
-            prose-em:text-gray-700
-            prose-img:rounded-lg prose-img:shadow-md
-            prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:rounded prose-code:px-2 prose-code:py-1
-            prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:rounded prose-blockquote:px-4 prose-blockquote:py-2
-            prose-li:marker:text-blue-600"
-          dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
-        />
+        {hasVisibleText ? (
+          <div
+            className="prose prose-sm max-w-none text-gray-900 
+              prose-p:text-gray-700 prose-p:leading-relaxed
+              prose-a:text-gray-900 prose-a:hover:text-gray-700 prose-a:underline
+              prose-strong:text-gray-900 prose-strong:font-bold
+              prose-em:text-gray-700
+              prose-img:rounded-lg prose-img:shadow-md
+              prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:rounded prose-code:px-2 prose-code:py-1
+              prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:rounded prose-blockquote:px-4 prose-blockquote:py-2
+              prose-li:marker:text-blue-600"
+            dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
+          />
+        ) : (
+          <pre className="whitespace-pre-wrap text-sm text-gray-700">
+            {rawText || 'No readable content.'}
+          </pre>
+        )}
       </div>
 
       {/* Footer */}
