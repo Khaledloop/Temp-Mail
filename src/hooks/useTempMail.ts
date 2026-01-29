@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { useUiStore } from '@/store/uiStore';
@@ -19,6 +19,7 @@ export const useTempMail = () => {
   const { sessionId, tempMailAddress, isSessionActive, setSession, clearSession } = useAuthStore();
   const { setEmails } = useInboxStore();
   const { addToast } = useUiStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   /**
    * Initialize session on mount
@@ -27,6 +28,19 @@ export const useTempMail = () => {
    * How: Check if existing session is valid, otherwise create a new one
    */
   useEffect(() => {
+    setHasHydrated(useAuthStore.persist.hasHydrated());
+    const unsubscribe = useAuthStore.persist.onFinishHydration(() => {
+      setHasHydrated(true);
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
     const initSession = async () => {
       // Check if session already exists and is active
       if (sessionId && isSessionActive()) {
@@ -55,7 +69,7 @@ export const useTempMail = () => {
     };
 
     initSession();
-  }, []);
+  }, [hasHydrated, sessionId, isSessionActive, addToast, setSession]);
 
   /**
    * Auto-refresh session 5 minutes before expiration
