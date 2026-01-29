@@ -22,7 +22,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const displayDateTime = formatEmailDateTime(email.timestamp);
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg animate-slideUp overflow-hidden border border-gray-200">
+    <div className="flex flex-col h-full min-h-0 bg-white rounded-2xl shadow-lg animate-slideUp overflow-hidden border border-gray-200">
       {/* Header - Clean */}
       <div className="border-b border-gray-200 px-6 py-5 flex items-center justify-between bg-white">
         <div className="flex-1">
@@ -74,7 +74,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       </div>
 
       {/* Email content - Clean */}
-      <div className="flex-1 overflow-auto px-6 py-8">
+      <div className="flex-1 min-h-0 overflow-auto px-6 py-8">
         <div
           className="prose prose-sm max-w-none text-gray-900 
             prose-p:text-gray-700 prose-p:leading-relaxed

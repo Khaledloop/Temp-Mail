@@ -28,7 +28,7 @@ export function EmailViewerModal() {
 
       {/* Modal */}
       <div className="fixed inset-4 sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-2xl z-50">
-        <div className="h-full sm:h-auto sm:max-h-[90vh] overflow-hidden">
+        <div className="h-full sm:h-[90vh] sm:max-h-[90vh] overflow-hidden">
           <EmailViewer
             email={selectedEmail}
             onClose={closeEmailViewer}

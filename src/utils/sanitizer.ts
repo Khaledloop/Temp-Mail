@@ -6,6 +6,7 @@
 import DOMPurify from 'isomorphic-dompurify';
 
 const ALLOWED_TAGS = [
+  'html', 'body',
   'p', 'br', 'b', 'i', 'em', 'strong', 'a',
   'ul', 'ol', 'li',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
