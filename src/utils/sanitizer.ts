@@ -77,7 +77,20 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
   try {
     ensureDomPurifyHooks();
 
-    return DOMPurify.sanitize(dirtyHTML, {
+    const html = String(dirtyHTML || '');
+    const hasEscapedTags = /&lt;[a-z!/][^&]*&gt;/i.test(html);
+    const hasRealTags = /<\s*[a-z!/]/i.test(html);
+
+    const normalizedHTML = hasEscapedTags && !hasRealTags
+      ? html
+          .replace(/&lt;/gi, '<')
+          .replace(/&gt;/gi, '>')
+          .replace(/&quot;/gi, '"')
+          .replace(/&#39;/gi, "'")
+          .replace(/&amp;/gi, '&')
+      : html;
+
+    return DOMPurify.sanitize(normalizedHTML, {
       ALLOWED_TAGS,
       ALLOWED_ATTR,
       FORBID_TAGS,
