@@ -101,10 +101,10 @@ export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps)
               <button
                 onClick={handleCopyEmail}
                 disabled={isCopying}
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-3 shadow-md hover:bg-gray-900 active:scale-95 transition-all font-bold text-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-3 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out font-bold text-sm group"
                 aria-label="Copy email"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                 </svg>
                 <span className="hidden sm:inline">{isCopying ? 'COPIED!' : 'Copy'}</span>
@@ -119,10 +119,10 @@ export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps)
           <button
             onClick={onFetchEmails}
             disabled={!onFetchEmails}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <svg 
-              className="h-5 w-5"
+              className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -137,10 +137,10 @@ export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps)
           <button
             onClick={handleRefresh}
             disabled={!onRefresh || isRefreshing}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <svg 
-              className={`h-5 w-5 transition-transform ${isRefreshing ? 'animate-spin' : ''}`}
+              className={`h-5 w-5 transition-transform duration-500 ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180'}`}
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -157,8 +157,16 @@ export function Hero({ onRefresh, onFetchEmails, isLoading = false }: HeroProps)
               clearSession();
               addToast({ message: 'Logged out', type: 'info', duration: 1500 });
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-md hover:bg-gray-50 active:scale-95 transition-all hover:text-red-600 hover:border-red-600"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out hover:text-red-600 hover:border-red-200 group"
           >
+            <svg 
+              className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
             <span className="text-sm">Logout</span>
           </button>
         </div>
