@@ -23,7 +23,7 @@ const ALLOWED_ATTR = [
 ];
 
 const FORBID_TAGS = ['script', 'iframe', 'object', 'embed', 'form', 'base'];
-const ALLOWED_URI_REGEXP = /^(?:(?:https?|mailto|tel):|#|\/|\.\/|\.\.\/|\/\/)/i;
+const ALLOWED_URI_REGEXP = /^(?:(?:https?|mailto|tel):|#|\/|\.\/|\.\.\/|\/\/|data:image\/)/i;
 
 let hooksInstalled = false;
 
@@ -57,9 +57,19 @@ function ensureDomPurifyHooks() {
       return;
     }
 
-    if (attrName === 'href' || attrName === 'src') {
+    if (attrName === 'href') {
       const value = String(data.attrValue || '').trim().toLowerCase();
       if (value.startsWith('javascript:') || value.startsWith('data:')) {
+        data.keepAttr = false;
+      }
+    }
+
+    if (attrName === 'src') {
+      const value = String(data.attrValue || '').trim().toLowerCase();
+      if (value.startsWith('javascript:')) {
+        data.keepAttr = false;
+      }
+      if (value.startsWith('data:') && !value.startsWith('data:image/')) {
         data.keepAttr = false;
       }
     }

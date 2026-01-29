@@ -11,6 +11,7 @@ import { useUiStore } from '@/store/uiStore';
 import { Hero } from '@/components/Hero/Hero';
 import { InboxList } from '@/components/Inbox/InboxList';
 import { SeoContent } from '@/components/home/SeoContent';
+import { EMAIL_POLL_INTERVAL } from '@/utils/constants';
 
 const EmailViewerModal = dynamic(
   () => import('@/components/modals/EmailViewerModal').then((mod) => mod.EmailViewerModal),
@@ -69,9 +70,9 @@ export default function HomePage() {
     bootstrap();
   }, [tempMailAddress, fetchEmails]);
 
-  // Auto-refresh emails every 10 seconds (paused when tab is hidden)
+  // Auto-refresh emails every 7 seconds (paused when tab is hidden)
   usePolling(handleAutoFetch, {
-    interval: 10000,
+    interval: EMAIL_POLL_INTERVAL,
     enabled: Boolean(tempMailAddress),
     immediate: false,
     resetSignal: pollResetSignal,
