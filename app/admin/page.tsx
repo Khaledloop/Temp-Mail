@@ -22,6 +22,7 @@ import {
   Wand2,
 } from 'lucide-react'
 import { adminRequest } from '@/utils/adminApi'
+import { sanitizeEmailHTML } from '@/utils/sanitizer'
 
 const DEFAULT_ADMIN_API_URL =
   process.env.NEXT_PUBLIC_ADMIN_API_URL ||
@@ -57,6 +58,13 @@ type AdminMessage = {
   size: string
   status: 'delivered' | 'blocked' | 'flagged'
   inbox: string
+}
+
+type AdminMessageDetail = AdminMessage & {
+  body?: string
+  htmlBody?: string
+  timestamp?: string
+  to?: string
 }
 
 type AdminSession = {
@@ -196,6 +204,27 @@ const demoDashboard: AdminDashboard = {
   ],
 }
 
+const emptyDashboard: AdminDashboard = {
+  stats: {
+    activeSessions: 0,
+    newSessionsToday: 0,
+    inboxChecksPerMin: 0,
+    messagesLastHour: 0,
+    avgDeliveryMs: 0,
+    errorRate: 0,
+    blockedRequests: 0,
+    storageUsedMb: 0,
+  },
+  series: {
+    volume: Array.from({ length: 12 }, () => 0),
+    latency: Array.from({ length: 12 }, () => 0),
+    countries: [],
+  },
+  messages: [],
+  sessions: [],
+  alerts: [],
+}
+
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -225,23 +254,24 @@ function formatTime(value: string) {
 }
 
 function normalizeDashboard(data?: Partial<AdminDashboard>): AdminDashboard {
-  if (!data) return demoDashboard
+  if (!data) return emptyDashboard
   return {
-    stats: { ...demoDashboard.stats, ...(data.stats || {}) },
-    series: { ...demoDashboard.series, ...(data.series || {}) },
-    messages: data.messages || demoDashboard.messages,
-    sessions: data.sessions || demoDashboard.sessions,
-    alerts: data.alerts || demoDashboard.alerts,
+    stats: { ...emptyDashboard.stats, ...(data.stats || {}) },
+    series: { ...emptyDashboard.series, ...(data.series || {}) },
+    messages: data.messages || emptyDashboard.messages,
+    sessions: data.sessions || emptyDashboard.sessions,
+    alerts: data.alerts || emptyDashboard.alerts,
   }
 }
 
 function Sparkline({ data, color }: { data: number[]; color: string }) {
-  const max = Math.max(...data)
-  const min = Math.min(...data)
+  const safeData = data.length >= 2 ? data : [0, 0]
+  const max = Math.max(...safeData)
+  const min = Math.min(...safeData)
   const range = max - min || 1
-  const points = data
+  const points = safeData
     .map((point, index) => {
-      const x = (index / (data.length - 1)) * 100
+      const x = (index / (safeData.length - 1)) * 100
       const y = 100 - ((point - min) / range) * 100
       return `${x},${y}`
     })
@@ -262,13 +292,14 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 function BarSeries({ data }: { data: number[] }) {
-  const max = Math.max(...data, 1)
+  const safeData = data.length ? data : [0]
+  const max = Math.max(...safeData, 1)
   return (
     <div className="flex h-32 items-end gap-2">
-      {data.map((value, index) => (
+      {safeData.map((value, index) => (
         <div
           key={`bar-${index}`}
-          className="flex-1 rounded-lg bg-gradient-to-t from-teal-500/10 via-teal-400/50 to-teal-300/90"
+          className="flex-1 rounded-lg bg-gradient-to-t from-gray-100 via-gray-200 to-gray-300"
           style={{ height: `${Math.max(12, (value / max) * 100)}%` }}
         />
       ))}
@@ -297,7 +328,7 @@ function DonutChart({
       className="relative h-28 w-28 rounded-full"
       style={{ background: `conic-gradient(${gradient})` }}
     >
-      <div className="absolute inset-4 rounded-full bg-slate-950" />
+      <div className="absolute inset-4 rounded-full bg-white" />
     </div>
   )
 }
@@ -310,9 +341,9 @@ function StatusBadge({
   tone: 'good' | 'warn' | 'bad'
 }) {
   const tones: Record<typeof tone, string> = {
-    good: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40',
-    warn: 'bg-amber-500/15 text-amber-300 border-amber-500/40',
-    bad: 'bg-rose-500/15 text-rose-300 border-rose-500/40',
+    good: 'bg-gray-100 text-gray-900 border-gray-300',
+    warn: 'bg-gray-100 text-gray-700 border-gray-300',
+    bad: 'bg-gray-200 text-gray-900 border-gray-400',
   }
   return (
     <span
@@ -329,12 +360,18 @@ export default function AdminPage() {
   const [mode, setMode] = useState<DashboardMode>('live')
   const [token, setToken] = useState('')
   const [baseUrl, setBaseUrl] = useState(DEFAULT_ADMIN_API_URL)
-  const [dashboard, setDashboard] = useState<AdminDashboard>(demoDashboard)
+  const [dashboard, setDashboard] = useState<AdminDashboard>(emptyDashboard)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'ok'>(
     'idle'
   )
   const [statusMessage, setStatusMessage] = useState('')
   const [search, setSearch] = useState('')
+  const [inboxQuery, setInboxQuery] = useState('')
+  const [inboxLoading, setInboxLoading] = useState(false)
+  const [messageLoading, setMessageLoading] = useState(false)
+  const [selectedMessage, setSelectedMessage] =
+    useState<AdminMessageDetail | null>(null)
+  const [isMessageOpen, setIsMessageOpen] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -381,12 +418,12 @@ export default function AdminPage() {
         setStatus('ok')
         setStatusMessage('Live data connected.')
       } catch (error) {
-        setDashboard(demoDashboard)
+        setDashboard(emptyDashboard)
         setStatus('error')
         setStatusMessage(
           error instanceof Error
             ? error.message
-            : 'Unable to reach admin API. Showing demo data.'
+            : 'Unable to reach admin API. Check Admin API URL + secret.'
         )
       }
     }
@@ -434,7 +471,8 @@ export default function AdminPage() {
         ? 'warn'
         : 'bad'
 
-  const isDemo = mode === 'demo' || status === 'error'
+  const isDemo = mode === 'demo'
+  const liveConnected = mode === 'live' && status === 'ok'
 
   const handleUnlock = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -485,9 +523,9 @@ export default function AdminPage() {
       setStatusMessage(
         error instanceof Error
           ? error.message
-          : 'Refresh failed. Showing demo data.'
+          : 'Refresh failed. Check Admin API URL + secret.'
       )
-      setDashboard(demoDashboard)
+      setDashboard(emptyDashboard)
     }
   }
 
@@ -495,8 +533,12 @@ export default function AdminPage() {
     path: string,
     payload?: Record<string, unknown>
   ) => {
-    if (isDemo) {
-      setStatusMessage('Demo mode: action simulated.')
+    if (!liveConnected) {
+      setStatusMessage(
+        isDemo
+          ? 'Demo mode: action simulated.'
+          : 'Live connection is offline. Fix API URL/secret.'
+      )
       return
     }
     setStatus('loading')
@@ -519,20 +561,88 @@ export default function AdminPage() {
     }
   }
 
+  const handleLoadInbox = async () => {
+    if (!liveConnected) {
+      setStatusMessage('Live connection is offline. Fix API URL/secret.')
+      return
+    }
+    if (!inboxQuery.trim()) {
+      setStatusMessage('Enter the inbox email to load messages.')
+      return
+    }
+    setInboxLoading(true)
+    setStatus('loading')
+    setStatusMessage('Loading inbox messages...')
+    try {
+      const data = await adminRequest<{ messages: AdminMessage[] }>(
+        `/api/admin/inbox?email=${encodeURIComponent(inboxQuery.trim())}`,
+        {
+          baseUrl,
+          token,
+        }
+      )
+      const messages = Array.isArray(data?.messages) ? data.messages : []
+      setDashboard((prev) => ({ ...prev, messages }))
+      setStatus('ok')
+      setStatusMessage(
+        messages.length
+          ? `Loaded ${messages.length} messages for ${inboxQuery.trim()}.`
+          : 'No messages found for this inbox.'
+      )
+    } catch (error) {
+      setStatus('error')
+      setStatusMessage(
+        error instanceof Error ? error.message : 'Failed to load inbox.'
+      )
+    } finally {
+      setInboxLoading(false)
+    }
+  }
+
+  const handleOpenMessage = async (messageId: string) => {
+    if (!liveConnected) {
+      setStatusMessage('Live connection is offline. Fix API URL/secret.')
+      return
+    }
+    setMessageLoading(true)
+    try {
+      const data = await adminRequest<AdminMessageDetail>(
+        `/api/admin/message/${messageId}`,
+        {
+          baseUrl,
+          token,
+        }
+      )
+      setSelectedMessage(data)
+      setIsMessageOpen(true)
+    } catch (error) {
+      setStatusMessage(
+        error instanceof Error ? error.message : 'Failed to load message.'
+      )
+    } finally {
+      setMessageLoading(false)
+    }
+  }
+
+  const handleCloseMessage = () => {
+    setIsMessageOpen(false)
+    setSelectedMessage(null)
+  }
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute -left-32 -top-32 h-[420px] w-[420px] rounded-full bg-teal-500/10 blur-[140px]" />
-      <div className="pointer-events-none absolute -bottom-48 right-0 h-[460px] w-[460px] rounded-full bg-amber-400/10 blur-[160px]" />
+    <div className="relative min-h-screen overflow-hidden bg-white text-gray-900">
+      <div className="pointer-events-none absolute -left-32 -top-32 h-[420px] w-[420px] rounded-full bg-black/5 blur-[140px]" />
+      <div className="pointer-events-none absolute -bottom-48 right-0 h-[460px] w-[460px] rounded-full bg-black/10 blur-[160px]" />
       <div className="pointer-events-none absolute inset-0 opacity-40 [background:radial-gradient(circle_at_top,_rgba(255,255,255,0.12)_0%,_rgba(0,0,0,0)_45%)]" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-10 lg:px-10">
         <header className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-300">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black/10 text-black">
               <ShieldCheck className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+              <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
                 Temp Mail Control
               </p>
               <h1 className="text-3xl font-semibold tracking-tight">
@@ -544,19 +654,21 @@ export default function AdminPage() {
             <StatusBadge label="Zero Trust" tone="good" />
             <StatusBadge label="Rate Limit Active" tone="good" />
             <StatusBadge
-              label={isDemo ? 'Demo Mode' : 'Live'}
-              tone={isDemo ? 'warn' : 'good'}
+              label={
+                liveConnected ? 'Live' : isDemo ? 'Demo Mode' : 'Offline'
+              }
+              tone={liveConnected ? 'good' : isDemo ? 'warn' : 'bad'}
             />
             <button
               onClick={handleRefresh}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-700"
+              className="inline-flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-gray-900"
             >
               <RefreshCcw className="h-4 w-4" />
               Refresh
             </button>
             <button
               onClick={handleLock}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-700"
+              className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
             >
               <Lock className="h-4 w-4" />
               Lock
@@ -572,57 +684,57 @@ export default function AdminPage() {
         >
           <motion.section variants={itemVariants}>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Active Sessions
                   </p>
-                  <Users className="h-4 w-4 text-teal-300" />
+                  <Users className="h-4 w-4 text-black" />
                 </div>
                 <p className="mt-3 text-3xl font-semibold">
                   {formatNumber(dashboard.stats.activeSessions)}
                 </p>
-                <Sparkline data={dashboard.series.volume} color="#2dd4bf" />
+                <Sparkline data={dashboard.series.volume} color="#111827" />
               </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     New Sessions Today
                   </p>
-                  <Bolt className="h-4 w-4 text-amber-300" />
+                  <Bolt className="h-4 w-4 text-gray-700" />
                 </div>
                 <p className="mt-3 text-3xl font-semibold">
                   {formatNumber(dashboard.stats.newSessionsToday)}
                 </p>
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="mt-2 text-xs text-gray-500">
                   Daily limit enforcement enabled
                 </p>
               </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Inbox Checks / Min
                   </p>
-                  <Activity className="h-4 w-4 text-sky-300" />
+                  <Activity className="h-4 w-4 text-gray-700" />
                 </div>
                 <p className="mt-3 text-3xl font-semibold">
                   {formatNumber(dashboard.stats.inboxChecksPerMin)}
                 </p>
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="mt-2 text-xs text-gray-500">
                   Auto-refresh throttled to 7s
                 </p>
               </div>
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Messages / Hour
                   </p>
-                  <MessageCircle className="h-4 w-4 text-emerald-300" />
+                  <MessageCircle className="h-4 w-4 text-gray-700" />
                 </div>
                 <p className="mt-3 text-3xl font-semibold">
                   {formatNumber(dashboard.stats.messagesLastHour)}
                 </p>
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="mt-2 text-xs text-gray-500">
                   Average delivery: {dashboard.stats.avgDeliveryMs} ms
                 </p>
               </div>
@@ -633,17 +745,17 @@ export default function AdminPage() {
             variants={itemVariants}
             className="grid gap-6 lg:grid-cols-[2fr_1fr]"
           >
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+            <div className="rounded-3xl border border-gray-200 bg-white p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Email Volume Pulse
                   </p>
                   <h2 className="mt-2 text-xl font-semibold">
                     Real-time inbound traffic
                   </h2>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
                   <BarChart3 className="h-4 w-4" />
                   Last 12 intervals
                 </div>
@@ -653,12 +765,12 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Security Posture
                   </p>
-                  <Siren className="h-4 w-4 text-rose-300" />
+                  <Siren className="h-4 w-4 text-gray-700" />
                 </div>
                 <div className="mt-5 flex items-center gap-5">
                   <DonutChart
@@ -668,7 +780,7 @@ export default function AdminPage() {
                       { label: 'Errors', value: 5, color: '#ef4444' },
                     ]}
                   />
-                  <div className="space-y-3 text-sm text-slate-300">
+                  <div className="space-y-3 text-sm text-gray-600">
                     <div className="flex items-center justify-between gap-6">
                       <span>Blocked Requests</span>
                       <strong>{dashboard.stats.blockedRequests}</strong>
@@ -692,29 +804,29 @@ export default function AdminPage() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-5 space-y-2 text-xs text-slate-400">
+                <div className="mt-5 space-y-2 text-xs text-gray-500">
                   <div className="flex items-center gap-2">
-                    <BadgeCheck className="h-4 w-4 text-emerald-300" />
+                    <BadgeCheck className="h-4 w-4 text-gray-700" />
                     Strict CORS & token validation enforced
                   </div>
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-emerald-300" />
+                    <ShieldCheck className="h-4 w-4 text-gray-700" />
                     Sanitization allowlist active
                   </div>
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-amber-300" />
+                    <AlertTriangle className="h-4 w-4 text-gray-700" />
                     Rate limit thresholds 60/min (inbox)
                   </div>
                 </div>
               </div>
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Infrastructure
                   </p>
-                  <Database className="h-4 w-4 text-sky-300" />
+                  <Database className="h-4 w-4 text-gray-700" />
                 </div>
-                <div className="mt-4 grid gap-3 text-sm text-slate-300">
+                <div className="mt-4 grid gap-3 text-sm text-gray-600">
                   <div className="flex items-center justify-between">
                     <span>KV Storage Used</span>
                     <strong>{dashboard.stats.storageUsedMb} MB</strong>
@@ -736,39 +848,59 @@ export default function AdminPage() {
             variants={itemVariants}
             className="grid gap-6 lg:grid-cols-[1.6fr_1fr]"
           >
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+            <div className="rounded-3xl border border-gray-200 bg-white p-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Live Messages
                   </p>
                   <h3 className="mt-2 text-lg font-semibold">
                     Recent inbound traffic
                   </h3>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Search inbox, sender, subject..."
-                    className="w-60 rounded-full border border-slate-700 bg-slate-950/60 px-4 py-2 text-xs text-slate-200 outline-none transition focus:border-teal-400"
+                    placeholder="Filter current list..."
+                    className="w-48 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs text-gray-900 outline-none transition focus:border-black"
                   />
+                  <input
+                    value={inboxQuery}
+                    onChange={(event) => setInboxQuery(event.target.value)}
+                    placeholder="Load inbox by email..."
+                    className="w-60 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs text-gray-900 outline-none transition focus:border-black"
+                  />
+                  <button
+                    onClick={handleLoadInbox}
+                    disabled={inboxLoading}
+                    className="inline-flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {inboxLoading ? 'Loading...' : 'Load Inbox'}
+                  </button>
+                  <button
+                    onClick={handleRefresh}
+                    className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                  >
+                    <RefreshCcw className="h-4 w-4" />
+                    Reset
+                  </button>
                   <button
                     onClick={() =>
                       handleAdminAction('/api/admin/message/flush', {
                         scope: 'stale',
                       })
                     }
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/60 px-4 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-500"
+                    className="inline-flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-gray-900"
                   >
                     <Wand2 className="h-4 w-4" />
                     Clean Stale
                   </button>
                 </div>
               </div>
-              <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800">
+              <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-slate-900/80 text-xs uppercase text-slate-400">
+                  <thead className="bg-gray-50 text-xs uppercase text-gray-500">
                     <tr>
                       <th className="px-4 py-3">Sender</th>
                       <th className="px-4 py-3">Subject</th>
@@ -778,139 +910,171 @@ export default function AdminPage() {
                       <th className="px-4 py-3 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {filteredMessages.map((message) => (
-                      <tr key={message.id} className="hover:bg-slate-900/60">
-                        <td className="px-4 py-3">
-                          <div className="font-medium">{message.from}</div>
-                          <div className="text-xs text-slate-400">
-                            {message.size}
-                          </div>
-                        </td>
-                        <td className="px-4 py-3">{message.subject}</td>
-                        <td className="px-4 py-3 text-xs text-slate-300">
-                          {message.inbox}
-                        </td>
-                        <td className="px-4 py-3 text-xs text-slate-400">
-                          {formatTime(message.receivedAt)}
-                        </td>
-                        <td className="px-4 py-3">
-                          <StatusBadge
-                            label={
-                              message.status === 'delivered'
-                                ? 'Delivered'
-                                : message.status === 'flagged'
-                                  ? 'Flagged'
-                                  : 'Blocked'
-                            }
-                            tone={
-                              message.status === 'delivered'
-                                ? 'good'
-                                : message.status === 'flagged'
-                                  ? 'warn'
-                                  : 'bad'
-                            }
-                          />
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() =>
-                              handleAdminAction(
-                                `/api/admin/message/${message.id}`
-                              )
-                            }
-                            className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-200 transition hover:border-rose-400 hover:text-rose-300"
-                          >
-                            Delete
-                          </button>
+                  <tbody className="divide-y divide-gray-200">
+                    {filteredMessages.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="px-4 py-6 text-center text-sm text-gray-500"
+                        >
+                          No messages yet. Connect live API to see real data.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredMessages.map((message) => (
+                        <tr key={message.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3">
+                            <div className="font-medium">{message.from}</div>
+                            <div className="text-xs text-gray-500">
+                              {message.size}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">{message.subject}</td>
+                          <td className="px-4 py-3 text-xs text-gray-600">
+                            {message.inbox}
+                          </td>
+                          <td className="px-4 py-3 text-xs text-gray-500">
+                            {formatTime(message.receivedAt)}
+                          </td>
+                          <td className="px-4 py-3">
+                            <StatusBadge
+                              label={
+                                message.status === 'delivered'
+                                  ? 'Delivered'
+                                  : message.status === 'flagged'
+                                    ? 'Flagged'
+                                    : 'Blocked'
+                              }
+                              tone={
+                                message.status === 'delivered'
+                                  ? 'good'
+                                  : message.status === 'flagged'
+                                    ? 'warn'
+                                    : 'bad'
+                              }
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex justify-end gap-2">
+                              <button
+                                onClick={() => handleOpenMessage(message.id)}
+                                className="rounded-full border border-black bg-black px-3 py-1 text-xs font-semibold text-white transition hover:bg-gray-900"
+                              >
+                                View
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleAdminAction(
+                                    `/api/admin/message/${message.id}`
+                                  )
+                                }
+                                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Active Sessions
                   </p>
-                  <Users className="h-4 w-4 text-teal-300" />
+                  <Users className="h-4 w-4 text-black" />
                 </div>
                 <div className="mt-4 space-y-3">
-                  {dashboard.sessions.map((session) => (
-                    <div
-                      key={session.id}
-                      className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold">
-                            {session.email}
-                          </p>
-                          <p className="text-xs text-slate-400">
-                            IP {session.ip}
-                          </p>
-                        </div>
-                        <StatusBadge
-                          label={
-                            session.status === 'active'
-                              ? 'Active'
-                              : session.status === 'idle'
-                                ? 'Idle'
-                                : 'Blocked'
-                          }
-                          tone={
-                            session.status === 'active'
-                              ? 'good'
-                              : session.status === 'idle'
-                                ? 'warn'
-                                : 'bad'
-                          }
-                        />
-                      </div>
-                      <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
-                        <span>
-                          {session.messages} msgs · {formatTime(session.lastSeen)}
-                        </span>
-                        <button
-                          onClick={() =>
-                            handleAdminAction('/api/admin/session/revoke', {
-                              sessionId: session.id,
-                            })
-                          }
-                          className="rounded-full border border-slate-700 px-3 py-1 text-[11px] font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-300"
-                        >
-                          Revoke
-                        </button>
-                      </div>
+                  {dashboard.sessions.length === 0 ? (
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500">
+                      No active sessions yet.
                     </div>
-                  ))}
+                  ) : (
+                    dashboard.sessions.map((session) => (
+                      <div
+                        key={session.id}
+                        className="rounded-2xl border border-gray-200 bg-white p-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold">
+                              {session.email}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              IP {session.ip}
+                            </p>
+                          </div>
+                          <StatusBadge
+                            label={
+                              session.status === 'active'
+                                ? 'Active'
+                                : session.status === 'idle'
+                                  ? 'Idle'
+                                  : 'Blocked'
+                            }
+                            tone={
+                              session.status === 'active'
+                                ? 'good'
+                                : session.status === 'idle'
+                                  ? 'warn'
+                                  : 'bad'
+                            }
+                          />
+                        </div>
+                        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                          <span>
+                            {session.messages} msgs ·{' '}
+                            {formatTime(session.lastSeen)}
+                          </span>
+                          <button
+                            onClick={() =>
+                              handleAdminAction('/api/admin/session/revoke', {
+                                sessionId: session.id,
+                              })
+                            }
+                            className="rounded-full border border-gray-300 px-3 py-1 text-[11px] font-semibold text-gray-900 transition hover:border-gray-400"
+                          >
+                            Revoke
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Country Mix
                   </p>
-                  <Globe className="h-4 w-4 text-sky-300" />
+                  <Globe className="h-4 w-4 text-gray-700" />
                 </div>
-                <div className="mt-4 space-y-3 text-sm text-slate-300">
-                  {dashboard.series.countries.map((country) => (
-                    <div key={country.name} className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span>{country.name}</span>
-                        <span>{country.value}%</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-slate-800">
-                        <div
-                          className="h-2 rounded-full bg-sky-400/70"
-                          style={{ width: `${country.value}%` }}
-                        />
-                      </div>
+                <div className="mt-4 space-y-3 text-sm text-gray-600">
+                  {dashboard.series.countries.length === 0 ? (
+                    <div className="text-sm text-gray-500">
+                      No geo data yet.
                     </div>
-                  ))}
+                  ) : (
+                    dashboard.series.countries.map((country) => (
+                      <div key={country.name} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span>{country.name}</span>
+                          <span>{country.value}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-gray-200">
+                          <div
+                            className="h-2 rounded-full bg-black/40"
+                            style={{ width: `${country.value}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -918,88 +1082,94 @@ export default function AdminPage() {
 
           <motion.section variants={itemVariants}>
             <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr_1fr]">
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Incident Feed
                   </p>
-                  <Siren className="h-4 w-4 text-rose-300" />
+                  <Siren className="h-4 w-4 text-gray-700" />
                 </div>
                 <div className="mt-4 space-y-4">
-                  {dashboard.alerts.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <StatusBadge
-                          label={alert.severity.toUpperCase()}
-                          tone={
-                            alert.severity === 'high'
-                              ? 'bad'
-                              : alert.severity === 'medium'
-                                ? 'warn'
-                                : 'good'
-                          }
-                        />
-                        <span className="text-xs text-slate-400">
-                          {alert.time}
-                        </span>
-                      </div>
-                      <p className="mt-3 text-sm text-slate-200">
-                        {alert.message}
-                      </p>
+                  {dashboard.alerts.length === 0 ? (
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500">
+                      No alerts. Everything looks stable.
                     </div>
-                  ))}
+                  ) : (
+                    dashboard.alerts.map((alert) => (
+                      <div
+                        key={alert.id}
+                        className="rounded-2xl border border-gray-200 bg-white p-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <StatusBadge
+                            label={alert.severity.toUpperCase()}
+                            tone={
+                              alert.severity === 'high'
+                                ? 'bad'
+                                : alert.severity === 'medium'
+                                  ? 'warn'
+                                  : 'good'
+                            }
+                          />
+                          <span className="text-xs text-gray-500">
+                            {alert.time}
+                          </span>
+                        </div>
+                        <p className="mt-3 text-sm text-gray-900">
+                          {alert.message}
+                        </p>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Latency Trend
                   </p>
-                  <Activity className="h-4 w-4 text-amber-300" />
+                  <Activity className="h-4 w-4 text-gray-700" />
                 </div>
                 <div className="mt-6">
-                  <Sparkline data={dashboard.series.latency} color="#f59e0b" />
-                  <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
+                  <Sparkline data={dashboard.series.latency} color="#111827" />
+                  <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
                     <span>Avg {dashboard.stats.avgDeliveryMs} ms</span>
                     <span>Target &lt; 1500 ms</span>
                   </div>
                 </div>
               </div>
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-500">
                     Admin Actions
                   </p>
-                  <Boxes className="h-4 w-4 text-teal-300" />
+                  <Boxes className="h-4 w-4 text-black" />
                 </div>
-                <div className="mt-4 space-y-3 text-sm text-slate-300">
+                <div className="mt-4 space-y-3 text-sm text-gray-600">
                   <button
                     onClick={() =>
                       handleAdminAction('/api/admin/sessions/expire', {
                         scope: 'idle',
                       })
                     }
-                    className="flex w-full items-center justify-between rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-left transition hover:border-slate-600"
+                    className="flex w-full items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-400"
                   >
                     <span>Expire idle sessions</span>
-                    <HardDrive className="h-4 w-4 text-slate-400" />
+                    <HardDrive className="h-4 w-4 text-gray-500" />
                   </button>
                   <button
                     onClick={() => handleAdminAction('/api/admin/security/rotate')}
-                    className="flex w-full items-center justify-between rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-left transition hover:border-slate-600"
+                    className="flex w-full items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-400"
                   >
                     <span>Rotate API secrets</span>
-                    <ShieldCheck className="h-4 w-4 text-slate-400" />
+                    <ShieldCheck className="h-4 w-4 text-gray-500" />
                   </button>
                   <button
                     onClick={() => handleAdminAction('/api/admin/logs/export')}
-                    className="flex w-full items-center justify-between rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-left transition hover:border-slate-600"
+                    className="flex w-full items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-400"
                   >
                     <span>Export audit logs</span>
-                    <FileStack className="h-4 w-4 text-slate-400" />
+                    <FileStack className="h-4 w-4 text-gray-500" />
                   </button>
                 </div>
               </div>
@@ -1008,60 +1178,111 @@ export default function AdminPage() {
         </motion.div>
 
         {statusMessage && (
-          <div className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/70 px-5 py-3 text-xs text-slate-300">
+          <div className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-5 py-3 text-xs text-gray-600">
             <div className="flex items-center gap-2">
-              <Siren className="h-4 w-4 text-teal-300" />
+              <Siren className="h-4 w-4 text-black" />
               <span>{statusMessage}</span>
             </div>
-            <span className="text-slate-500">
+            <span className="text-gray-400">
               {status === 'loading' ? 'Updating...' : 'Ready'}
             </span>
           </div>
         )}
       </div>
 
+      {isMessageOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 p-6 backdrop-blur">
+          <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-gray-500">
+                  Message Detail
+                </p>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {selectedMessage?.subject || 'Message'}
+                </h3>
+                <p className="mt-1 text-xs text-gray-500">
+                  {selectedMessage?.from || ''}{' '}
+                  {selectedMessage?.inbox ? `→ ${selectedMessage.inbox}` : ''}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseMessage}
+                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+              >
+                Close
+              </button>
+            </div>
+            <div className="max-h-[70vh] overflow-y-auto p-6">
+              {messageLoading && (
+                <div className="text-sm text-gray-500">Loading message...</div>
+              )}
+              {!messageLoading && selectedMessage && (
+                <div
+                  className="prose prose-sm max-w-none text-gray-800"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeEmailHTML(
+                      selectedMessage.htmlBody ||
+                        selectedMessage.body ||
+                        '<p>No content.</p>'
+                    ),
+                  }}
+                />
+              )}
+              {!messageLoading && !selectedMessage && (
+                <div className="text-sm text-gray-500">No message loaded.</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {locked && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6 backdrop-blur">
-          <form
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6 backdrop-blur">
+          <motion.form
             onSubmit={handleUnlock}
-            className="w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl"
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
+            className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-gray-200 bg-white p-8 shadow-[0_30px_60px_-40px_rgba(15,23,42,0.45)]"
           >
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-black via-gray-700 to-black" />
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-white">
                 <Lock className="h-6 w-6" />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+                <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
                   Admin Gate
                 </p>
                 <h2 className="text-2xl font-semibold">Unlock Console</h2>
               </div>
             </div>
-            <p className="mt-4 text-sm text-slate-300">
+            <p className="mt-4 text-sm text-gray-600">
               Enter the admin secret stored in your Cloudflare Worker environment
               variables. Sessions auto-lock after 15 minutes of inactivity.
             </p>
             <div className="mt-6 space-y-4">
-              <label className="block text-xs uppercase tracking-widest text-slate-400">
+              <label className="block text-xs uppercase tracking-widest text-gray-500">
                 Admin API Base URL
                 <input
                   value={baseUrl}
                   onChange={(event) => setBaseUrl(event.target.value)}
                   placeholder="https://your-worker.workers.dev"
-                  className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950/60 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-teal-400"
+                  className="mt-2 w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black"
                 />
               </label>
-              <label className="block text-xs uppercase tracking-widest text-slate-400">
+              <label className="block text-xs uppercase tracking-widest text-gray-500">
                 Admin Secret
                 <input
                   value={token}
                   onChange={(event) => setToken(event.target.value)}
                   type="password"
                   placeholder="Enter secret"
-                  className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950/60 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-teal-400"
+                  className="mt-2 w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black"
                 />
               </label>
-              <div className="flex items-center gap-3 text-xs text-slate-400">
+              <div className="flex items-center gap-3 text-xs text-gray-500">
                 <input
                   id="demoMode"
                   type="checkbox"
@@ -1069,7 +1290,7 @@ export default function AdminPage() {
                   onChange={(event) =>
                     setMode(event.target.checked ? 'demo' : 'live')
                   }
-                  className="h-4 w-4 rounded border-slate-700 bg-slate-950 text-teal-400"
+                  className="h-4 w-4 rounded border-gray-300 bg-white text-black"
                 />
                 <label htmlFor="demoMode">
                   Use demo data (no API calls)
@@ -1077,16 +1298,17 @@ export default function AdminPage() {
               </div>
               <button
                 type="submit"
-                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-900"
               >
                 <ShieldCheck className="h-4 w-4" />
                 Unlock Console
               </button>
             </div>
-          </form>
+          </motion.form>
         </div>
       )}
     </div>
   )
 }
+
 
