@@ -141,13 +141,39 @@ export function stripHTMLTags(html: string): string {
 
 export function decodeQuotedPrintableIfNeeded(input: string): string {
   if (!input) return input;
-  if (!/=\r?\n|=([0-9A-F]{2})/i.test(input)) return input;
+  const raw = String(input);
+  if (!/=\r?\n|=\s*\r?\n|=([0-9A-F]{2})/i.test(raw)) return raw;
 
-  return input
-    .replace(/=\r?\n/g, '')
-    .replace(/=([0-9A-F]{2})/gi, (_, hex) =>
-      String.fromCharCode(parseInt(hex, 16))
+  const normalized = raw.replace(/=(?:\s*\r?\n)/g, '');
+  let output = '';
+  let bytes: number[] = [];
+  let hasHex = false;
+
+  const flushBytes = () => {
+    if (!bytes.length) return;
+    output += new TextDecoder('utf-8', { fatal: false }).decode(
+      new Uint8Array(bytes)
     );
+    bytes = [];
+  };
+
+  for (let i = 0; i < normalized.length; i += 1) {
+    const ch = normalized[i];
+    if (ch === '=' && i + 2 < normalized.length) {
+      const hex = normalized.slice(i + 1, i + 3);
+      if (/^[0-9A-Fa-f]{2}$/.test(hex)) {
+        bytes.push(parseInt(hex, 16));
+        hasHex = true;
+        i += 2;
+        continue;
+      }
+    }
+    flushBytes();
+    output += ch;
+  }
+
+  flushBytes();
+  return hasHex ? output : normalized;
 }
 
 /**

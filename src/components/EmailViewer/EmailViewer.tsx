@@ -29,6 +29,16 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const decodedSource = decodeQuotedPrintableIfNeeded(contentSource);
   const sanitizedHTML = sanitizeEmailHTML(decodedSource);
   const fallbackText = stripHTMLTags(decodedSource).trim();
+  const hasHtmlTags = /<\s*[a-z][^>]*>/i.test(sanitizedHTML);
+  const escapeHtml = (value: string) =>
+    value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  const plainHtml = escapeHtml(stripHTMLTags(decodedSource)).replace(/\r?\n/g, '<br />');
+  const renderHtml = hasHtmlTags ? sanitizedHTML : plainHtml;
   const hasRenderableHtml = stripHTMLTags(sanitizedHTML).trim().length > 0;
   const senderName = formatSenderName(email.from);
   const senderEmail = email.from;
@@ -100,7 +110,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
               a { color: #111827; text-decoration: underline; }
               table { max-width: 100%; }
               pre { white-space: pre-wrap; word-break: break-word; }
-            </style></head><body>${sanitizedHTML}</body></html>`}
+            </style></head><body>${renderHtml}</body></html>`}
           />
         ) : (
           <pre className="whitespace-pre-wrap text-sm text-gray-700">

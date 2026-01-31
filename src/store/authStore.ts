@@ -67,6 +67,13 @@ export const useAuthStore = create<AuthState>()(
       // Check if session is still active
       isSessionActive: () => {
         const state = get();
+        if (state.expiresAt) {
+          const expires = new Date(state.expiresAt).getTime();
+          if (!Number.isNaN(expires)) {
+            return Date.now() < expires;
+          }
+        }
+
         if (!state.createdAt) return false;
         return isSessionValid(state.createdAt, SESSION_TTL);
       },

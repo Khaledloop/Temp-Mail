@@ -17,6 +17,9 @@ interface UiState {
   isEmailViewerOpen: boolean;
   openEmailViewer: () => void;
   closeEmailViewer: () => void;
+  isRecoveryOpen: boolean;
+  openRecoveryModal: () => void;
+  closeRecoveryModal: () => void;
 
   // Toast notifications
   toasts: Toast[];
@@ -32,12 +35,15 @@ interface UiState {
 export const useUiStore = create<UiState>((set, get) => ({
   // Initial state
   isEmailViewerOpen: false,
+  isRecoveryOpen: false,
   toasts: [],
   isDarkMode: false,
 
   // Email viewer modal
   openEmailViewer: () => set({ isEmailViewerOpen: true }),
   closeEmailViewer: () => set({ isEmailViewerOpen: false }),
+  openRecoveryModal: () => set({ isRecoveryOpen: true }),
+  closeRecoveryModal: () => set({ isRecoveryOpen: false }),
 
   // Toast notifications
   addToast: (toast) => {

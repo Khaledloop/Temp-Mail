@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { useUiStore } from '@/store/uiStore';
@@ -20,6 +20,7 @@ export const useTempMail = () => {
   const { setEmails } = useInboxStore();
   const { addToast } = useUiStore();
   const [hasHydrated, setHasHydrated] = useState(false);
+  const initInFlightRef = useRef<Promise<void> | null>(null);
 
   /**
    * Initialize session on mount
@@ -47,25 +48,36 @@ export const useTempMail = () => {
         return; // Session still valid, no need to create new one
       }
 
-      try {
-        const response = await apiClient.createNewSession();
-        
-        // Map backend response to store
-        setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
-        
-        addToast({ 
-          message: 'Session created successfully', 
-          type: 'success', 
-          duration: 2000 
-        });
-      } catch (error) {
-        console.error('Failed to create session:', error);
-        addToast({ 
-          message: 'Failed to create session. Please refresh the page.', 
-          type: 'error', 
-          duration: 3000 
-        });
+      if (initInFlightRef.current) {
+        await initInFlightRef.current;
+        return;
       }
+
+      initInFlightRef.current = (async () => {
+        try {
+          const response = await apiClient.createNewSession();
+          
+          // Map backend response to store
+          setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
+          
+          addToast({ 
+            message: 'Session created successfully', 
+            type: 'success', 
+            duration: 2000 
+          });
+        } catch (error) {
+          console.error('Failed to create session:', error);
+          addToast({ 
+            message: 'Failed to create session. Please refresh the page.', 
+            type: 'error', 
+            duration: 3000 
+          });
+        } finally {
+          initInFlightRef.current = null;
+        }
+      })();
+
+      await initInFlightRef.current;
     };
 
     initSession();

@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import type { ApiError, NewSessionResponse } from '@/types';
 import { useAuthStore } from '@/store/authStore';
+import { getFallbackDomains } from '@/utils/domains';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
@@ -156,10 +157,11 @@ class ApiClient {
   async getDomains(): Promise<string[]> {
     try {
       const response = await this.axiosInstance.get<DomainsResponse>('/api/domains');
-      return Array.isArray(response.data?.domains) ? response.data.domains : [];
+      const domains = Array.isArray(response.data?.domains) ? response.data.domains : [];
+      return domains.length ? domains : getFallbackDomains();
     } catch (error) {
       console.error('Error fetching domains:', error);
-      return [];
+      return getFallbackDomains();
     }
   }
 
