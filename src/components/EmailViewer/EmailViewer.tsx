@@ -4,7 +4,11 @@
 
 'use client';
 
-import { sanitizeEmailHTML, stripHTMLTags } from '@/utils/sanitizer';
+import {
+  decodeQuotedPrintableIfNeeded,
+  sanitizeEmailHTML,
+  stripHTMLTags,
+} from '@/utils/sanitizer';
 import { formatEmailDateTime } from '@/utils/formatters';
 import { formatSenderName } from '@/utils/formatters';
 import { X } from 'lucide-react';
@@ -22,8 +26,9 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const bodyText = stripHTMLTags(rawText).trim();
   const shouldUseBody = bodyText.length > htmlText.length + 20;
   const contentSource = shouldUseBody ? rawText : (rawHtml || rawText);
-  const sanitizedHTML = sanitizeEmailHTML(contentSource);
-  const fallbackText = stripHTMLTags(contentSource).trim();
+  const decodedSource = decodeQuotedPrintableIfNeeded(contentSource);
+  const sanitizedHTML = sanitizeEmailHTML(decodedSource);
+  const fallbackText = stripHTMLTags(decodedSource).trim();
   const hasRenderableHtml = stripHTMLTags(sanitizedHTML).trim().length > 0;
   const senderName = formatSenderName(email.from);
   const senderEmail = email.from;
@@ -69,7 +74,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
         </div>
         <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
           <p className="text-sm font-medium text-gray-700">
-            📅 {displayDateTime}
+            Sent: {displayDateTime}
           </p>
           <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-800 border border-gray-300">
             <span className="relative flex h-2 w-2 mr-2">
@@ -84,17 +89,18 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       {/* Email content - Clean */}
       <div className="flex-1 min-h-0 overflow-auto px-6 py-8">
         {hasRenderableHtml ? (
-          <div
-            className="prose prose-sm max-w-none text-gray-900 
-              prose-p:text-gray-700 prose-p:leading-relaxed
-              prose-a:text-gray-900 prose-a:hover:text-gray-700 prose-a:underline
-              prose-strong:text-gray-900 prose-strong:font-bold
-              prose-em:text-gray-700
-              prose-img:rounded-lg prose-img:shadow-md
-              prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:rounded prose-code:px-2 prose-code:py-1
-              prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:rounded prose-blockquote:px-4 prose-blockquote:py-2
-              prose-li:marker:text-blue-600"
-            dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
+          <iframe
+            title="Email content"
+            className="h-full w-full rounded-xl border border-gray-200 bg-white"
+            sandbox="allow-popups allow-popups-to-escape-sandbox"
+            referrerPolicy="no-referrer"
+            srcDoc={`<!doctype html><html><head><meta charset="utf-8" /><style>
+              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #111827; line-height: 1.6; }
+              img { max-width: 100%; height: auto; }
+              a { color: #111827; text-decoration: underline; }
+              table { max-width: 100%; }
+              pre { white-space: pre-wrap; word-break: break-word; }
+            </style></head><body>${sanitizedHTML}</body></html>`}
           />
         ) : (
           <pre className="whitespace-pre-wrap text-sm text-gray-700">
@@ -107,12 +113,11 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
         <div className="flex items-center justify-center gap-2">
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-          <p className="text-sm font-medium text-gray-600">
-            ⏰ This email will be deleted in 24 hours
-          </p>
+          <p className="text-sm font-medium text-gray-600">This email will be deleted in 24 hours</p>
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
         </div>
       </div>
     </div>
   );
 }
+

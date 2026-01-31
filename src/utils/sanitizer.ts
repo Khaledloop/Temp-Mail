@@ -139,6 +139,17 @@ export function stripHTMLTags(html: string): string {
   }
 }
 
+export function decodeQuotedPrintableIfNeeded(input: string): string {
+  if (!input) return input;
+  if (!/=\r?\n|=([0-9A-F]{2})/i.test(input)) return input;
+
+  return input
+    .replace(/=\r?\n/g, '')
+    .replace(/=([0-9A-F]{2})/gi, (_, hex) =>
+      String.fromCharCode(parseInt(hex, 16))
+    );
+}
+
 /**
  * Extracts plain text preview from HTML content (first 150 chars)
  * @param html - HTML content

@@ -22,7 +22,6 @@ import {
   Wand2,
 } from 'lucide-react'
 import { adminRequest } from '@/utils/adminApi'
-import { sanitizeEmailHTML } from '@/utils/sanitizer'
 
 const DEFAULT_ADMIN_API_URL =
   process.env.NEXT_PUBLIC_ADMIN_API_URL ||
@@ -58,13 +57,6 @@ type AdminMessage = {
   size: string
   status: 'delivered' | 'blocked' | 'flagged'
   inbox: string
-}
-
-type AdminMessageDetail = AdminMessage & {
-  body?: string
-  htmlBody?: string
-  timestamp?: string
-  to?: string
 }
 
 type AdminSession = {
@@ -366,12 +358,6 @@ export default function AdminPage() {
   )
   const [statusMessage, setStatusMessage] = useState('')
   const [search, setSearch] = useState('')
-  const [inboxQuery, setInboxQuery] = useState('')
-  const [inboxLoading, setInboxLoading] = useState(false)
-  const [messageLoading, setMessageLoading] = useState(false)
-  const [selectedMessage, setSelectedMessage] =
-    useState<AdminMessageDetail | null>(null)
-  const [isMessageOpen, setIsMessageOpen] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -560,74 +546,8 @@ export default function AdminPage() {
       )
     }
   }
-
-  const handleLoadInbox = async () => {
-    if (!liveConnected) {
-      setStatusMessage('Live connection is offline. Fix API URL/secret.')
-      return
-    }
-    if (!inboxQuery.trim()) {
-      setStatusMessage('Enter the inbox email to load messages.')
-      return
-    }
-    setInboxLoading(true)
-    setStatus('loading')
-    setStatusMessage('Loading inbox messages...')
-    try {
-      const data = await adminRequest<{ messages: AdminMessage[] }>(
-        `/api/admin/inbox?email=${encodeURIComponent(inboxQuery.trim())}`,
-        {
-          baseUrl,
-          token,
-        }
-      )
-      const messages = Array.isArray(data?.messages) ? data.messages : []
-      setDashboard((prev) => ({ ...prev, messages }))
-      setStatus('ok')
-      setStatusMessage(
-        messages.length
-          ? `Loaded ${messages.length} messages for ${inboxQuery.trim()}.`
-          : 'No messages found for this inbox.'
-      )
-    } catch (error) {
-      setStatus('error')
-      setStatusMessage(
-        error instanceof Error ? error.message : 'Failed to load inbox.'
-      )
-    } finally {
-      setInboxLoading(false)
-    }
-  }
-
-  const handleOpenMessage = async (messageId: string) => {
-    if (!liveConnected) {
-      setStatusMessage('Live connection is offline. Fix API URL/secret.')
-      return
-    }
-    setMessageLoading(true)
-    try {
-      const data = await adminRequest<AdminMessageDetail>(
-        `/api/admin/message/${messageId}`,
-        {
-          baseUrl,
-          token,
-        }
-      )
-      setSelectedMessage(data)
-      setIsMessageOpen(true)
-    } catch (error) {
-      setStatusMessage(
-        error instanceof Error ? error.message : 'Failed to load message.'
-      )
-    } finally {
-      setMessageLoading(false)
-    }
-  }
-
-  const handleCloseMessage = () => {
-    setIsMessageOpen(false)
-    setSelectedMessage(null)
-  }
+  const adminCapabilitiesNote =
+    'This admin view reflects the current worker endpoints: overview metrics, recent messages, and session controls. Full message view requires a dedicated admin message endpoint, which is not enabled in your worker.'
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white text-gray-900">
@@ -828,7 +748,7 @@ export default function AdminPage() {
                 </div>
                 <div className="mt-4 grid gap-3 text-sm text-gray-600">
                   <div className="flex items-center justify-between">
-                    <span>KV Storage Used</span>
+                    <span>DB Storage Used</span>
                     <strong>{dashboard.stats.storageUsedMb} MB</strong>
                   </div>
                   <div className="flex items-center justify-between">
@@ -857,6 +777,9 @@ export default function AdminPage() {
                   <h3 className="mt-2 text-lg font-semibold">
                     Recent inbound traffic
                   </h3>
+                  <p className="mt-2 max-w-xl text-xs text-gray-500">
+                    {adminCapabilitiesNote}
+                  </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
                   <input
@@ -865,26 +788,6 @@ export default function AdminPage() {
                     placeholder="Filter current list..."
                     className="w-48 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs text-gray-900 outline-none transition focus:border-black"
                   />
-                  <input
-                    value={inboxQuery}
-                    onChange={(event) => setInboxQuery(event.target.value)}
-                    placeholder="Load inbox by email..."
-                    className="w-60 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs text-gray-900 outline-none transition focus:border-black"
-                  />
-                  <button
-                    onClick={handleLoadInbox}
-                    disabled={inboxLoading}
-                    className="inline-flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {inboxLoading ? 'Loading...' : 'Load Inbox'}
-                  </button>
-                  <button
-                    onClick={handleRefresh}
-                    className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
-                  >
-                    <RefreshCcw className="h-4 w-4" />
-                    Reset
-                  </button>
                   <button
                     onClick={() =>
                       handleAdminAction('/api/admin/message/flush', {
@@ -956,12 +859,6 @@ export default function AdminPage() {
                           </td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex justify-end gap-2">
-                              <button
-                                onClick={() => handleOpenMessage(message.id)}
-                                className="rounded-full border border-black bg-black px-3 py-1 text-xs font-semibold text-white transition hover:bg-gray-900"
-                              >
-                                View
-                              </button>
                               <button
                                 onClick={() =>
                                   handleAdminAction(
@@ -1189,53 +1086,6 @@ export default function AdminPage() {
           </div>
         )}
       </div>
-
-      {isMessageOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 p-6 backdrop-blur">
-          <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-              <div>
-                <p className="text-xs uppercase tracking-widest text-gray-500">
-                  Message Detail
-                </p>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedMessage?.subject || 'Message'}
-                </h3>
-                <p className="mt-1 text-xs text-gray-500">
-                  {selectedMessage?.from || ''}{' '}
-                  {selectedMessage?.inbox ? `→ ${selectedMessage.inbox}` : ''}
-                </p>
-              </div>
-              <button
-                onClick={handleCloseMessage}
-                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
-              >
-                Close
-              </button>
-            </div>
-            <div className="max-h-[70vh] overflow-y-auto p-6">
-              {messageLoading && (
-                <div className="text-sm text-gray-500">Loading message...</div>
-              )}
-              {!messageLoading && selectedMessage && (
-                <div
-                  className="prose prose-sm max-w-none text-gray-800"
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeEmailHTML(
-                      selectedMessage.htmlBody ||
-                        selectedMessage.body ||
-                        '<p>No content.</p>'
-                    ),
-                  }}
-                />
-              )}
-              {!messageLoading && !selectedMessage && (
-                <div className="text-sm text-gray-500">No message loaded.</div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {locked && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6 backdrop-blur">

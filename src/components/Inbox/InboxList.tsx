@@ -11,7 +11,7 @@ import { useInboxStore } from '@/store/inboxStore';
 import { formatEmailTime } from '@/utils/formatters';
 import { truncateText } from '@/utils/formatters';
 import { formatSenderName } from '@/utils/formatters';
-import { stripHTMLTags } from '@/utils/sanitizer';
+import { decodeQuotedPrintableIfNeeded, stripHTMLTags } from '@/utils/sanitizer';
 import type { Email } from '@/types';
 
 interface InboxListProps {
@@ -123,7 +123,10 @@ const EmailRow = memo(function EmailRow({
   index = 0,
 }: EmailRowProps) {
   const senderName = formatSenderName(email.from);
-  const preview = truncateText(stripHTMLTags(email.htmlBody || email.body), 80);
+  const previewSource = decodeQuotedPrintableIfNeeded(
+    email.htmlBody || email.body
+  );
+  const preview = truncateText(stripHTMLTags(previewSource), 80);
   const timeString = formatEmailTime(email.timestamp);
   const handleClick = useCallback(() => {
     onSelectEmail?.(email.id);
