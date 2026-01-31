@@ -4,12 +4,28 @@ import { useAuthStore } from '@/store/authStore';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
-// Backend session TTL in seconds (24 hours)
-const SESSION_TTL_SECONDS = 86400;
+// Backend session TTL in seconds (30 days)
+const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 interface BackendNewSessionResponse {
   token: string;
   email: string;
+}
+
+interface DomainsResponse {
+  domains: string[];
+}
+
+interface RecoveryKeyResponse {
+  key: string;
+  email: string;
+  createdAt?: string;
+}
+
+interface ChangeEmailRequest {
+  localPart?: string;
+  domain?: string;
+  random?: boolean;
 }
 
 class ApiClient {
@@ -132,6 +148,69 @@ class ApiClient {
    */
   async refreshSession(): Promise<NewSessionResponse> {
     return this.createNewSession();
+  }
+
+  /**
+   * Fetch available domains from backend
+   */
+  async getDomains(): Promise<string[]> {
+    try {
+      const response = await this.axiosInstance.get<DomainsResponse>('/api/domains');
+      return Array.isArray(response.data?.domains) ? response.data.domains : [];
+    } catch (error) {
+      console.error('Error fetching domains:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Change current email to a custom local part + domain
+   */
+  async changeEmail(payload: ChangeEmailRequest): Promise<NewSessionResponse> {
+    const response = await this.axiosInstance.post<BackendNewSessionResponse>(
+      '/api/change_email',
+      payload
+    );
+
+    const expiresAt = new Date(
+      Date.now() + SESSION_TTL_SECONDS * 1000
+    ).toISOString();
+
+    return {
+      sessionId: response.data.token,
+      tempMailAddress: response.data.email,
+      expiresAt,
+    };
+  }
+
+  /**
+   * Get recovery key for current email
+   */
+  async getRecoveryKey(): Promise<RecoveryKeyResponse> {
+    const response = await this.axiosInstance.get<RecoveryKeyResponse>(
+      '/api/recovery/key'
+    );
+    return response.data;
+  }
+
+  /**
+   * Recover email using recovery key
+   */
+  async recoverEmail(key: string): Promise<NewSessionResponse> {
+    const response = await this.axiosInstance.post<BackendNewSessionResponse>(
+      '/api/recovery/restore',
+      { key }
+    );
+
+    const expiresAt = new Date(
+      Date.now() + SESSION_TTL_SECONDS * 1000
+    ).toISOString();
+
+    return {
+      sessionId: response.data.token,
+      tempMailAddress: response.data.email,
+      expiresAt,
+    };
   }
 }
 

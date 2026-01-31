@@ -55,7 +55,7 @@ export function JsonLd() {
         name: 'How long does the email address last?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Temporary email addresses are automatically deleted after 24 hours. You can generate a new address at any time with just one click.',
+          text: 'Temporary email addresses are automatically deleted after 30 days. You can generate a new address at any time with just one click.',
         },
       },
       {
@@ -103,7 +103,7 @@ export function JsonLd() {
         name: 'Is my data stored or logged?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Temp Mail does not store logs of your activity. Your temporary email and inbox data are automatically deleted after 24 hours.',
+          text: 'Temp Mail does not store logs of your activity. Your temporary email and inbox data are automatically deleted after 30 days.',
         },
       },
     ],
@@ -132,3 +132,4 @@ export function JsonLd() {
     </>
   );
 }
+

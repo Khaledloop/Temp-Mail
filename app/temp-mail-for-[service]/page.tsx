@@ -114,7 +114,7 @@ export default function ServicePage({
                 Avoid Spam
               </h3>
               <p className="text-gray-600 text-sm">
-                Temporary email addresses expire after 24 hours, automatically filtering spam.
+                Temporary email addresses expire after 30 days, automatically filtering spam.
               </p>
             </div>
           </li>

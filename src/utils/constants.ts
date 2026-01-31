@@ -6,7 +6,7 @@
 export const EMAIL_POLL_INTERVAL = 7000; // 7 seconds
 
 // Session TTL (time-to-live) in milliseconds
-export const SESSION_TTL = 24 * 60 * 60 * 1000; // 24 hours
+export const SESSION_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 // LocalStorage keys
 export const STORAGE_KEYS = {

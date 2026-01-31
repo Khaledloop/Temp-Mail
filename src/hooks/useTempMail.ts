@@ -116,7 +116,7 @@ export const useTempMail = () => {
    */
   const changeEmailAddress = useCallback(async () => {
     try {
-      const response = await apiClient.createNewSession();
+      const response = await apiClient.changeEmail({ random: true });
       setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
       setEmails([]); // Clear inbox for new address
       
@@ -135,11 +135,43 @@ export const useTempMail = () => {
     }
   }, [addToast, setEmails, setSession]);
 
+  const changeEmailCustom = useCallback(
+    async (localPart: string, domain: string, random = false) => {
+      const response = await apiClient.changeEmail({ localPart, domain, random });
+      setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
+      setEmails([]);
+      return response;
+    },
+    [setEmails, setSession]
+  );
+
+  const getRecoveryKey = useCallback(async () => {
+    return apiClient.getRecoveryKey();
+  }, []);
+
+  const recoverEmail = useCallback(
+    async (key: string) => {
+      const response = await apiClient.recoverEmail(key);
+      setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
+      setEmails([]);
+      return response;
+    },
+    [setEmails, setSession]
+  );
+
+  const getDomains = useCallback(async () => {
+    return apiClient.getDomains();
+  }, []);
+
   return {
     sessionId,
     tempMailAddress,
     isSessionActive: isSessionActive(),
     changeEmailAddress,
+    changeEmailCustom,
+    getRecoveryKey,
+    recoverEmail,
+    getDomains,
     clearSession,
   };
 };

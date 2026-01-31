@@ -113,7 +113,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
         <div className="flex items-center justify-center gap-2">
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-          <p className="text-sm font-medium text-gray-600">This email will be deleted in 24 hours</p>
+          <p className="text-sm font-medium text-gray-600">This email will be deleted in 30 days</p>
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
         </div>
       </div>

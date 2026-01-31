@@ -46,7 +46,7 @@ export default function PrivacyPage() {
           </h2>
           <p>
             All temporary email addresses and their contents are automatically
-            deleted after 24 hours. We do not retain any personal data beyond
+            deleted after 30 days. We do not retain any personal data beyond
             this period.
           </p>
         </section>
@@ -64,3 +64,4 @@ export default function PrivacyPage() {
     </div>
   );
 }
+

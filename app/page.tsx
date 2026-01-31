@@ -21,7 +21,7 @@ const EmailViewerModal = dynamic(
 
 export default function HomePage() {
   // Initialize session
-  const { changeEmailAddress } = useTempMail();
+  const { changeEmailCustom, getRecoveryKey, recoverEmail, getDomains } = useTempMail();
 
   // Fetch emails with polling
   const { fetchEmails, deleteEmail } = useFetchEmails();
@@ -32,7 +32,6 @@ export default function HomePage() {
   const { isEmailViewerOpen, openEmailViewer, addToast } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
 
-  const handleRefresh = useCallback(() => changeEmailAddress(), [changeEmailAddress]);
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
   const handleFetchEmails = useCallback(async () => {
     await fetchEmails({ source: 'manual' });
@@ -92,8 +91,11 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <Hero
             isLoading={isLoading}
-            onRefresh={handleRefresh}
             onFetchEmails={handleFetchEmails}
+            onChangeEmail={changeEmailCustom}
+            onGetRecoveryKey={getRecoveryKey}
+            onRecoverEmail={recoverEmail}
+            onGetDomains={getDomains}
           />
         </div>
       </div>
@@ -140,7 +142,7 @@ export default function HomePage() {
           {[
             { icon: '⚡', title: 'INSTANT', desc: 'No signup' },
             { icon: '🔒', title: 'PRIVATE', desc: 'Encrypted' },
-            { icon: '⏱️', title: 'TEMP', desc: '24h auto' },
+            { icon: '⏱️', title: 'TEMP', desc: '30d auto' },
             { icon: '💰', title: 'FREE', desc: 'Always' },
           ].map((feature, idx) => (
             <button
