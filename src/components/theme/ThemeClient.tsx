@@ -19,10 +19,13 @@ export function ThemeClient() {
 
   useEffect(() => {
     const root = document.documentElement;
+    const body = document.body;
     if (isDarkMode) {
       root.classList.add('dark');
+      body.classList.add('dark');
     } else {
       root.classList.remove('dark');
+      body.classList.remove('dark');
     }
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');

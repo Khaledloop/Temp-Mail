@@ -288,15 +288,32 @@ export function Hero({
       </div>
 
       {isChangeOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          onClick={() => setIsChangeOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
                 onClick={() => setIsChangeOpen(false)}
-                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                aria-label="Close"
               >
-                Close
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 6l12 12M18 6l12 12" />
+                </svg>
               </button>
             </div>
             <p className="mt-2 text-sm text-gray-600">
@@ -360,15 +377,32 @@ export function Hero({
       )}
 
       {isRecoveryOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          onClick={() => setIsRecoveryOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
                 onClick={() => setIsRecoveryOpen(false)}
-                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                aria-label="Close"
               >
-                Close
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 6l12 12M18 6l12 12" />
+                </svg>
               </button>
             </div>
             <p className="mt-2 text-sm text-gray-600">
