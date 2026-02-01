@@ -128,12 +128,30 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
  */
 export function stripHTMLTags(html: string): string {
   try {
-    const decoded = html.replace(/&[a-z]+;/gi, (match) => {
+    const source = String(html || '');
+    const withoutBlocks = source
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<\s*(script|style|head|title|meta|noscript)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, ' ');
+
+    if (typeof document !== 'undefined') {
       const element = document.createElement('div');
-      element.innerHTML = match;
-      return element.textContent || match;
-    });
-    return decoded.replace(/<[^>]*>/g, '');
+      element.innerHTML = withoutBlocks;
+      return (element.textContent || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    const decoded = withoutBlocks
+      .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+      .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)))
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>');
+
+    return decoded.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   } catch {
     return html;
   }
