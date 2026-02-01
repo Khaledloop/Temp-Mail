@@ -23,8 +23,22 @@ export function HomeClient() {
 
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, toggleDarkMode } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, setDarkMode } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
+
+  const applyTheme = (isDark: boolean) => {
+    if (typeof document === 'undefined') return;
+    const mode = isDark ? 'dark' : 'light';
+    const root = document.documentElement;
+    const body = document.body;
+    root.dataset.theme = mode;
+    body.dataset.theme = mode;
+    root.classList.toggle('dark', isDark);
+    body.classList.toggle('dark', isDark);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('theme', mode);
+    }
+  };
 
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
   const handleFetchEmails = useCallback(async () => {
@@ -75,7 +89,13 @@ export function HomeClient() {
     <>
       <button
         type="button"
-        onClick={toggleDarkMode}
+        onClick={() => {
+          const root = document.documentElement;
+          const current = root.dataset.theme === 'dark' || root.classList.contains('dark');
+          const next = !current;
+          setDarkMode(next);
+          applyTheme(next);
+        }}
         className="fixed top-4 right-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-900 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 dark:border-gray-300 dark:bg-black dark:text-white"
         aria-label={isDarkMode ? 'Disable dark mode' : 'Enable dark mode'}
       >

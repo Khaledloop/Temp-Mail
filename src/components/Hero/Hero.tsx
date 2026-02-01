@@ -300,20 +300,25 @@ export function Hero({
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
                 onClick={() => setIsChangeOpen(false)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
                 aria-label="Close"
               >
                 <svg
-                  className="h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="lucide lucide-x h-4 w-4 text-gray-900"
                 >
-                  <path d="M6 6l12 12M18 6l12 12" />
+                  <path d="M18 6 6 18"></path>
+                  <path d="m6 6 12 12"></path>
                 </svg>
+                <span className="text-xs font-black hidden sm:inline">Close</span>
               </button>
             </div>
             <p className="mt-2 text-sm text-gray-600">
@@ -389,20 +394,25 @@ export function Hero({
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
                 onClick={() => setIsRecoveryOpen(false)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
                 aria-label="Close"
               >
                 <svg
-                  className="h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="lucide lucide-x h-4 w-4 text-gray-900"
                 >
-                  <path d="M6 6l12 12M18 6l12 12" />
+                  <path d="M18 6 6 18"></path>
+                  <path d="m6 6 12 12"></path>
                 </svg>
+                <span className="text-xs font-black hidden sm:inline">Close</span>
               </button>
             </div>
             <p className="mt-2 text-sm text-gray-600">
