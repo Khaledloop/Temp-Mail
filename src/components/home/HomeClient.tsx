@@ -23,7 +23,7 @@ export function HomeClient() {
 
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, openEmailViewer, addToast } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, toggleDarkMode } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
 
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
@@ -73,6 +73,25 @@ export function HomeClient() {
 
   return (
     <>
+      <button
+        type="button"
+        onClick={toggleDarkMode}
+        className="fixed top-4 right-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-900 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 dark:border-gray-300 dark:bg-black dark:text-white"
+        aria-label={isDarkMode ? 'Disable dark mode' : 'Enable dark mode'}
+      >
+        <svg
+          className="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      </button>
+
       <div className="relative py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <Hero

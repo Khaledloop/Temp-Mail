@@ -29,6 +29,7 @@ interface UiState {
 
   // Theme
   isDarkMode: boolean;
+  setDarkMode: (isDark: boolean) => void;
   toggleDarkMode: () => void;
 }
 
@@ -72,6 +73,7 @@ export const useUiStore = create<UiState>((set, get) => ({
   },
 
   // Theme toggle
+  setDarkMode: (isDark) => set({ isDarkMode: isDark }),
   toggleDarkMode: () => {
     set((state) => ({ isDarkMode: !state.isDarkMode }));
   },

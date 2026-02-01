@@ -12,6 +12,93 @@
   }
 }
 
+@layer base {
+  .dark body {
+    background-color: #050505;
+    color: #f5f5f5;
+  }
+
+  .dark .bg-white {
+    background-color: #0b0b0b;
+  }
+
+  .dark .bg-gray-50 {
+    background-color: #0f0f0f;
+  }
+
+  .dark .bg-gray-100 {
+    background-color: #151515;
+  }
+
+  .dark .text-gray-900 {
+    color: #f5f5f5;
+  }
+
+  .dark .text-gray-800 {
+    color: #e6e6e6;
+  }
+
+  .dark .text-gray-700 {
+    color: #d6d6d6;
+  }
+
+  .dark .text-gray-600 {
+    color: #c4c4c4;
+  }
+
+  .dark .text-gray-500 {
+    color: #aaaaaa;
+  }
+
+  .dark .text-gray-400 {
+    color: #909090;
+  }
+
+  .dark .border-gray-100 {
+    border-color: #1c1c1c;
+  }
+
+  .dark .border-gray-200 {
+    border-color: #262626;
+  }
+
+  .dark .border-gray-300 {
+    border-color: #2f2f2f;
+  }
+
+  .dark input,
+  .dark select,
+  .dark textarea {
+    background-color: #0b0b0b;
+    color: #f5f5f5;
+    border-color: #2f2f2f;
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #7d7d7d;
+  }
+
+  .dark .bg-black {
+    background-color: #000000;
+  }
+
+  .dark .bg-gray-200 {
+    background-color: #1a1a1a;
+  }
+
+  .dark .bg-gray-900 {
+    background-color: #050505;
+  }
+
+  .dark .shadow-sm,
+  .dark .shadow-md,
+  .dark .shadow-lg,
+  .dark .shadow-xl {
+    box-shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.8);
+  }
+}
+
 @layer components {
   /* Premium fade animations */
   @keyframes fadeIn {

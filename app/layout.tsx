@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { ThemeClient } from '@/components/theme/ThemeClient'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -69,7 +70,10 @@ export default function RootLayout({
       <head>
         <JsonLd />
       </head>
-      <body className={manrope.className}>{children}</body>
+      <body className={manrope.className}>
+        <ThemeClient />
+        {children}
+      </body>
     </html>
   )
 }
