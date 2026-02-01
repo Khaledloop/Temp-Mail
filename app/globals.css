@@ -3,10 +3,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-white text-gray-900 min-h-screen;
+    overflow-x: hidden;
   }
 }
 

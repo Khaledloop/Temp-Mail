@@ -212,12 +212,12 @@ export function Hero({
         </div>
 
         {/* small actions under the pill */}
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-6">
           {/* Refresh Button - Simple */}
           <button
             onClick={onFetchEmails}
             disabled={!onFetchEmails}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
@@ -235,7 +235,7 @@ export function Hero({
           <button
             onClick={openChangeModal}
             disabled={changeLoading}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <svg 
               className={`h-5 w-5 transition-transform duration-500 ${changeLoading ? 'animate-spin' : 'group-hover:rotate-180'}`}
@@ -252,18 +252,18 @@ export function Hero({
           {/* Recover Email Button */}
           <button
             onClick={openRecoveryModal}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out group"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" 
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2" 
-              viewBox="0 0 24 24"
+              viewBox="-1 -1 26 26"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-4a10 10 0 11-20 0 10 10 0 0120 0z"/>
             </svg>
-            <span className="text-sm">Recover</span>
+            <span className="text-sm">Recovery Key</span>
           </button>
 
           {/* Logout Button */}
@@ -272,7 +272,7 @@ export function Hero({
               clearSession();
               addToast({ message: 'Logged out', type: 'info', duration: 1500 });
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out hover:text-red-600 hover:border-red-200 group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out hover:text-red-600 hover:border-red-200 group"
           >
             <svg 
               className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-300" 
@@ -288,13 +288,13 @@ export function Hero({
       </div>
 
       {isChangeOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6 backdrop-blur">
-          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto">
+          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
                 onClick={() => setIsChangeOpen(false)}
-                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
               >
                 Close
               </button>
@@ -313,11 +313,11 @@ export function Hero({
                     value={localPart}
                     onChange={(event) => setLocalPart(event.target.value)}
                     placeholder="yourname"
-                    className="flex-1 rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black"
+                    className="flex-1 rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
                   />
                   <button
                     onClick={() => setLocalPart(generateRandomLocalPart())}
-                    className="rounded-2xl border border-gray-300 px-4 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                    className="rounded-2xl border border-gray-300 px-4 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
                   >
                     Random
                   </button>
@@ -331,7 +331,7 @@ export function Hero({
                   <select
                     value={selectedDomain}
                     onChange={(event) => setSelectedDomain(event.target.value)}
-                    className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black"
+                    className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
                   >
                     {domainLoading && <option>Loading domains...</option>}
                     {!domainLoading &&
@@ -350,7 +350,7 @@ export function Hero({
               <button
                 onClick={handleChangeEmail}
                 disabled={changeLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {changeLoading ? 'Updating...' : 'Confirm Change'}
               </button>
@@ -360,13 +360,13 @@ export function Hero({
       )}
 
       {isRecoveryOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6 backdrop-blur">
-          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto">
+          <div className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
                 onClick={() => setIsRecoveryOpen(false)}
-                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
               >
                 Close
               </button>
@@ -390,7 +390,7 @@ export function Hero({
                       await navigator.clipboard.writeText(recoveryKey);
                       addToast({ message: 'Recovery key copied', type: 'success', duration: 1500 });
                     }}
-                    className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition hover:border-gray-400"
+                    className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
                   >
                     Copy
                   </button>
@@ -404,13 +404,13 @@ export function Hero({
                   value={recoveryInput}
                   onChange={(event) => setRecoveryInput(event.target.value)}
                   placeholder="Paste recovery key"
-                  className="mt-2 w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black"
+                  className="mt-2 w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
                 />
               </div>
               <button
                 onClick={handleRecoverEmail}
                 disabled={recoveryLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {recoveryLoading ? 'Recovering...' : 'Recover Email'}
               </button>
