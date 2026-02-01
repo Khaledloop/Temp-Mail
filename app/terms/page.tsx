@@ -4,9 +4,15 @@
 
 import type { Metadata } from 'next';
 
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+  .replace(/\/+$/, '');
+
 export const metadata: Metadata = {
   title: 'Terms of Service - Temp Mail',
   description: 'Our terms of service',
+  alternates: {
+    canonical: `${baseUrl}/terms`,
+  },
 };
 
 export default function TermsPage() {
@@ -70,7 +76,7 @@ export default function TermsPage() {
           </h2>
           <p>
             If you have any questions about these Terms and Conditions, please
-            contact us at legal@tempmail.example.com
+            contact us at legal@temp-mail-6xq.pages.dev
           </p>
         </section>
       </div>

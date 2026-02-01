@@ -4,9 +4,15 @@
 
 import type { Metadata } from 'next';
 
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+  .replace(/\/+$/, '');
+
 export const metadata: Metadata = {
   title: 'Privacy Policy - Temp Mail',
   description: 'Our privacy policy and how we handle your data',
+  alternates: {
+    canonical: `${baseUrl}/privacy`,
+  },
 };
 
 export default function PrivacyPage() {
@@ -57,7 +63,7 @@ export default function PrivacyPage() {
           </h2>
           <p>
             If you have questions about this Privacy Policy, please contact us
-            at privacy@tempmail.example.com
+            at privacy@temp-mail-6xq.pages.dev
           </p>
         </section>
       </div>

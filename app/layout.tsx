@@ -8,10 +8,13 @@ const manrope = Manrope({
   display: 'swap',
 })
 
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+  .replace(/\/+$/, '')
+
 export const metadata: Metadata = {
   title: 'Temp Mail - Your Temporary Email Address',
   description: 'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required. Privacy-focused disposable email.',
-  metadataBase: new URL('https://tempmail.pages.dev'),
+  metadataBase: new URL(baseUrl),
   robots: {
     index: true,
     follow: true,
@@ -24,19 +27,19 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://tempmail.pages.dev',
+    canonical: baseUrl,
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://tempmail.pages.dev',
+    url: baseUrl,
     siteName: 'Temp Mail',
     title: 'Temp Mail - Your Temporary Email Address',
     description:
       'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required.',
     images: [
       {
-        url: 'https://tempmail.pages.dev/og-image.png',
+        url: `${baseUrl}/og-image.png`,
         width: 1200,
         height: 630,
         alt: 'Temp Mail - Temporary Email Service',
@@ -48,8 +51,7 @@ export const metadata: Metadata = {
     title: 'Temp Mail - Your Temporary Email Address',
     description:
       'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online.',
-    creator: '@tempmail',
-    images: ['https://tempmail.pages.dev/twitter-image.png'],
+    images: [`${baseUrl}/twitter-image.png`],
   },
   icons: {
     icon: '/favicon.ico',
