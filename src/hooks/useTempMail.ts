@@ -15,12 +15,18 @@ import { SESSION_TTL } from '@/utils/constants';
  * 2. Auto-refresh session 5 minutes before expiration
  * 3. Handle session errors gracefully
  */
+const MAX_TIMEOUT_MS = 2_147_483_647; // 2^31-1 (setTimeout safe max)
+const INIT_COOLDOWN_MS = 30_000; // prevent rapid session creation loops
+const REFRESH_MARGIN_MS = 5 * 60 * 1000; // 5 minutes
+
 export const useTempMail = () => {
-  const { sessionId, tempMailAddress, isSessionActive, setSession, clearSession } = useAuthStore();
+  const { sessionId, tempMailAddress, expiresAt, isSessionActive, setSession, clearSession } = useAuthStore();
   const { setEmails } = useInboxStore();
   const { addToast } = useUiStore();
   const [hasHydrated, setHasHydrated] = useState(false);
   const initInFlightRef = useRef<Promise<void> | null>(null);
+  const lastInitAttemptRef = useRef(0);
+  const initFailedRef = useRef(false);
 
   /**
    * Initialize session on mount
@@ -48,11 +54,21 @@ export const useTempMail = () => {
         return; // Session still valid, no need to create new one
       }
 
+      if (initFailedRef.current) {
+        return;
+      }
+
+      const now = Date.now();
+      if (now - lastInitAttemptRef.current < INIT_COOLDOWN_MS) {
+        return;
+      }
+
       if (initInFlightRef.current) {
         await initInFlightRef.current;
         return;
       }
 
+      lastInitAttemptRef.current = now;
       initInFlightRef.current = (async () => {
         try {
           const response = await apiClient.createNewSession();
@@ -67,6 +83,7 @@ export const useTempMail = () => {
           });
         } catch (error) {
           console.error('Failed to create session:', error);
+          initFailedRef.current = true;
           addToast({ 
             message: 'Failed to create session. Please refresh the page.', 
             type: 'error', 
@@ -92,15 +109,28 @@ export const useTempMail = () => {
   useEffect(() => {
     if (!sessionId) return;
 
-    // SESSION_TTL is in milliseconds, refresh 5 minutes (300000ms) before expiration
-    const refreshTime = SESSION_TTL - 300000;
+    const now = Date.now();
+    const expiresAtMs = expiresAt ? new Date(expiresAt).getTime() : NaN;
+    const refreshAtMs = Number.isFinite(expiresAtMs)
+      ? expiresAtMs - REFRESH_MARGIN_MS
+      : now + SESSION_TTL - REFRESH_MARGIN_MS;
+
+    let refreshDelay = refreshAtMs - now;
+
+    if (!Number.isFinite(refreshDelay) || refreshDelay <= 0) {
+      return;
+    }
+
+    if (refreshDelay > MAX_TIMEOUT_MS) {
+      refreshDelay = MAX_TIMEOUT_MS;
+    }
 
     const refreshTimeout = setTimeout(() => {
       const refreshSession = async () => {
         try {
           const response = await apiClient.refreshSession();
           setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
-          
+
           addToast({ 
             message: 'Session refreshed', 
             type: 'success', 
@@ -108,9 +138,8 @@ export const useTempMail = () => {
           });
         } catch (error) {
           console.error('Session refresh failed:', error);
-          clearSession();
           addToast({ 
-            message: 'Session expired. Please create a new one.', 
+            message: 'Session refresh failed. Please try again later.', 
             type: 'error', 
             duration: 3000 
           });
@@ -118,10 +147,10 @@ export const useTempMail = () => {
       };
 
       refreshSession();
-    }, refreshTime);
+    }, refreshDelay);
 
     return () => clearTimeout(refreshTimeout);
-  }, [sessionId]);
+  }, [sessionId, expiresAt, addToast, setSession]);
 
   /**
    * Change email address by creating a new session
