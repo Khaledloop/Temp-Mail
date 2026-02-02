@@ -174,7 +174,7 @@ export function Hero({
           <span className="inline-flex items-center rounded-full bg-black px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm">
             Temporary Email Address
           </span>
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight">
             Your Private Inbox
           </h1>
         </div>
@@ -185,12 +185,12 @@ export function Hero({
       </div>
 
       {/* Email pill with Copy button on the right */}
-      <div className="w-full max-w-2xl px-4">
+      <div className="w-full max-w-xl px-4">
         <div className="relative">
           <div className="rounded-full bg-gray-50 border border-gray-200 shadow-sm flex items-center overflow-hidden">
-            <div className="flex-1 px-6 py-4">
+            <div className="flex-1 px-5 py-3">
               <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
-              <div className="font-mono text-xl md:text-2xl font-bold text-gray-900 break-all select-all mt-1" id="emailDisplay">
+              <div className="font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all mt-1" id="emailDisplay">
                 {displayEmail}
               </div>
             </div>
@@ -199,7 +199,7 @@ export function Hero({
               <button
                 onClick={handleCopyEmail}
                 disabled={isCopying}
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-5 py-3 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out font-bold text-sm group"
+                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2.5 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out font-bold text-sm group"
                 aria-label="Copy email"
               >
                 <svg className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

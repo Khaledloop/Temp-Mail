@@ -175,6 +175,11 @@
 }
 
 @layer components {
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 700px;
+  }
+
   /* Premium fade animations */
   @keyframes fadeIn {
     from {
