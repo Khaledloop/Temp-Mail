@@ -25,6 +25,7 @@ export function HomeClient() {
   const { tempMailAddress } = useAuthStore();
   const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, setDarkMode } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
+  const [showInbox, setShowInbox] = useState(false);
 
   const applyTheme = (isDark: boolean) => {
     if (typeof document === 'undefined') return;
@@ -81,6 +82,28 @@ export function HomeClient() {
     bootstrap();
   }, [tempMailAddress, fetchEmails]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let cancelled = false;
+    const reveal = () => {
+      if (!cancelled) setShowInbox(true);
+    };
+    const idleCallback = (window as Window & { requestIdleCallback?: Function }).requestIdleCallback;
+    if (idleCallback) {
+      const id = idleCallback(reveal, { timeout: 1200 });
+      return () => {
+        cancelled = true;
+        const cancelIdle = (window as Window & { cancelIdleCallback?: Function }).cancelIdleCallback;
+        if (cancelIdle) cancelIdle(id);
+      };
+    }
+    const timeout = window.setTimeout(reveal, 600);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+    };
+  }, []);
+
   usePolling(handleAutoFetch, {
     interval: EMAIL_POLL_INTERVAL,
     enabled: Boolean(tempMailAddress),
@@ -129,44 +152,52 @@ export function HomeClient() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
-        <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 content-visibility-auto">
-          <div className="mb-12 border-b border-gray-100 pb-8">
-            <div className="flex items-center gap-4">
-              <div className="bg-black p-3 rounded-2xl">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                </svg>
-              </div>
-              <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">
-                  Inbox
-                </h2>
-                <div
-                  className={`flex items-center gap-2 mt-1 min-h-[16px] transition-opacity duration-300 ${
-                    isRefreshing ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  aria-hidden={!isRefreshing}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
-                  ></span>
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Checking for mail...
-                  </p>
+        {showInbox ? (
+          <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 content-visibility-auto">
+            <div className="mb-12 border-b border-gray-100 pb-8">
+              <div className="flex items-center gap-4">
+                <div className="bg-black p-3 rounded-2xl">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">
+                    Inbox
+                  </h2>
+                  <div
+                    className={`flex items-center gap-2 mt-1 min-h-[16px] transition-opacity duration-300 ${
+                      isRefreshing ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    aria-hidden={!isRefreshing}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
+                    ></span>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      Checking for mail...
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="min-h-[300px]">
-            <InboxList
-              isLoading={isLoading}
-              isRefreshing={isRefreshing}
-              onSelectEmail={handleSelectEmail}
-              onDeleteEmail={handleDeleteEmail}
-            />
+            <div className="min-h-[300px]">
+              <InboxList
+                isLoading={isLoading}
+                isRefreshing={isRefreshing}
+                onSelectEmail={handleSelectEmail}
+                onDeleteEmail={handleDeleteEmail}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.06)] p-8 sm:p-12 mb-12 border border-gray-100 min-h-[360px]" aria-hidden="true">
+            <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">
+              Inbox loading…
+            </div>
+          </div>
+        )}
       </div>
 
       {isEmailViewerOpen && <EmailViewerModal />}

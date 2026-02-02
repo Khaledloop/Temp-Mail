@@ -52,7 +52,6 @@ export const useFetchEmails = () => {
         hasFetchedRef.current = true;
 
         setEmails(emails);
-        console.log(`✅ Fetched ${emails.length} emails`);
       } else {
         console.warn('Invalid inbox response:', emails);
         setEmails([]);
@@ -76,7 +75,6 @@ export const useFetchEmails = () => {
       setMessageLoading(true);
       try {
         const message = await apiClient.getMessage(messageId);
-        console.log(`✅ Fetched message: ${messageId}`);
         return message;
       } catch (error) {
         console.error('Failed to fetch message:', error);
