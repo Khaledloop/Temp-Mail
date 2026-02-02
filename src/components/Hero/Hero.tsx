@@ -164,7 +164,6 @@ export function Hero({
     }
   };
 
-  const hasEmail = Boolean(tempMailAddress);
   const displayEmail = tempMailAddress || 'loading@temp-mail.io';
 
   return (
@@ -194,19 +193,11 @@ export function Hero({
               <div className="mt-1">
                 <div
                   id="emailDisplay"
-                  className="min-h-[48px] leading-tight font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all"
+                  className="min-h-[32px] flex items-center font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all leading-none"
                   aria-live="polite"
                 >
                   {displayEmail}
                 </div>
-                <p
-                  className={`mt-2 text-xs font-semibold transition-opacity duration-300 min-h-[16px] ${
-                    hasEmail ? 'opacity-0' : 'opacity-100 text-gray-500'
-                  }`}
-                  aria-hidden={hasEmail}
-                >
-                  Generating address...
-                </p>
               </div>
             </div>
 
