@@ -30,7 +30,7 @@ export function Hero({
   onGetDomains,
   isLoading = false,
 }: HeroProps) {
-  const { tempMailAddress, clearSession } = useAuthStore();
+  const { tempMailAddress } = useAuthStore();
   const { addToast } = useUiStore();
   const [isCopying, setIsCopying] = useState(false);
   const [isRecoveryOpen, setIsRecoveryOpen] = useState(false);
@@ -165,6 +165,7 @@ export function Hero({
   };
 
   const hasEmail = Boolean(tempMailAddress);
+  const displayEmail = tempMailAddress || 'loading@temp-mail.io';
 
   return (
     <div className="space-y-8 flex flex-col items-center">
@@ -191,27 +192,18 @@ export function Hero({
             <div className="flex-1 px-5 py-3">
               <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
               <div className="mt-1">
-                <div className="relative">
-                  <div
-                    aria-hidden="true"
-                    className={`h-7 sm:h-8 w-full rounded-xl bg-gray-200 ${hasEmail ? 'opacity-0' : 'animate-shimmer'}`}
-                  ></div>
-                  <div
-                    id="emailDisplay"
-                    className={`absolute inset-0 flex items-center font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all transition-opacity duration-300 ${hasEmail ? 'opacity-100' : 'opacity-0'}`}
-                    aria-live="polite"
-                  >
-                    {tempMailAddress}
-                  </div>
+                <div
+                  id="emailDisplay"
+                  className="min-h-[48px] leading-tight font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all"
+                  aria-live="polite"
+                >
+                  {displayEmail}
                 </div>
                 {!hasEmail && (
                   <p className="mt-2 text-xs text-gray-500 font-semibold">
                     Generating address...
                   </p>
                 )}
-                <span className="sr-only">
-                  {tempMailAddress || 'Generating address'}
-                </span>
               </div>
             </div>
 
@@ -286,24 +278,6 @@ export function Hero({
             <span className="text-sm">Recovery Key</span>
           </button>
 
-          {/* Logout Button */}
-          <button
-            onClick={() => {
-              clearSession();
-              addToast({ message: 'Logged out', type: 'info', duration: 1500 });
-            }}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out hover:text-red-600 hover:border-red-200 group"
-          >
-            <svg 
-              className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-300" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            <span className="text-sm">Logout</span>
-          </button>
         </div>
       </div>
 

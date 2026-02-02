@@ -1,3 +1,3 @@
-:HL["/_next/static/chunks/cae3aae2dab85d58.css","style"]
+:HL["/_next/static/chunks/6c476100906e13b6.css","style"]
 :HL["/_next/static/media/a343f882a40d2cc9-s.p.71e1367e.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"buildId":"lEC2J1xoFxiA-C9_1TXtq","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"temp-mail-for-[service]","paramType":null,"paramKey":"temp-mail-for-[service]","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"jMnl3qEAZ4rVyo8RW7l3c","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"temp-mail-for-[service]","paramType":null,"paramKey":"temp-mail-for-[service]","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

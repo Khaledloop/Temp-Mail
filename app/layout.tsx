@@ -80,7 +80,7 @@ export default function RootLayout({
         <JsonLd />
         {apiOrigin ? (
           <>
-            <link rel="preconnect" href={apiOrigin} />
+            <link rel="preconnect" href={apiOrigin} crossOrigin="" />
             <link rel="dns-prefetch" href={apiOrigin} />
           </>
         ) : null}
