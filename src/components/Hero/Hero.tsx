@@ -189,7 +189,7 @@ export function Hero({
         <div className="relative">
           <div className="rounded-full bg-gray-50 border border-gray-200 shadow-sm flex items-center overflow-hidden">
             <div className="flex-1 px-6 py-4">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase">YOUR ADDRESS</p>
+              <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
               <div className="font-mono text-xl md:text-2xl font-bold text-gray-900 break-all select-all mt-1" id="emailDisplay">
                 {displayEmail}
               </div>

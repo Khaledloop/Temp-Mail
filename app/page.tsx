@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <div className="bg-gray-50 border-b border-gray-100 py-3 text-center">
-        <p className="text-[10px] font-black tracking-[0.3em] text-gray-400 uppercase">
+        <p className="text-[10px] font-black tracking-[0.3em] text-gray-600 uppercase">
           100% Anonymous - High Speed - Free Forever
         </p>
       </div>

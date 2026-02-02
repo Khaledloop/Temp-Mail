@@ -35,6 +35,9 @@ export function HomeClient() {
     body.dataset.theme = mode;
     root.classList.toggle('dark', isDark);
     body.classList.toggle('dark', isDark);
+    root.style.colorScheme = isDark ? 'dark' : 'light';
+    body.style.backgroundColor = isDark ? '#050505' : '';
+    body.style.color = isDark ? '#f5f5f5' : '';
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('theme', mode);
     }

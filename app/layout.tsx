@@ -11,6 +11,15 @@ const manrope = Manrope({
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
   .replace(/\/+$/, '')
+const apiOrigin = (() => {
+  const raw = process.env.NEXT_PUBLIC_API_URL
+  if (!raw) return ''
+  try {
+    return new URL(raw).origin
+  } catch {
+    return ''
+  }
+})()
 
 export const metadata: Metadata = {
   title: 'Temp Mail - Your Temporary Email Address',
@@ -69,10 +78,16 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <JsonLd />
+        {apiOrigin ? (
+          <>
+            <link rel="preconnect" href={apiOrigin} />
+            <link rel="dns-prefetch" href={apiOrigin} />
+          </>
+        ) : null}
       </head>
       <body className={manrope.className}>
         <ThemeClient />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   )
