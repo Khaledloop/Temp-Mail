@@ -277,11 +277,11 @@ export function Hero({
 
       {isChangeOpen && (
         <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
           onClick={() => setIsChangeOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -318,7 +318,7 @@ export function Hero({
                 <label className="text-xs font-semibold uppercase tracking-widest text-gray-500">
                   Email Name
                 </label>
-                <div className="mt-2 flex gap-2">
+                <div className="mt-2 flex flex-col sm:flex-row gap-2">
                   <input
                     value={localPart}
                     onChange={(event) => setLocalPart(event.target.value)}
@@ -327,7 +327,7 @@ export function Hero({
                   />
                   <button
                     onClick={() => setLocalPart(generateRandomLocalPart())}
-                    className="rounded-2xl border border-gray-300 px-4 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                    className="w-full sm:w-auto rounded-2xl border border-gray-300 px-4 py-3 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 whitespace-nowrap"
                   >
                     Random
                   </button>
@@ -371,11 +371,11 @@ export function Hero({
 
       {isRecoveryOpen && (
         <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
           onClick={() => setIsRecoveryOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-3xl border border-gray-200 bg-white p-6 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">
