@@ -164,7 +164,7 @@ export function Hero({
     }
   };
 
-  const displayEmail = tempMailAddress || 'loading@temp-mail.io';
+  const displayEmail = tempMailAddress || 'Loading email address...';
 
   return (
     <div className="space-y-8 flex flex-col items-center">
@@ -185,15 +185,15 @@ export function Hero({
       </div>
 
       {/* Email pill with Copy button on the right */}
-      <div className="w-full max-w-xl px-4">
+      <div className="w-full max-w-2xl px-4">
         <div className="relative">
           <div className="rounded-full bg-gray-50 border border-gray-200 shadow-sm flex items-center overflow-hidden">
-            <div className="flex-1 px-5 py-3">
+            <div className="flex-1 px-6 py-4">
               <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
               <div className="mt-1">
                 <div
                   id="emailDisplay"
-                  className="min-h-[32px] flex items-center font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all leading-none"
+                  className="min-h-[28px] font-mono text-xl md:text-2xl font-bold text-gray-900 break-all select-all leading-tight"
                   aria-live="polite"
                 >
                   {displayEmail}
