@@ -164,10 +164,10 @@ export function Hero({
     }
   };
 
-  const displayEmail = tempMailAddress || 'Loading email address...';
+  const hasEmail = Boolean(tempMailAddress);
 
   return (
-    <div className="space-y-8 animate-fadeIn flex flex-col items-center">
+    <div className="space-y-8 flex flex-col items-center">
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="flex flex-col items-center gap-3">
@@ -190,8 +190,28 @@ export function Hero({
           <div className="rounded-full bg-gray-50 border border-gray-200 shadow-sm flex items-center overflow-hidden">
             <div className="flex-1 px-5 py-3">
               <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
-              <div className="font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all mt-1" id="emailDisplay">
-                {displayEmail}
+              <div className="mt-1">
+                <div className="relative">
+                  <div
+                    aria-hidden="true"
+                    className={`h-7 sm:h-8 w-full rounded-xl bg-gray-200 ${hasEmail ? 'opacity-0' : 'animate-shimmer'}`}
+                  ></div>
+                  <div
+                    id="emailDisplay"
+                    className={`absolute inset-0 flex items-center font-mono text-lg md:text-xl font-bold text-gray-900 break-all select-all transition-opacity duration-300 ${hasEmail ? 'opacity-100' : 'opacity-0'}`}
+                    aria-live="polite"
+                  >
+                    {tempMailAddress}
+                  </div>
+                </div>
+                {!hasEmail && (
+                  <p className="mt-2 text-xs text-gray-500 font-semibold">
+                    Generating address...
+                  </p>
+                )}
+                <span className="sr-only">
+                  {tempMailAddress || 'Generating address'}
+                </span>
               </div>
             </div>
 

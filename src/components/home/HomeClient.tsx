@@ -129,7 +129,7 @@ export function HomeClient() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
-        <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 animate-slideUp content-visibility-auto">
+        <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 content-visibility-auto">
           <div className="mb-12 border-b border-gray-100 pb-8">
             <div className="flex items-center gap-4">
               <div className="bg-black p-3 rounded-2xl">
