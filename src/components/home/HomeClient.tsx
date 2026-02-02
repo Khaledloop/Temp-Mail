@@ -141,14 +141,19 @@ export function HomeClient() {
                 <h2 className="text-3xl font-black text-gray-900 tracking-tight">
                   Inbox
                 </h2>
-                {isRefreshing && (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-900 animate-pulse"></span>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      Checking for mail...
-                    </p>
-                  </div>
-                )}
+                <div
+                  className={`flex items-center gap-2 mt-1 min-h-[16px] transition-opacity duration-300 ${
+                    isRefreshing ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  aria-hidden={!isRefreshing}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
+                  ></span>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    Checking for mail...
+                  </p>
+                </div>
               </div>
             </div>
           </div>

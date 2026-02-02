@@ -199,11 +199,14 @@ export function Hero({
                 >
                   {displayEmail}
                 </div>
-                {!hasEmail && (
-                  <p className="mt-2 text-xs text-gray-500 font-semibold">
-                    Generating address...
-                  </p>
-                )}
+                <p
+                  className={`mt-2 text-xs font-semibold transition-opacity duration-300 min-h-[16px] ${
+                    hasEmail ? 'opacity-0' : 'opacity-100 text-gray-500'
+                  }`}
+                  aria-hidden={hasEmail}
+                >
+                  Generating address...
+                </p>
               </div>
             </div>
 
