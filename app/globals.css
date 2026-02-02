@@ -10,6 +10,22 @@
     @apply bg-white text-gray-900 min-h-screen;
     overflow-x: hidden;
   }
+
+  button {
+    touch-action: manipulation;
+  }
+
+  button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.18);
+  }
+
+  @media (hover: none) {
+    button:active:not(:disabled) {
+      transform: scale(0.97);
+      filter: brightness(0.92);
+    }
+  }
 }
 
 @layer base {
