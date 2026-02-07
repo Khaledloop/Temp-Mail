@@ -1,4 +1,13 @@
 -- Temp Mail D1 schema
+-- KV emulation table (used by worker for sessions, messages, metrics)
+CREATE TABLE IF NOT EXISTS app_kv (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  expires_at INTEGER
+);
+
+CREATE INDEX IF NOT EXISTS idx_app_kv_expires ON app_kv (expires_at);
+
 -- Sessions table
 CREATE TABLE IF NOT EXISTS sessions (
   token TEXT PRIMARY KEY,

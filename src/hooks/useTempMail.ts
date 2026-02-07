@@ -181,9 +181,14 @@ export const useTempMail = () => {
       const response = await apiClient.changeEmail({ localPart, domain, random });
       setSession(response.sessionId, response.tempMailAddress, response.expiresAt);
       setEmails([]);
+      addToast({
+        message: 'New email address created',
+        type: 'success',
+        duration: 2000,
+      });
       return response;
     },
-    [setEmails, setSession]
+    [addToast, setEmails, setSession]
   );
 
   const getRecoveryKey = useCallback(async () => {

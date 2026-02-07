@@ -4,7 +4,7 @@
 
 import type { Metadata } from 'next';
 
-const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
 
 export const metadata: Metadata = {
@@ -76,7 +76,7 @@ export default function TermsPage() {
           </h2>
           <p>
             If you have any questions about these Terms and Conditions, please
-            contact us at legal@temp-mail-6xq.pages.dev
+            contact us at legal@tempmaillab.com
           </p>
         </section>
       </div>

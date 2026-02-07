@@ -43,6 +43,7 @@ export function Hero({
   const [localPart, setLocalPart] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('');
   const [changeLoading, setChangeLoading] = useState(false);
+  const [changeError, setChangeError] = useState('');
 
   // Show skeleton only if truly loading, not just missing data
   if (isLoading && !tempMailAddress) {
@@ -127,6 +128,7 @@ export function Hero({
 
   const openChangeModal = async () => {
     setIsChangeOpen(true);
+    setChangeError('');
     if (!domainOptions.length && onGetDomains) {
       setDomainLoading(true);
       try {
@@ -148,9 +150,11 @@ export function Hero({
     const domain = selectedDomain;
     if (!domain) {
       addToast({ message: 'Select a domain', type: 'warning', duration: 2000 });
+      setChangeError('Please select a domain.');
       return;
     }
     setChangeLoading(true);
+    setChangeError('');
     try {
       await onChangeEmail(trimmedLocal, domain, trimmedLocal.length === 0);
       setLocalPart('');
@@ -158,6 +162,14 @@ export function Hero({
       addToast({ message: 'Email address updated', type: 'success', duration: 2000 });
     } catch (error) {
       console.error('Change email failed:', error);
+      const statusCode =
+        (error as { statusCode?: number })?.statusCode ||
+        (error as { response?: { status?: number } })?.response?.status;
+      if (statusCode === 409) {
+        setChangeError('This email already exists. Try a different name.');
+      } else {
+        setChangeError('Failed to change email. Please try again.');
+      }
       addToast({ message: 'Failed to change email', type: 'error', duration: 2500 });
     } finally {
       setChangeLoading(false);
@@ -205,13 +217,17 @@ export function Hero({
               <button
                 onClick={handleCopyEmail}
                 disabled={isCopying}
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2.5 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out font-bold text-sm group"
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
+                  isCopying
+                    ? 'bg-emerald-600 text-white shadow-lg scale-105'
+                    : 'bg-black text-white hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95'
+                }`}
                 aria-label="Copy email"
               >
                 <svg className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                 </svg>
-                <span className="hidden sm:inline">{isCopying ? 'COPIED!' : 'Copy'}</span>
+                <span>{isCopying ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
           </div>
@@ -277,7 +293,7 @@ export function Hero({
 
       {isChangeOpen && (
         <div
-          className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
           onClick={() => setIsChangeOpen(false)}
         >
           <div
@@ -321,9 +337,16 @@ export function Hero({
                 <div className="mt-2 flex flex-col sm:flex-row gap-2">
                   <input
                     value={localPart}
-                    onChange={(event) => setLocalPart(event.target.value)}
+                    onChange={(event) => {
+                      setLocalPart(event.target.value);
+                      if (changeError) setChangeError('');
+                    }}
                     placeholder="yourname"
-                    className="flex-1 rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+                    className={`flex-1 rounded-2xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${
+                      changeError
+                        ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
+                        : 'border-gray-300 focus:border-black focus:ring-black/10'
+                    }`}
                   />
                   <button
                     onClick={() => setLocalPart(generateRandomLocalPart())}
@@ -340,8 +363,15 @@ export function Hero({
                 <div className="mt-2">
                   <select
                     value={selectedDomain}
-                    onChange={(event) => setSelectedDomain(event.target.value)}
-                    className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+                    onChange={(event) => {
+                      setSelectedDomain(event.target.value);
+                      if (changeError) setChangeError('');
+                    }}
+                    className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${
+                      changeError
+                        ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
+                        : 'border-gray-300 focus:border-black focus:ring-black/10'
+                    }`}
                   >
                     {domainLoading && <option>Loading domains...</option>}
                     {!domainLoading &&
@@ -364,6 +394,9 @@ export function Hero({
               >
                 {changeLoading ? 'Updating...' : 'Confirm Change'}
               </button>
+              {changeError ? (
+                <p className="text-xs font-semibold text-red-600">{changeError}</p>
+              ) : null}
             </div>
           </div>
         </div>
@@ -371,7 +404,7 @@ export function Hero({
 
       {isRecoveryOpen && (
         <div
-          className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
           onClick={() => setIsRecoveryOpen(false)}
         >
           <div

@@ -4,7 +4,7 @@
  */
  
 export function JsonLd() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com';
 
   const organizationSchema = {
     '@context': 'https://schema.org',

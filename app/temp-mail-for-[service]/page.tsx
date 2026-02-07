@@ -17,7 +17,7 @@ export async function generateMetadata({
 }: {
   params: { service: string };
 }): Promise<Metadata> {
-  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
     .replace(/\/+$/, '');
   const service = SEO_SERVICES.find((s) => s.slug === params.service);
 

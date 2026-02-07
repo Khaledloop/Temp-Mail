@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import type { ApiError, NewSessionResponse } from '@/types';
 import { useAuthStore } from '@/store/authStore';
+import { useInboxStore } from '@/store/inboxStore';
 import { getFallbackDomains } from '@/utils/domains';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
@@ -69,6 +70,15 @@ class ApiClient {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error: AxiosError<ApiError>) => {
+        const status = error.response?.status;
+        if (status === 401) {
+          try {
+            useAuthStore.getState().clearSession();
+            useInboxStore.getState().clearInbox();
+          } catch (clearError) {
+            console.debug('Failed to clear session after 401:', clearError);
+          }
+        }
         if (error.response?.data) return Promise.reject(error.response.data);
         return Promise.reject({
           statusCode: error.response?.status || 500,

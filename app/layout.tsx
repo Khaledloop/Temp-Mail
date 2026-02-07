@@ -3,13 +3,14 @@ import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { ThemeClient } from '@/components/theme/ThemeClient'
+import { Footer } from '@/components/common/Footer'
 
 const manrope = Manrope({
   subsets: ['latin'],
   display: 'swap',
 })
 
-const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://temp-mail-6xq.pages.dev')
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '')
 const apiOrigin = (() => {
   const raw = process.env.NEXT_PUBLIC_API_URL
@@ -88,6 +89,7 @@ export default function RootLayout({
       <body className={manrope.className}>
         <ThemeClient />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   )
