@@ -1,12 +1,14 @@
-import {metadata, viewport} from 'next-sanity/studio'
+import {notFound} from 'next/navigation'
 
-import Studio from './Studio'
+const studioEnabled = process.env.NEXT_PUBLIC_ENABLE_STUDIO === 'true'
 
-export const dynamic = 'force-static'
-export const runtime = 'edge'
+export const dynamic = studioEnabled ? 'force-dynamic' : 'force-static'
 
-export {metadata, viewport}
+export default async function StudioPage() {
+  if (!studioEnabled) {
+    notFound()
+  }
 
-export default function StudioPage() {
+  const {default: Studio} = await import('./Studio')
   return <Studio />
 }
