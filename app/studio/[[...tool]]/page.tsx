@@ -2,13 +2,14 @@ import {notFound} from 'next/navigation'
 
 const studioEnabled = process.env.NEXT_PUBLIC_ENABLE_STUDIO === 'true'
 
-export const dynamic = 'force-static'
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export default async function StudioPage() {
-  if (studioEnabled) {
-    const {default: Studio} = await import('./Studio')
-    return <Studio />
+  if (!studioEnabled) {
+    notFound()
   }
 
-  notFound()
+  const {default: Studio} = await import('./Studio')
+  return <Studio />
 }
