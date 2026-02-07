@@ -20,6 +20,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
   ''
 )
 
+
 export async function generateStaticParams() {
   const slugs = await sanityFetch<{slug: string}[]>({
     query: POST_SLUGS_QUERY,

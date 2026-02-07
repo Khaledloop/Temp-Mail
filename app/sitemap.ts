@@ -5,6 +5,7 @@ import {sanityFetch} from '@/sanity/lib/client'
 import {POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 
 export const revalidate = 3600 // Revalidate every hour
+export const runtime = 'edge'
 
 type PostSlugEntry = {
   slug: string
