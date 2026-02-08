@@ -50,6 +50,11 @@ export async function generateMetadata({
       type: 'website',
       url: `${baseUrl}/temp-mail-for-${service.slug}`,
     },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
 

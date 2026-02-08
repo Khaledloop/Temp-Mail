@@ -9,9 +9,20 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Temp Mail',
-  description: 'Our privacy policy and how we handle your data',
+  description: 'Our privacy policy and how we handle your data.',
   alternates: {
     canonical: `${baseUrl}/privacy`,
+  },
+  openGraph: {
+    title: 'Privacy Policy - Temp Mail',
+    description: 'Our privacy policy and how we handle your data.',
+    url: `${baseUrl}/privacy`,
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Privacy Policy - Temp Mail',
+    description: 'Our privacy policy and how we handle your data.',
   },
 };
 

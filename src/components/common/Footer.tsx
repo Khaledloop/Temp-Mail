@@ -35,13 +35,13 @@ export function Footer() {
             <Link href="/terms" className="transition hover:text-gray-900">
               Terms
             </Link>
-            <a
-              href={supportHref ?? '#'}
-              className="transition hover:text-gray-900"
-              aria-disabled={!supportHref}
-            >
-              Support
-            </a>
+            {supportHref ? (
+              <a href={supportHref} className="transition hover:text-gray-900">
+                Support
+              </a>
+            ) : (
+              <span className="cursor-default">Support</span>
+            )}
           </div>
         </div>
         <div className="flex flex-col items-start justify-between gap-3 border-t border-gray-100 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center">

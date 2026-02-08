@@ -9,9 +9,20 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
 
 export const metadata: Metadata = {
   title: 'Terms of Service - Temp Mail',
-  description: 'Our terms of service',
+  description: 'Our terms of service.',
   alternates: {
     canonical: `${baseUrl}/terms`,
+  },
+  openGraph: {
+    title: 'Terms of Service - Temp Mail',
+    description: 'Our terms of service.',
+    url: `${baseUrl}/terms`,
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Terms of Service - Temp Mail',
+    description: 'Our terms of service.',
   },
 };
 

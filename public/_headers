@@ -1,5 +1,21 @@
-/_next/static/*
-  Cache-Control: public, max-age=31536000, immutable
+# Cloudflare Pages build and security headers configuration
 
-/_next/image*
-  Cache-Control: public, max-age=86400, immutable
+[[headers]]
+path = "/*"
+[headers.values]
+  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.tempmail.example.com https://www.google-analytics.com https://*.workers.dev https://cloudflareinsights.com https://*.api.sanity.io https://cdn.sanity.io; frame-src 'self' https://googleads.g.doubleclick.net; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+  X-Content-Type-Options = "nosniff"
+  X-Frame-Options = "DENY"
+  X-XSS-Protection = "1; mode=block"
+  Referrer-Policy = "strict-origin-when-cross-origin"
+  Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+  Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+[[headers]]
+path = "/studio/*"
+[headers.values]
+  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://core.sanity-cdn.com https://cdn.sanity.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: https://cdn.sanity.io; font-src 'self' data: https:; connect-src 'self' https://*.api.sanity.io https://cdn.sanity.io https://core.sanity-cdn.com; frame-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+  X-Content-Type-Options = "nosniff"
+  X-Frame-Options = "DENY"
+  X-XSS-Protection = "1; mode=block"
+  Referrer-Policy = "strict-origin-when-cross-origin"
