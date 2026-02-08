@@ -2,6 +2,19 @@
   "name": "temp-mail-next-js",
   "version": "1.0.0",
   "description": "Secure, fast, and SEO-optimized Temp Mail SaaS frontend",
+  "browserslist": {
+    "production": [
+      "last 2 Chrome versions",
+      "last 2 Edge versions",
+      "last 2 Firefox versions",
+      "last 2 Safari versions"
+    ],
+    "development": [
+      "last 1 Chrome version",
+      "last 1 Firefox version",
+      "last 1 Safari version"
+    ]
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build",

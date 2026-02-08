@@ -12,7 +12,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
   ''
 )
 
-export const runtime = 'edge'
+export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
   title: 'Blog - Temp Mail',

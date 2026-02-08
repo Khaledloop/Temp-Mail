@@ -174,7 +174,7 @@ export function HomeClient() {
                     <span
                       className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
                     ></span>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
                       Checking for mail...
                     </p>
                   </div>
@@ -193,8 +193,8 @@ export function HomeClient() {
           </div>
         ) : (
           <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.06)] p-8 sm:p-12 mb-12 border border-gray-100 min-h-[360px]" aria-hidden="true">
-            <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">
-              Inbox loading…
+            <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+              Inbox loading...
             </div>
           </div>
         )}

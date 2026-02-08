@@ -5,7 +5,7 @@ import type {Metadata} from 'next'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
 
 import {sanityFetch} from '@/sanity/lib/client'
-import {POST_QUERY} from '@/sanity/lib/queries'
+import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import {urlForImage} from '@/sanity/lib/image'
 import type {BlogPost} from '@/sanity/types'
 
@@ -15,13 +15,22 @@ type PageProps = {
   }>
 }
 
-export const runtime = 'edge'
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(
   /\/+$/,
   ''
 )
+
+export async function generateStaticParams() {
+  const slugs = await sanityFetch<{slug: string}[]>({
+    query: POST_SLUGS_QUERY,
+    revalidate: 3600,
+    tags: ['post'],
+  })
+
+  return slugs.map((entry) => ({slug: entry.slug}))
+}
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const resolvedParams = await params

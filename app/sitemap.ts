@@ -1,11 +1,10 @@
 import {MetadataRoute} from 'next'
 
 import {SEO_SERVICES} from '@/utils/constants'
-import {sanityFetch} from '@/sanity/lib/client'
+import {client} from '@/sanity/lib/client'
 import {POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 
-export const revalidate = 3600 // Revalidate every hour
-export const runtime = 'edge'
+export const dynamic = 'force-static'
 
 type PostSlugEntry = {
   slug: string
@@ -26,11 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  const posts = await sanityFetch<PostSlugEntry[]>({
-    query: POST_SLUGS_QUERY,
-    revalidate,
-    tags: ['post'],
-  })
+  const posts = await client.fetch<PostSlugEntry[]>(POST_SLUGS_QUERY, {}, {cache: 'force-cache'})
 
   const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
