@@ -9,7 +9,10 @@ import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { useUiStore } from '@/store/uiStore';
 import { Hero } from '@/components/Hero/Hero';
-import { InboxList } from '@/components/Inbox/InboxList';
+const InboxList = dynamic(
+  () => import('@/components/Inbox/InboxList').then((mod) => mod.InboxList),
+  { ssr: false }
+);
 import { EMAIL_POLL_INTERVAL } from '@/utils/constants';
 
 const EmailViewerModal = dynamic(

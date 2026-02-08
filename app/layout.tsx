@@ -13,7 +13,10 @@ const manrope = Manrope({
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '')
 const apiOrigin = (() => {
-  const raw = process.env.NEXT_PUBLIC_API_URL
+  const raw =
+    process.env.NEXT_PUBLIC_API_ORIGIN ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    ''
   if (!raw) return ''
   try {
     return new URL(raw).origin
