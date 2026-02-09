@@ -199,13 +199,13 @@ export function Hero({
       {/* Email pill with Copy button on the right */}
       <div className="w-full max-w-2xl px-4">
         <div className="relative">
-          <div className="rounded-full bg-gray-50 border border-gray-200 shadow-sm flex items-center overflow-hidden">
-            <div className="flex-1 px-6 py-4">
+          <div className="rounded-3xl sm:rounded-full bg-gray-50 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden">
+            <div className="flex-1 min-w-0 px-6 pt-4 pb-2 sm:py-4">
               <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
               <div className="mt-1">
                 <div
                   id="emailDisplay"
-                  className="min-h-[28px] font-mono text-xl md:text-2xl font-bold text-gray-900 break-all select-all leading-tight"
+                  className="min-h-[28px] font-mono text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-all select-all leading-tight"
                   aria-live="polite"
                 >
                   {displayEmail}
@@ -213,11 +213,11 @@ export function Hero({
               </div>
             </div>
 
-            <div className="pr-4 pl-2">
+            <div className="px-4 pb-4 sm:pb-0 sm:pr-4 sm:pl-2">
               <button
                 onClick={handleCopyEmail}
                 disabled={isCopying}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
+                className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
                   isCopying
                     ? 'bg-emerald-600 text-white shadow-lg scale-105'
                     : 'bg-black text-white hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95'
