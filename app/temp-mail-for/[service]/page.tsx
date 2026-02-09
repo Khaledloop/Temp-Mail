@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { SEO_SERVICES } from '@/utils/constants';
 
 /**
@@ -6,11 +7,8 @@ import { SEO_SERVICES } from '@/utils/constants';
  * Generates static pages for: facebook, instagram, discord, gmail, twitter, linkedin, reddit, twitch
  */
 
-export async function generateStaticParams() {
-  return SEO_SERVICES.map((service) => ({
-    service: service.slug,
-  }));
-}
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -25,6 +23,7 @@ export async function generateMetadata({
     return {
       title: 'Service Not Found',
       description: 'The requested service page does not exist.',
+      robots: { index: false, follow: false },
     };
   }
 
@@ -78,22 +77,7 @@ export default function ServicePage({
   const otherServices = SEO_SERVICES.filter((s) => s.slug !== params.service).slice(0, 6);
 
   if (!service) {
-    return (
-      <div className="py-12 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Service Not Found
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Sorry, we couldn't find the page you're looking for.
-        </p>
-        <a
-          href="/"
-          className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Go Home
-        </a>
-      </div>
-    );
+    notFound();
   }
 
   return (
