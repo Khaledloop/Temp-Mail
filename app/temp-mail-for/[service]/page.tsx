@@ -101,7 +101,7 @@ export default function ServicePage({
           </div>
           <div className="rounded-xl border border-blue-100 bg-white/70 p-4">
             <p className="text-xs font-black uppercase tracking-widest text-blue-700">30 Days</p>
-            <p className="mt-2 text-sm text-gray-700">Emails auto-expire, reducing long‑term exposure.</p>
+            <p className="mt-2 text-sm text-gray-700">Emails auto-expire, reducing long-term exposure.</p>
           </div>
         </div>
       </section>
@@ -134,7 +134,7 @@ export default function ServicePage({
             <div>
               <h3 className="font-semibold text-gray-900">Reduce Spam</h3>
               <p className="text-gray-600 text-sm">
-                Temporary email addresses expire after 30 days, so spam doesn’t follow you.
+                Temporary email addresses expire after 30 days, so spam doesn't follow you.
               </p>
             </div>
           </li>
