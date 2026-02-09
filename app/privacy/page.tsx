@@ -8,20 +8,20 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Temp Mail',
+  title: 'Privacy Policy - Temp Mail Lab',
   description: 'Our privacy policy and how we handle your data.',
   alternates: {
     canonical: `${baseUrl}/privacy`,
   },
   openGraph: {
-    title: 'Privacy Policy - Temp Mail',
+    title: 'Privacy Policy - Temp Mail Lab',
     description: 'Our privacy policy and how we handle your data.',
     url: `${baseUrl}/privacy`,
     type: 'article',
   },
   twitter: {
     card: 'summary',
-    title: 'Privacy Policy - Temp Mail',
+    title: 'Privacy Policy - Temp Mail Lab',
     description: 'Our privacy policy and how we handle your data.',
   },
 };
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
             Introduction
           </h2>
           <p>
-            At Temp Mail, we take your privacy seriously. This Privacy Policy
+            At Temp Mail Lab, we take your privacy seriously. This Privacy Policy
             explains how we collect, use, disclose, and safeguard your
             information.
           </p>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
             Information We Collect
           </h2>
           <p>
-            We collect minimal information. When you use Temp Mail, we collect:
+            We collect minimal information. When you use Temp Mail Lab, we collect:
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li>Your temporary email address</li>

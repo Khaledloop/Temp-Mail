@@ -28,7 +28,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = `Temp Mail for ${service.name} - Disposable Email`;
+  const title = `Temp Mail Lab for ${service.name} - Disposable Email`;
   const description = `${service.description} No registration required. Create a temporary email for ${service.name} in seconds.`;
 
   return {
@@ -88,14 +88,14 @@ export default function ServicePage({
     <div>
       <section className="mb-8 rounded-xl bg-gradient-to-br from-blue-50 to-white p-8 border border-blue-100 shadow-sm">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">
-          Temp Mail for {service.name}
+          Temp Mail Lab for {service.name}
         </h1>
         <p className="text-xl text-gray-600">{service.description}</p>
       </section>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Why Use Temp Mail for {service.name}?
+          Why Use Temp Mail Lab for {service.name}?
         </h2>
         <ul className="space-y-4">
           <li className="flex items-start gap-3">

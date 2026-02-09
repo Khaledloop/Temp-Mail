@@ -8,20 +8,20 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Temp Mail',
+  title: 'Terms of Service - Temp Mail Lab',
   description: 'Our terms of service.',
   alternates: {
     canonical: `${baseUrl}/terms`,
   },
   openGraph: {
-    title: 'Terms of Service - Temp Mail',
+    title: 'Terms of Service - Temp Mail Lab',
     description: 'Our terms of service.',
     url: `${baseUrl}/terms`,
     type: 'article',
   },
   twitter: {
     card: 'summary',
-    title: 'Terms of Service - Temp Mail',
+    title: 'Terms of Service - Temp Mail Lab',
     description: 'Our terms of service.',
   },
 };
@@ -39,7 +39,7 @@ export default function TermsPage() {
             Agreement to Terms
           </h2>
           <p>
-            By accessing and using Temp Mail, you accept and agree to be bound
+            By accessing and using Temp Mail Lab, you accept and agree to be bound
             by the terms and provision of this agreement.
           </p>
         </section>
@@ -50,7 +50,7 @@ export default function TermsPage() {
           </h2>
           <p>
             Permission is granted to temporarily download one copy of the
-            materials (information or software) on Temp Mail for personal,
+            materials (information or software) on Temp Mail Lab for personal,
             non-commercial transitory viewing only. This is the grant of a
             license, not a transfer of title, and under this license you may
             not:
@@ -71,8 +71,8 @@ export default function TermsPage() {
             Disclaimer
           </h2>
           <p>
-            The materials on Temp Mail's website are provided for educational
-            purposes only. Temp Mail makes no warranties, expressed or implied,
+            The materials on Temp Mail Lab's website are provided for educational
+            purposes only. Temp Mail Lab makes no warranties, expressed or implied,
             and hereby disclaims and negates all other warranties including,
             without limitation, implied warranties or conditions of
             merchantability, fitness for a particular purpose, or

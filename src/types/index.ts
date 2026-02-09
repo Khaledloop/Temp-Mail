@@ -1,5 +1,5 @@
 /**
- * Core type definitions for the Temp Mail SaaS application
+ * Core type definitions for the Temp Mail Lab SaaS application
  */
 
 export interface Email {

@@ -36,7 +36,7 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const resolvedParams = await params
   if (!resolvedParams?.slug) {
     return {
-      title: 'Post not found - Temp Mail',
+      title: 'Post not found - Temp Mail Lab',
     }
   }
 
@@ -49,7 +49,7 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: 'Post not found - Temp Mail',
+      title: 'Post not found - Temp Mail Lab',
     }
   }
 
@@ -173,7 +173,7 @@ export default async function BlogPostPage({params}: PageProps) {
           <Link href="/blog" className="hover:text-gray-900 transition">
             Back to Blog
           </Link>
-          <span>Temp Mail Journal</span>
+          <span>Temp Mail Lab Journal</span>
         </div>
 
         <h1 className="mt-6 text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
@@ -181,7 +181,7 @@ export default async function BlogPostPage({params}: PageProps) {
         </h1>
 
         <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-600">
-          <span className="font-semibold">{post.author || 'Temp Mail'}</span>
+          <span className="font-semibold">{post.author || 'Temp Mail Lab'}</span>
           <span>
             {new Date(post.publishedAt).toLocaleDateString('en-US', {
               month: 'long',

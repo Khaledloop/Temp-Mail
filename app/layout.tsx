@@ -26,7 +26,7 @@ const apiOrigin = (() => {
 })()
 
 export const metadata: Metadata = {
-  title: 'Temp Mail - Your Temporary Email Address',
+  title: 'Temp Mail Lab - Your Temporary Email Address',
   description: 'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required. Privacy-focused disposable email.',
   metadataBase: new URL(baseUrl),
   robots: {
@@ -47,8 +47,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: baseUrl,
-    siteName: 'Temp Mail',
-    title: 'Temp Mail - Your Temporary Email Address',
+    siteName: 'Temp Mail Lab',
+    title: 'Temp Mail Lab - Your Temporary Email Address',
     description:
       'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required.',
     images: [
@@ -56,13 +56,13 @@ export const metadata: Metadata = {
         url: `${baseUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Temp Mail - Temporary Email Service',
+        alt: 'Temp Mail Lab - Temporary Email Service',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Temp Mail - Your Temporary Email Address',
+    title: 'Temp Mail Lab - Your Temporary Email Address',
     description:
       'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online.',
     images: [`${baseUrl}/twitter-image.png`],

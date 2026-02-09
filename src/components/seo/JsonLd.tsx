@@ -9,7 +9,7 @@ export function JsonLd() {
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Temp Mail',
+    name: 'Temp Mail Lab',
     description: 'Temporary email address service for privacy protection.',
     url: baseUrl,
   };
@@ -17,7 +17,7 @@ export function JsonLd() {
   const softwareApplicationSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Temp Mail - Temporary Email Address',
+    name: 'Temp Mail Lab - Temporary Email Address',
     description:
       'Instantly generate a free and anonymous temporary email address to protect your privacy online. No signup required.',
     applicationCategory: 'Utility',
@@ -52,10 +52,10 @@ export function JsonLd() {
       },
       {
         '@type': 'Question',
-        name: 'Do I need to sign up to use Temp Mail?',
+        name: 'Do I need to sign up to use Temp Mail Lab?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No signup is required. Temp Mail is completely anonymous and instant. Simply visit our site, generate a temporary email, and start receiving emails immediately.',
+          text: 'No signup is required. Temp Mail Lab is completely anonymous and instant. Simply visit our site, generate a temporary email, and start receiving emails immediately.',
         },
       },
       {

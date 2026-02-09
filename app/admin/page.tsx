@@ -563,7 +563,7 @@ export default function AdminPage() {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
-                Temp Mail Control
+                Temp Mail Lab Control
               </p>
               <h1 className="text-3xl font-semibold tracking-tight">
                 Admin Command Center

@@ -15,13 +15,13 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-  title: 'Blog - Temp Mail',
+  title: 'Blog - Temp Mail Lab',
   description: 'Actionable guides, updates, and privacy insights for temporary email users.',
   alternates: {
     canonical: `${baseUrl}/blog`,
   },
   openGraph: {
-    title: 'Blog - Temp Mail',
+    title: 'Blog - Temp Mail Lab',
     description: 'Actionable guides, updates, and privacy insights for temporary email users.',
     url: `${baseUrl}/blog`,
     type: 'website',
@@ -41,7 +41,7 @@ export default async function BlogPage() {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <p className="text-xs font-black tracking-[0.3em] text-gray-500 uppercase">
-              Temp Mail Journal
+              Temp Mail Lab Journal
             </p>
             <h1 className="mt-3 text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
               Blog
@@ -108,7 +108,7 @@ export default async function BlogPage() {
                   </h2>
                   <p className="mt-3 text-sm text-gray-600 leading-relaxed">{post.excerpt}</p>
                   <div className="mt-6 flex items-center justify-between text-xs text-gray-500">
-                    <span className="font-semibold">{post.author || 'Temp Mail'}</span>
+                    <span className="font-semibold">{post.author || 'Temp Mail Lab'}</span>
                     <span className="font-semibold uppercase tracking-widest">Read</span>
                   </div>
                 </Link>

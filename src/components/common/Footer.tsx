@@ -19,7 +19,7 @@ export function Footer() {
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
             <p className="text-xs font-black tracking-[0.3em] text-gray-600 uppercase">
-              Temp Mail
+              Temp Mail Lab
             </p>
             <p className="mt-2 max-w-md text-sm text-gray-600">
               Private, fast, and disposable email for safer sign-ups.
@@ -45,7 +45,7 @@ export function Footer() {
           </div>
         </div>
         <div className="flex flex-col items-start justify-between gap-3 border-t border-gray-100 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center">
-          <span>(c) {year} Temp Mail. All rights reserved.</span>
+          <span>(c) {year} Temp Mail Lab. All rights reserved.</span>
           <span>Built for privacy and search visibility.</span>
         </div>
       </div>

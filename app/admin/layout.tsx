@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Admin Console | Temp Mail',
-  description: 'Secure operations console for Temp Mail',
+  title: 'Admin Console | Temp Mail Lab',
+  description: 'Secure operations console for Temp Mail Lab',
   robots: {
     index: false,
     follow: false,
