@@ -110,17 +110,24 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
             srcDoc={`<!doctype html><html><head><meta charset="utf-8" />
               <meta http-equiv="Content-Security-Policy" content="${iframeCsp}" />
               <style>
-              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #111827; line-height: 1.6; }
-              img { max-width: 100%; height: auto; }
+              * { box-sizing: border-box; }
+              html, body { width: 100%; }
+              body { font-family: Arial, sans-serif; margin: 0; padding: 14px; color: #111827; line-height: 1.6; background: #ffffff; }
+              img { max-width: 100% !important; height: auto !important; }
               a { color: #111827; text-decoration: underline; }
-              table { max-width: 100%; }
+              table { width: 100% !important; max-width: 100% !important; border-collapse: collapse; }
+              td, th { word-break: break-word; }
               pre { white-space: pre-wrap; word-break: break-word; }
-            </style></head><body>${renderHtml}</body></html>`}
+              code { white-space: pre-wrap; word-break: break-word; }
+              .email-content { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+            </style></head><body><div class="email-content">${renderHtml}</div></body></html>`}
           />
         ) : (
-          <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {fallbackText || 'No readable content.'}
-          </pre>
+          <div className="h-full w-full rounded-xl border border-gray-200 bg-white p-4">
+            <pre className="whitespace-pre-wrap text-sm text-gray-700">
+              {fallbackText || 'No readable content.'}
+            </pre>
+          </div>
         )}
       </div>
 

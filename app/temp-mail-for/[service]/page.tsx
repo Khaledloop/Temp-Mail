@@ -190,7 +190,7 @@ export default function ServicePage({
               <li key={item.slug}>
                 <a
                   href={`/temp-mail-for/${item.slug}`}
-                  className="underline underline-offset-4 hover:text-gray-900"
+                  className="underline underline-offset-4 hover:text-gray-900 dark:hover:text-white"
                 >
                   Temp Mail Lab for {item.name}
                 </a>
