@@ -18,11 +18,20 @@ export const metadata: Metadata = {
     description: 'Our terms of service.',
     url: `${baseUrl}/terms`,
     type: 'article',
+    images: [
+      {
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Temp Mail Lab Terms of Service',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Terms of Service - Temp Mail Lab',
     description: 'Our terms of service.',
+    images: [`${baseUrl}/twitter-image.png`],
   },
 };
 

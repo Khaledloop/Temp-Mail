@@ -12,7 +12,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
   ''
 )
 
-export const dynamic = 'force-static'
+export const revalidate = 600
 
 export const metadata: Metadata = {
   title: 'Blog - Temp Mail Lab',
@@ -25,6 +25,20 @@ export const metadata: Metadata = {
     description: 'Actionable guides, updates, and privacy insights for temporary email users.',
     url: `${baseUrl}/blog`,
     type: 'website',
+    images: [
+      {
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Temp Mail Lab Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog - Temp Mail Lab',
+    description: 'Actionable guides, updates, and privacy insights for temporary email users.',
+    images: [`${baseUrl}/twitter-image.png`],
   },
 }
 

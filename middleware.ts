@@ -11,6 +11,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  const dashedServiceMatch = request.nextUrl.pathname.match(/^\/temp-mail-for-([a-z0-9-]+)$/i)
+  if (dashedServiceMatch) {
+    const url = request.nextUrl.clone()
+    url.pathname = `/temp-mail-for/${dashedServiceMatch[1]}`
+    return NextResponse.redirect(url, 308)
+  }
+
   if (host === `www.${CANONICAL_HOST}` || LEGACY_HOSTS.has(host)) {
     const url = request.nextUrl.clone()
     url.protocol = 'https:'

@@ -18,11 +18,20 @@ export const metadata: Metadata = {
     description: 'Our privacy policy and how we handle your data.',
     url: `${baseUrl}/privacy`,
     type: 'article',
+    images: [
+      {
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Temp Mail Lab Privacy Policy',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Privacy Policy - Temp Mail Lab',
     description: 'Our privacy policy and how we handle your data.',
+    images: [`${baseUrl}/twitter-image.png`],
   },
 };
 

@@ -50,16 +50,16 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   return (
     <div className="flex flex-col h-full min-h-0 bg-white rounded-2xl shadow-lg animate-slideUp overflow-hidden border border-gray-200">
       {/* Header - Clean */}
-      <div className="border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between bg-white">
-        <div className="flex-1">
-          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 break-words">
+      <div className="relative border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 bg-white pr-14 sm:pr-6">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-base sm:text-xl font-bold text-gray-900 break-words leading-snug">
             {email.subject || <span className="text-gray-400 text-base">(No subject)</span>}
           </h2>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="group ml-3 inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
+            className="group absolute right-3 top-3 sm:static sm:ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
             aria-label="Close"
           >
             <X className="h-4 w-4" />
@@ -69,28 +69,28 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       </div>
 
       {/* Sender info - Clean */}
-      <div className="border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-5 bg-gray-50">
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="h-11 w-11 sm:h-14 sm:w-14 rounded-lg bg-gray-900 flex items-center justify-center shadow-md flex-shrink-0">
-            <span className="text-base sm:text-lg font-bold text-white">
+      <div className="border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 bg-gray-50">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-gray-900 flex items-center justify-center shadow-md flex-shrink-0">
+            <span className="text-sm sm:text-base font-bold text-white">
               {senderName.charAt(0).toUpperCase()}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-gray-900 truncate text-base sm:text-lg">
+            <p className="font-bold text-gray-900 truncate text-sm sm:text-base">
               {senderName}
             </p>
-            <p className="text-xs sm:text-sm text-gray-600 truncate font-mono">
+            <p className="text-[11px] sm:text-xs text-gray-600 truncate font-mono">
               {senderEmail}
             </p>
           </div>
         </div>
-        <div className="mt-3 pt-3 sm:mt-4 sm:pt-4 border-t border-gray-200 flex items-center justify-between gap-3">
-          <p className="text-xs sm:text-sm font-medium text-gray-700">
+        <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-gray-200 flex items-center justify-between gap-3">
+          <p className="text-[11px] sm:text-xs font-medium text-gray-700">
             Sent: {displayDateTime}
           </p>
-          <span className="inline-flex items-center rounded-full bg-gray-200 px-2.5 py-1 text-[11px] font-semibold text-gray-800 border border-gray-300">
-            <span className="relative flex h-1.5 w-1.5 mr-2">
+          <span className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold text-gray-800 border border-gray-300">
+            <span className="relative flex h-1.5 w-1.5 mr-1.5">
               <span className="absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75 animate-ping"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-gray-600"></span>
             </span>
@@ -100,7 +100,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       </div>
 
       {/* Email content - Clean */}
-      <div className="flex-1 min-h-0 overflow-auto px-4 sm:px-6 py-4 sm:py-8">
+      <div className="flex-1 min-h-0 overflow-auto px-4 sm:px-6 py-4 sm:py-6">
         {hasRenderableHtml ? (
           <iframe
             title="Email content"
@@ -125,10 +125,10 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
+      <div className="border-t border-gray-200 px-4 sm:px-6 py-3 bg-gray-50">
         <div className="flex items-center justify-center gap-2">
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-          <p className="text-sm font-medium text-gray-600">This email will be deleted in 30 days</p>
+          <p className="text-[11px] sm:text-xs font-medium text-gray-600">This email will be deleted in 30 days</p>
           <div className="w-1 h-1 rounded-full bg-gray-400"></div>
         </div>
       </div>

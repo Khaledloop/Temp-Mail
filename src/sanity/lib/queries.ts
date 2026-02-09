@@ -1,7 +1,7 @@
 import {defineQuery} from 'next-sanity'
 
 export const POSTS_QUERY = defineQuery(
-  `*[_type == "post" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**"))]
+  `*[_type == "post" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**")) && (!defined(seo.noIndex) || seo.noIndex != true)]
     | order(publishedAt desc) {
       _id,
       title,
@@ -32,7 +32,7 @@ export const POST_QUERY = defineQuery(
 )
 
 export const POST_SLUGS_QUERY = defineQuery(
-  `*[_type == "post" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**"))]{
+  `*[_type == "post" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**")) && (!defined(seo.noIndex) || seo.noIndex != true)]{
       "slug": slug.current,
       _updatedAt,
       publishedAt
