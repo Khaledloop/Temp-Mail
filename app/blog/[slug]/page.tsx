@@ -15,8 +15,8 @@ type PageProps = {
   }>
 }
 
+export const runtime = 'edge'
 export const revalidate = 600
-export const dynamicParams = true
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(
   /\/+$/,
