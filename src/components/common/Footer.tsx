@@ -26,17 +26,17 @@ export function Footer() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-widest text-gray-600">
-            <Link href="/blog" className="transition hover:text-gray-900">
+            <Link href="/blog" className="transition hover:text-gray-900 dark:hover:text-white">
               Blog
             </Link>
-            <Link href="/privacy" className="transition hover:text-gray-900">
+            <Link href="/privacy" className="transition hover:text-gray-900 dark:hover:text-white">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-gray-900">
+            <Link href="/terms" className="transition hover:text-gray-900 dark:hover:text-white">
               Terms
             </Link>
             {supportHref ? (
-              <a href={supportHref} className="transition hover:text-gray-900">
+              <a href={supportHref} className="transition hover:text-gray-900 dark:hover:text-white">
                 Support
               </a>
             ) : (
