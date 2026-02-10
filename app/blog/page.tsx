@@ -72,7 +72,7 @@ export default async function BlogPage() {
               Practical guidance on disposable email, privacy, and staying safe online.
             </p>
           </div>
-          <Link href="/" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition">
+          <Link href="/" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors dark:text-gray-300 dark:hover:text-white">
             Back to Home
           </Link>
         </div>

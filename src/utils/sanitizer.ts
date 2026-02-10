@@ -166,12 +166,26 @@ export function decodeQuotedPrintableIfNeeded(input: string): string {
   let output = '';
   let bytes: number[] = [];
   let hasHex = false;
+  let decoder: TextDecoder | null = null;
+  try {
+    if (typeof TextDecoder !== 'undefined') {
+      decoder = new TextDecoder('utf-8', { fatal: false });
+    }
+  } catch {
+    decoder = null;
+  }
 
   const flushBytes = () => {
     if (!bytes.length) return;
-    output += new TextDecoder('utf-8', { fatal: false }).decode(
-      new Uint8Array(bytes)
-    );
+    if (decoder) {
+      try {
+        output += decoder.decode(new Uint8Array(bytes));
+      } catch {
+        output += String.fromCharCode(...bytes);
+      }
+    } else {
+      output += String.fromCharCode(...bytes);
+    }
     bytes = [];
   };
 

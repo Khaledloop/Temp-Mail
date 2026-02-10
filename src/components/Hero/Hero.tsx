@@ -183,14 +183,14 @@ export function Hero({
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="flex flex-col items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-black px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm">
+          <span className="inline-flex items-center rounded-full bg-black px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
             Temporary Email Address
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight dark:text-white">
             Your Private Inbox
           </h1>
         </div>
-        <p className="text-sm text-gray-500 font-medium max-w-md mx-auto leading-relaxed">
+        <p className="text-sm text-gray-500 font-medium max-w-md mx-auto leading-relaxed dark:text-gray-400">
           Forget about spam and hacking robots. Keep your real mailbox clean and secure. 
           Expires in 30 days.
         </p>
@@ -199,13 +199,13 @@ export function Hero({
       {/* Email pill with Copy button on the right */}
       <div className="w-full max-w-2xl px-4">
         <div className="relative">
-          <div className="rounded-3xl sm:rounded-full bg-gray-50 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden">
+          <div className="rounded-3xl sm:rounded-full bg-gray-50 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden dark:bg-white/5 dark:border-white/10">
             <div className="flex-1 min-w-0 px-6 pt-4 pb-2 sm:py-4">
-              <p className="text-[10px] font-semibold text-gray-600 uppercase">YOUR ADDRESS</p>
+              <p className="text-[10px] font-semibold text-gray-600 uppercase dark:text-gray-300">YOUR ADDRESS</p>
               <div className="mt-1">
                 <div
                   id="emailDisplay"
-                  className="min-h-[28px] font-mono text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-all select-all leading-tight"
+                  className="min-h-[28px] font-mono text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-all select-all leading-tight dark:text-white"
                   aria-live="polite"
                 >
                   {displayEmail}
@@ -220,7 +220,7 @@ export function Hero({
                 className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
                   isCopying
                     ? 'bg-emerald-600 text-white shadow-lg scale-105'
-                    : 'bg-black text-white hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95'
+                    : 'bg-black text-white hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 dark:bg-white/15 dark:text-white dark:border dark:border-white/10 dark:hover:bg-white/25'
                 }`}
                 aria-label="Copy email"
               >
@@ -239,7 +239,7 @@ export function Hero({
           <button
             onClick={onFetchEmails}
             disabled={!onFetchEmails}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
@@ -257,7 +257,7 @@ export function Hero({
           <button
             onClick={openChangeModal}
             disabled={changeLoading}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
           >
             <svg 
               className={`h-5 w-5 transition-transform duration-500 ${changeLoading ? 'animate-spin' : 'group-hover:rotate-180'}`}
@@ -274,7 +274,7 @@ export function Hero({
           {/* Recover Email Button */}
           <button
             onClick={openRecoveryModal}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out group"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" 
@@ -297,14 +297,14 @@ export function Hero({
           onClick={() => setIsChangeOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto dark:border-white/10 dark:bg-[#0d0d0d]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
                 onClick={() => setIsChangeOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
                 aria-label="Close"
               >
                 <svg
@@ -325,13 +325,13 @@ export function Hero({
                 <span className="text-xs font-black hidden sm:inline">Close</span>
               </button>
             </div>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Choose a custom name and domain. You can also generate a random name.
             </p>
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   Email Name
                 </label>
                 <div className="mt-2 flex flex-col sm:flex-row gap-2">
@@ -350,14 +350,14 @@ export function Hero({
                   />
                   <button
                     onClick={() => setLocalPart(generateRandomLocalPart())}
-                    className="w-full sm:w-auto rounded-2xl border border-gray-300 px-4 py-3 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 whitespace-nowrap"
+                    className="w-full sm:w-auto rounded-2xl border border-gray-300 px-4 py-3 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 whitespace-nowrap dark:border-white/10 dark:text-white dark:hover:border-white/20 dark:hover:bg-white/10"
                   >
                     Random
                   </button>
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   Domain
                 </label>
                 <div className="mt-2">
@@ -390,7 +390,7 @@ export function Hero({
               <button
                 onClick={handleChangeEmail}
                 disabled={changeLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
               >
                 {changeLoading ? 'Updating...' : 'Confirm Change'}
               </button>
@@ -408,14 +408,14 @@ export function Hero({
           onClick={() => setIsRecoveryOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto dark:border-white/10 dark:bg-[#0d0d0d]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
                 onClick={() => setIsRecoveryOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
                 aria-label="Close"
               >
                 <svg
@@ -436,16 +436,16 @@ export function Hero({
                 <span className="text-xs font-black hidden sm:inline">Close</span>
               </button>
             </div>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Keep this recovery key safe. It gives access to your inbox.
             </p>
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   Current Recovery Key
                 </label>
-                <div className="mt-2 flex items-center gap-2 rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-900">
+                <div className="mt-2 flex items-center gap-2 rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-900 dark:border-white/10 dark:bg-white/5 dark:text-white">
                   <span className="flex-1 break-all">
                     {recoveryLoading ? 'Loading...' : recoveryKey || 'Not available'}
                   </span>
@@ -455,14 +455,14 @@ export function Hero({
                       await navigator.clipboard.writeText(recoveryKey);
                       addToast({ message: 'Recovery key copied', type: 'success', duration: 1500 });
                     }}
-                    className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95"
+                    className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 dark:border-white/10 dark:text-white dark:hover:border-white/20 dark:hover:bg-white/10"
                   >
                     Copy
                   </button>
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   Recover Another Email
                 </label>
                 <input
@@ -475,7 +475,7 @@ export function Hero({
               <button
                 onClick={handleRecoverEmail}
                 disabled={recoveryLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
               >
                 {recoveryLoading ? 'Recovering...' : 'Recover Email'}
               </button>
