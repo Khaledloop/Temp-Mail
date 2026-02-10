@@ -10,6 +10,9 @@ export const client = createClient({
   apiVersion,
   useCdn: true,
   token: readToken || undefined,
+  // Avoid Cloudflare 524 timeouts when Sanity is slow/unreachable.
+  timeout: 8000,
+  maxRetries: 1,
 })
 
 type SanityFetchOptions<TParams extends QueryParams> = {
