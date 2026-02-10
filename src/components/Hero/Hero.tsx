@@ -190,11 +190,11 @@ export function Hero({
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="flex flex-col items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-brand-600 px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
+          <span className="inline-flex items-center rounded-full bg-brand-600/95 px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-md ring-1 ring-white/30 dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
             Temporary Email Address
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight dark:text-white">
-            Your Private Inbox
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-950 tracking-tighter leading-tight dark:text-white">
+            Temp Mail <span className="text-brand-600 dark:text-brand-500">Lab</span>
           </h1>
         </div>
         <p className="text-sm text-gray-600 font-medium max-w-md mx-auto leading-relaxed dark:text-gray-400">
@@ -206,7 +206,7 @@ export function Hero({
       {/* Email pill with Copy button on the right */}
       <div className="w-full max-w-2xl px-4">
         <div className="relative">
-          <div className="rounded-3xl sm:rounded-full bg-gray-50 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden dark:bg-white/5 dark:border-white/10">
+          <div className="rounded-3xl sm:rounded-full bg-white/85 border border-gray-200/80 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.45)] ring-1 ring-black/5 backdrop-blur-md flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden dark:bg-white/10 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_25px_60px_-40px_rgba(0,0,0,0.85)]">
             <div className="flex-1 min-w-0 px-6 pt-4 pb-2 sm:py-4">
               <p className="text-[10px] font-semibold text-gray-700 uppercase dark:text-gray-300">YOUR ADDRESS</p>
               <div className="mt-1">
@@ -227,7 +227,7 @@ export function Hero({
                 className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
                   isCopying
                     ? 'bg-emerald-600 text-white shadow-lg scale-105'
-                    : 'bg-brand-600 text-white hover:bg-brand-700 hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 dark:bg-white/15 dark:text-white dark:border dark:border-white/10 dark:hover:bg-white/25'
+                    : 'bg-brand-600 text-white hover:bg-brand-700 hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 ring-1 ring-white/30 dark:bg-white/20 dark:text-white dark:border dark:border-white/10 dark:hover:bg-white/30'
                 }`}
                 aria-label="Copy email"
               >
@@ -246,7 +246,7 @@ export function Hero({
           <button
             onClick={onFetchEmails}
             disabled={!onFetchEmails}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
@@ -264,7 +264,7 @@ export function Hero({
           <button
             onClick={openChangeModal}
             disabled={changeLoading}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
               className={`h-5 w-5 transition-transform duration-500 ${changeLoading ? 'animate-spin' : 'group-hover:rotate-180'}`}
@@ -281,7 +281,7 @@ export function Hero({
           {/* Recover Email Button */}
           <button
             onClick={openRecoveryModal}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-gray-50 active:scale-95 transition-all duration-300 ease-out group dark:bg-white/5 dark:text-white dark:border-white/10 dark:hover:bg-white/10"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
               className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" 
@@ -304,7 +304,7 @@ export function Hero({
           onClick={() => setIsChangeOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto dark:border-white/10 dark:bg-[#0d0d0d]"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">
@@ -415,7 +415,7 @@ export function Hero({
           onClick={() => setIsRecoveryOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200 bg-white p-5 sm:p-7 shadow-2xl animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto dark:border-white/10 dark:bg-[#0d0d0d]"
+            className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between">

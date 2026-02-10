@@ -26,7 +26,7 @@ export function HomeClient() {
 
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, toggleDarkMode } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer, addToast } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
   const [showInbox, setShowInbox] = useState(false);
 
@@ -101,27 +101,6 @@ export function HomeClient() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => {
-          toggleDarkMode();
-        }}
-        className="fixed top-4 right-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-900 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 dark:border-gray-300 dark:bg-black dark:text-white"
-        aria-label={isDarkMode ? 'Disable dark mode' : 'Enable dark mode'}
-      >
-        <svg
-          className="h-5 w-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
-        </svg>
-      </button>
-
       <div className="relative py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <Hero
@@ -137,10 +116,10 @@ export function HomeClient() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
         {showInbox ? (
-          <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 content-visibility-auto">
-            <div className="mb-12 border-b border-gray-100 pb-8">
+          <div className="bg-white/85 rounded-[2.5rem] shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35)] p-8 sm:p-12 mb-12 border border-gray-200/80 ring-1 ring-black/5 backdrop-blur-md content-visibility-auto dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_45px_90px_-40px_rgba(0,0,0,0.9)]">
+            <div className="mb-12 border-b border-gray-200/80 pb-8 dark:border-white/10">
               <div className="flex items-center gap-4">
-                <div className="bg-brand-600 p-3 rounded-2xl dark:bg-white/15">
+                <div className="bg-brand-600 p-3 rounded-2xl shadow-md ring-1 ring-white/40 dark:bg-white/15 dark:ring-white/20">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                   </svg>
@@ -156,7 +135,7 @@ export function HomeClient() {
                     aria-hidden={!isRefreshing}
                   >
                     <span
-                      className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
+                      className={`w-1.5 h-1.5 rounded-full bg-brand-600 ${isRefreshing ? 'animate-pulse' : ''}`}
                     ></span>
                     <p className="text-[10px] font-black text-gray-700 uppercase tracking-widest">
                       Checking for mail...
@@ -176,7 +155,7 @@ export function HomeClient() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.06)] p-8 sm:p-12 mb-12 border border-gray-100 min-h-[360px]" aria-hidden="true">
+          <div className="bg-white/85 rounded-[2.5rem] shadow-[0_40px_80px_-30px_rgba(15,23,42,0.3)] p-8 sm:p-12 mb-12 border border-gray-200/80 ring-1 ring-black/5 backdrop-blur-md min-h-[360px] dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_45px_90px_-40px_rgba(0,0,0,0.9)]" aria-hidden="true">
             <div className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
               Inbox loading...
             </div>

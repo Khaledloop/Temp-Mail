@@ -6,8 +6,8 @@
 
 export function SeoContent() {
   return (
-    <article className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white rounded-2xl shadow-sm border border-gray-100">
-      <div className="prose prose-sm sm:prose max-w-none text-gray-700 space-y-6">
+    <article className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 bg-white/85 rounded-2xl shadow-[0_30px_80px_-50px_rgba(15,23,42,0.35)] border border-gray-200/80 ring-1 ring-black/5 backdrop-blur-md dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_35px_90px_-55px_rgba(0,0,0,0.9)]">
+      <div className="prose prose-base sm:prose-lg max-w-none text-gray-700 space-y-7 prose-headings:tracking-tight prose-headings:text-gray-950 prose-p:leading-7 sm:prose-p:leading-8 prose-strong:text-gray-900 dark:prose-invert">
         <section>
           <h2 className="text-2xl font-black text-gray-900 mb-4 tracking-tight">
             What is a Disposable Email Address?

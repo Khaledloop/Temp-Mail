@@ -11,26 +11,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-transparent pb-24">
-      <div className="bg-gray-50 border-b border-gray-100 py-3 text-center dark:bg-white/5 dark:border-white/10">
-        <p className="text-[10px] font-black tracking-[0.3em] text-gray-700 uppercase dark:text-gray-300">
-          100% Anonymous - High Speed - Free Forever
-        </p>
-      </div>
-
-      <div className="border-b border-gray-100 dark:border-white/10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-center gap-4 text-[11px] font-bold tracking-[0.2em] uppercase text-gray-700 dark:text-gray-300">
-          <a href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-white">
-            Blog
-          </a>
-          <a href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-white">
-            Privacy
-          </a>
-          <a href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-white">
-            Terms
-          </a>
-        </div>
-      </div>
-
       <HomeClient />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
@@ -38,7 +18,7 @@ export default function HomePage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="group bg-gray-50 rounded-[1.5rem] p-6 border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-all duration-300 transform hover:scale-105 hover:bg-white hover:border-gray-300 cursor-pointer dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-white/20"
+              className="group bg-white/85 rounded-[1.5rem] p-6 border border-gray-200/80 ring-1 ring-black/5 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.4)] flex flex-col items-center text-center transition-all duration-300 transform hover:scale-105 hover:bg-white hover:border-gray-300 hover:shadow-[0_25px_55px_-35px_rgba(15,23,42,0.45)] cursor-pointer backdrop-blur-md dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:border-white/20 dark:shadow-[0_25px_60px_-40px_rgba(0,0,0,0.9)]"
             >
               <div className="text-xs font-black tracking-[0.3em] text-gray-700 mb-3 group-hover:text-gray-900 transition-colors duration-300 dark:text-gray-300 dark:group-hover:text-white">
                 {feature.icon}

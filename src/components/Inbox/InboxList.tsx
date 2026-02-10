@@ -53,8 +53,8 @@ export function InboxList({
 
   if (emails.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-white py-16 px-6 dark:border-white/10 dark:bg-white/5">
-        <div className="rounded-full bg-gray-200 p-4 mb-4 dark:bg-white/10">
+      <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300/80 bg-white/80 py-16 px-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.4)] ring-1 ring-black/5 backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:ring-white/10 dark:shadow-[0_30px_70px_-45px_rgba(0,0,0,0.9)]">
+        <div className="rounded-full bg-gray-200/80 p-4 mb-4 ring-1 ring-black/5 dark:bg-white/10 dark:ring-white/10">
           <Mail className="h-8 w-8 text-gray-600 dark:text-gray-300" />
         </div>
         <p className="text-lg font-bold text-gray-900 dark:text-white">No emails yet</p>
@@ -148,8 +148,8 @@ const EmailRow = memo(function EmailRow({
       }}
       className={`group relative cursor-pointer rounded-xl border-l-4 transition-all duration-300 overflow-hidden ${
         isSelected
-          ? 'border-l-gray-900 bg-gray-50 shadow-lg border border-gray-300 dark:border-l-white/70 dark:bg-white/5 dark:border-white/10'
-          : 'border-l-gray-700 hover:border-l-gray-900 bg-white hover:bg-gray-50 hover:shadow-md border border-gray-200 dark:border-l-white/30 dark:hover:border-l-white/70 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10'
+          ? 'border-l-brand-600 bg-white/90 shadow-[0_20px_50px_-30px_rgba(15,23,42,0.45)] border border-gray-200/80 ring-1 ring-black/5 dark:border-l-white/70 dark:bg-white/10 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_25px_60px_-40px_rgba(0,0,0,0.9)]'
+          : 'border-l-brand-200 hover:border-l-brand-600 bg-white/75 hover:bg-white/90 hover:shadow-md border border-gray-200/70 ring-1 ring-black/5 dark:border-l-white/30 dark:hover:border-l-white/70 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:ring-white/10'
       }`}
     >
       <div className="px-4 py-4 sm:px-5 sm:py-5">
@@ -207,7 +207,7 @@ const EmailRow = memo(function EmailRow({
             <button
               onClick={handleDeleteClick}
               disabled={isDeleting || isRefreshing}
-              className="group inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
+              className="group inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/20"
               aria-label="Delete email"
             >
               {isDeleting ? (

@@ -4,6 +4,7 @@ import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { ThemeClient } from '@/components/theme/ThemeClient'
 import { Footer } from '@/components/common/Footer'
+import { TopNav } from '@/components/home/TopNav'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -68,8 +69,8 @@ export const metadata: Metadata = {
     images: [`${baseUrl}/twitter-image.png`],
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: '/Temp%20Mail%20Lab%20Favicon%20.png',
+    apple: '/Temp%20Mail%20Lab%20Favicon%20.png',
   },
 }
 
@@ -117,7 +118,8 @@ export default function RootLayout({
       </head>
       <body className={manrope.className}>
         <ThemeClient />
-        <main>{children}</main>
+        <TopNav />
+        <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
       </body>
     </html>
