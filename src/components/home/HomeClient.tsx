@@ -30,7 +30,7 @@ export function HomeClient() {
   const [pollResetSignal, setPollResetSignal] = useState(0);
   const [showInbox, setShowInbox] = useState(false);
 
-  const applyTheme = (isDark: boolean) => {
+  const applyTheme = useCallback((isDark: boolean) => {
     if (typeof document === 'undefined') return;
     const mode = isDark ? 'dark' : 'light';
     const root = document.documentElement;
@@ -45,7 +45,7 @@ export function HomeClient() {
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('theme', mode);
     }
-  };
+  }, []);
 
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
   const handleFetchEmails = useCallback(async () => {
@@ -84,6 +84,18 @@ export function HomeClient() {
 
     bootstrap();
   }, [tempMailAddress, fetchEmails]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = window.localStorage.getItem('theme');
+    const shouldDark = stored === 'dark';
+    setDarkMode(shouldDark);
+    applyTheme(shouldDark);
+  }, [applyTheme, setDarkMode]);
+
+  useEffect(() => {
+    applyTheme(isDarkMode);
+  }, [applyTheme, isDarkMode]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
