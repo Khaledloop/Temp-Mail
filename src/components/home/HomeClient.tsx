@@ -41,7 +41,8 @@ export function HomeClient() {
     body.classList.toggle('dark', isDark);
     root.style.colorScheme = isDark ? 'dark' : 'light';
     body.style.backgroundColor = isDark ? '#050505' : '';
-    body.style.color = isDark ? '#f5f5f5' : '';
+    body.style.color = isDark ? '#f5f5f5' : '#0f172a';
+    root.style.color = isDark ? '#f5f5f5' : '#0f172a';
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('theme', mode);
     }
