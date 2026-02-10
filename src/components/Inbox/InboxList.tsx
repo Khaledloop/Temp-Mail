@@ -157,8 +157,8 @@ const EmailRow = memo(function EmailRow({
           {/* Avatar - Clean dark */}
           <div className={`h-12 w-12 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-white transition-all ${
             isSelected
-              ? 'bg-gray-900 shadow-lg dark:bg-white/20'
-              : 'bg-gray-800 group-hover:bg-gray-900 group-hover:shadow-md dark:bg-white/15 dark:group-hover:bg-white/25'
+              ? 'bg-brand-700 shadow-lg dark:bg-white/20'
+              : 'bg-brand-600 group-hover:bg-brand-700 group-hover:shadow-md dark:bg-white/15 dark:group-hover:bg-white/25'
           }`}>
             {senderName.charAt(0).toUpperCase()}
           </div>

@@ -6,40 +6,51 @@ import { useUiStore } from '@/store/uiStore';
 export function ThemeClient() {
   const { isDarkMode, setDarkMode } = useUiStore();
 
-  const applyTheme = (isDark: boolean) => {
-    const mode = isDark ? 'dark' : 'light';
-    const root = document.documentElement;
-    const body = document.body;
-    root.dataset.theme = mode;
-    body.dataset.theme = mode;
-    root.classList.toggle('dark', isDark);
-    body.classList.toggle('dark', isDark);
-    root.style.colorScheme = isDark ? 'dark' : 'light';
-    // Remove inline overrides so CSS themes control colors consistently
-    body.style.removeProperty('background-color');
-    body.style.removeProperty('background-image');
-    body.style.removeProperty('color');
-    root.style.removeProperty('color');
-  };
-
   useEffect(() => {
+    // 1. عند التحميل: مزامنة الحالة مع التخزين المحلي أو تفضيلات النظام
     if (typeof window === 'undefined') return;
-    const stored = window.localStorage.getItem('theme');
-    if (stored === 'dark' || stored === 'light') {
-      const isDark = stored === 'dark';
-      setDarkMode(isDark);
-      applyTheme(isDark);
-      return;
-    }
+    
+    const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(prefersDark);
-    applyTheme(prefersDark);
+    
+    if (stored === 'dark' || (!stored && prefersDark)) {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
   }, [setDarkMode]);
 
   useEffect(() => {
-    applyTheme(isDarkMode);
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    // 2. تطبيق التغييرات على DOM عند تغير الحالة
+    const root = document.documentElement;
+    const body = document.body;
+    
+    // تنظيف ستايل منع الوميض الذي تمت إضافته في layout.tsx
+    const tempStyle = document.getElementById('dark-mode-style');
+    if (tempStyle) {
+      tempStyle.remove();
+    }
+
+    if (isDarkMode) {
+      root.classList.add('dark');
+      root.dataset.theme = 'dark';
+      root.style.colorScheme = 'dark';
+      
+      // إجبار الخلفية على اللون الداكن
+      body.style.backgroundColor = '#050505'; 
+      body.style.color = '#f5f5f5';
+      
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      root.dataset.theme = 'light';
+      root.style.colorScheme = 'light';
+      
+      // إزالة الأنماط اليدوية
+      body.style.backgroundColor = '';
+      body.style.color = '';
+      
+      localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
 

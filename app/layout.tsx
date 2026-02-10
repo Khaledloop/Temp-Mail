@@ -78,10 +78,36 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const themeScript = `
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = stored === 'dark' || (!stored && prefersDark);
+        var root = document.documentElement;
+        
+        if (isDark) {
+          root.classList.add('dark');
+          root.dataset.theme = 'dark';
+          root.style.colorScheme = 'dark';
+          // Inject style immediately to prevent FOUC (Flash of Unstyled Content)
+          var style = document.createElement('style');
+          style.id = 'dark-mode-style';
+          style.innerHTML = 'body { background-color: #050505 !important; color: #f5f5f5 !important; }';
+          document.head.appendChild(style);
+        } else {
+          root.classList.remove('dark');
+          root.dataset.theme = 'light';
+          root.style.colorScheme = 'light';
+        }
+      } catch (e) {}
+    })();
+  `
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <JsonLd />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {apiOrigin ? (
           <>
             <link rel="preconnect" href={apiOrigin} crossOrigin="" />

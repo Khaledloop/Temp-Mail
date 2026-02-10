@@ -162,15 +162,22 @@ export function Hero({
       addToast({ message: 'Email address updated', type: 'success', duration: 2000 });
     } catch (error) {
       console.error('Change email failed:', error);
+      const apiMessage =
+        (error as { message?: string; error?: string })?.message ||
+        (error as { error?: string })?.error;
       const statusCode =
         (error as { statusCode?: number })?.statusCode ||
         (error as { response?: { status?: number } })?.response?.status;
       if (statusCode === 409) {
-        setChangeError('This email already exists. Try a different name.');
+        const conflictMessage =
+          apiMessage || 'Email already exists. Choose a different name or domain.';
+        setChangeError(conflictMessage);
+        addToast({ message: conflictMessage, type: 'warning', duration: 3000 });
       } else {
-        setChangeError('Failed to change email. Please try again.');
+        const fallbackMessage = apiMessage || 'Failed to change email. Please try again.';
+        setChangeError(fallbackMessage);
+        addToast({ message: fallbackMessage, type: 'error', duration: 3000 });
       }
-      addToast({ message: 'Failed to change email', type: 'error', duration: 2500 });
     } finally {
       setChangeLoading(false);
     }
@@ -183,14 +190,14 @@ export function Hero({
       {/* Header */}
       <div className="text-center space-y-3">
         <div className="flex flex-col items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-black px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
+          <span className="inline-flex items-center rounded-full bg-brand-600 px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-sm dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
             Temporary Email Address
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight dark:text-white">
             Your Private Inbox
           </h1>
         </div>
-        <p className="text-sm text-gray-500 font-medium max-w-md mx-auto leading-relaxed dark:text-gray-400">
+        <p className="text-sm text-gray-600 font-medium max-w-md mx-auto leading-relaxed dark:text-gray-400">
           Forget about spam and hacking robots. Keep your real mailbox clean and secure. 
           Expires in 30 days.
         </p>
@@ -201,7 +208,7 @@ export function Hero({
         <div className="relative">
           <div className="rounded-3xl sm:rounded-full bg-gray-50 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 overflow-hidden dark:bg-white/5 dark:border-white/10">
             <div className="flex-1 min-w-0 px-6 pt-4 pb-2 sm:py-4">
-              <p className="text-[10px] font-semibold text-gray-600 uppercase dark:text-gray-300">YOUR ADDRESS</p>
+              <p className="text-[10px] font-semibold text-gray-700 uppercase dark:text-gray-300">YOUR ADDRESS</p>
               <div className="mt-1">
                 <div
                   id="emailDisplay"
@@ -220,7 +227,7 @@ export function Hero({
                 className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
                   isCopying
                     ? 'bg-emerald-600 text-white shadow-lg scale-105'
-                    : 'bg-black text-white hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 dark:bg-white/15 dark:text-white dark:border dark:border-white/10 dark:hover:bg-white/25'
+                    : 'bg-brand-600 text-white hover:bg-brand-700 hover:shadow-xl hover:scale-105 hover:-translate-y-0.5 active:scale-95 dark:bg-white/15 dark:text-white dark:border dark:border-white/10 dark:hover:bg-white/25'
                 }`}
                 aria-label="Copy email"
               >
@@ -331,7 +338,7 @@ export function Hero({
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">
                   Email Name
                 </label>
                 <div className="mt-2 flex flex-col sm:flex-row gap-2">
@@ -357,7 +364,7 @@ export function Hero({
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">
                   Domain
                 </label>
                 <div className="mt-2">
@@ -390,7 +397,7 @@ export function Hero({
               <button
                 onClick={handleChangeEmail}
                 disabled={changeLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
+                className="w-full rounded-2xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-700 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
               >
                 {changeLoading ? 'Updating...' : 'Confirm Change'}
               </button>
@@ -442,7 +449,7 @@ export function Hero({
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">
                   Current Recovery Key
                 </label>
                 <div className="mt-2 flex items-center gap-2 rounded-2xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-900 dark:border-white/10 dark:bg-white/5 dark:text-white">
@@ -462,7 +469,7 @@ export function Hero({
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <label className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">
                   Recover Another Email
                 </label>
                 <input
@@ -475,7 +482,7 @@ export function Hero({
               <button
                 onClick={handleRecoverEmail}
                 disabled={recoveryLoading}
-                className="w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
+                className="w-full rounded-2xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-700 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/15 dark:text-white dark:hover:bg-white/25"
               >
                 {recoveryLoading ? 'Recovering...' : 'Recover Email'}
               </button>

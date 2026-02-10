@@ -140,7 +140,7 @@ export function HomeClient() {
           <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] p-8 sm:p-12 mb-12 border border-gray-100 content-visibility-auto">
             <div className="mb-12 border-b border-gray-100 pb-8">
               <div className="flex items-center gap-4">
-                <div className="bg-black p-3 rounded-2xl">
+                <div className="bg-brand-600 p-3 rounded-2xl dark:bg-white/15">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                   </svg>
@@ -158,7 +158,7 @@ export function HomeClient() {
                     <span
                       className={`w-1.5 h-1.5 rounded-full bg-gray-900 ${isRefreshing ? 'animate-pulse' : ''}`}
                     ></span>
-                    <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                    <p className="text-[10px] font-black text-gray-700 uppercase tracking-widest">
                       Checking for mail...
                     </p>
                   </div>
@@ -177,7 +177,7 @@ export function HomeClient() {
           </div>
         ) : (
           <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.06)] p-8 sm:p-12 mb-12 border border-gray-100 min-h-[360px]" aria-hidden="true">
-            <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+            <div className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
               Inbox loading...
             </div>
           </div>
