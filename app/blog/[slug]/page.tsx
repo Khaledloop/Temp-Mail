@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import type {Metadata} from 'next'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
@@ -150,9 +149,9 @@ export default async function BlogPostPage({params}: PageProps) {
       <div className="min-h-screen bg-transparent pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-            <Link href="/blog" className="hover:text-gray-900 transition">
+            <a href="/blog" className="hover:text-gray-900 transition">
               Back to Blog
-            </Link>
+            </a>
             <span>Temp Mail Lab Journal</span>
           </div>
 
@@ -190,9 +189,9 @@ export default async function BlogPostPage({params}: PageProps) {
       />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-          <Link href="/blog" className="hover:text-gray-900 transition-colors dark:hover:text-white">
+          <a href="/blog" className="hover:text-gray-900 transition-colors dark:hover:text-white">
             Back to Blog
-          </Link>
+          </a>
           <span>Temp Mail Lab Journal</span>
         </div>
 

@@ -1,6 +1,5 @@
 "use client"
 
-import Link from 'next/link'
 import {useEffect, useState} from 'react'
 
 export function Footer() {
@@ -26,15 +25,15 @@ export function Footer() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
-            <Link href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            <a href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Blog
-            </Link>
-            <Link href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            </a>
+            <a href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Privacy
-            </Link>
-            <Link href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            </a>
+            <a href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Terms
-            </Link>
+            </a>
             {supportHref ? (
               <a href={supportHref} className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
                 Support

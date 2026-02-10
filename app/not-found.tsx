@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-transparent pb-24">
@@ -15,18 +13,18 @@ export default function NotFound() {
           or removed. You can return to the homepage or explore the blog.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link
+          <a
             href="/"
             className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-900"
           >
             Back to Home
-          </Link>
-          <Link
+          </a>
+          <a
             href="/blog"
             className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-900 transition hover:border-gray-300"
           >
             Visit the Blog
-          </Link>
+          </a>
         </div>
       </div>
     </div>

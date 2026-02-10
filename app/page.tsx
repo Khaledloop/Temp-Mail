@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { HomeClient } from '@/components/home/HomeClient';
 import { SeoContent } from '@/components/home/SeoContent';
 
@@ -20,15 +19,15 @@ export default function HomePage() {
 
       <div className="border-b border-gray-100 dark:border-white/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-center gap-4 text-[11px] font-bold tracking-[0.2em] uppercase text-gray-500 dark:text-gray-300">
-          <Link href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-white">
+          <a href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-white">
             Blog
-          </Link>
-          <Link href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-white">
+          </a>
+          <a href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-white">
             Privacy
-          </Link>
-          <Link href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-white">
+          </a>
+          <a href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-white">
             Terms
-          </Link>
+          </a>
         </div>
       </div>
 
