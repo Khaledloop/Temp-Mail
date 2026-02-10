@@ -15,8 +15,11 @@ export function ThemeClient() {
     root.classList.toggle('dark', isDark);
     body.classList.toggle('dark', isDark);
     root.style.colorScheme = isDark ? 'dark' : 'light';
-    body.style.backgroundColor = isDark ? '#050505' : '';
-    body.style.color = isDark ? '#f5f5f5' : '';
+    // Remove inline overrides so CSS themes control colors consistently
+    body.style.removeProperty('background-color');
+    body.style.removeProperty('background-image');
+    body.style.removeProperty('color');
+    root.style.removeProperty('color');
   };
 
   useEffect(() => {

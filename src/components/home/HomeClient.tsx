@@ -26,27 +26,9 @@ export function HomeClient() {
 
   const { isLoading, isRefreshing, selectEmail } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
-  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, setDarkMode } = useUiStore();
+  const { isEmailViewerOpen, openEmailViewer, addToast, isDarkMode, toggleDarkMode } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
   const [showInbox, setShowInbox] = useState(false);
-
-  const applyTheme = useCallback((isDark: boolean) => {
-    if (typeof document === 'undefined') return;
-    const mode = isDark ? 'dark' : 'light';
-    const root = document.documentElement;
-    const body = document.body;
-    root.dataset.theme = mode;
-    body.dataset.theme = mode;
-    root.classList.toggle('dark', isDark);
-    body.classList.toggle('dark', isDark);
-    root.style.colorScheme = isDark ? 'dark' : 'light';
-    body.style.backgroundColor = isDark ? '#050505' : '';
-    body.style.color = isDark ? '#f5f5f5' : '#0f172a';
-    root.style.color = isDark ? '#f5f5f5' : '#0f172a';
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('theme', mode);
-    }
-  }, []);
 
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
   const handleFetchEmails = useCallback(async () => {
@@ -86,17 +68,7 @@ export function HomeClient() {
     bootstrap();
   }, [tempMailAddress, fetchEmails]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const stored = window.localStorage.getItem('theme');
-    const shouldDark = stored === 'dark';
-    setDarkMode(shouldDark);
-    applyTheme(shouldDark);
-  }, [applyTheme, setDarkMode]);
-
-  useEffect(() => {
-    applyTheme(isDarkMode);
-  }, [applyTheme, isDarkMode]);
+  // Theme is managed globally by ThemeClient in the root layout.
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -132,11 +104,7 @@ export function HomeClient() {
       <button
         type="button"
         onClick={() => {
-          const root = document.documentElement;
-          const current = root.dataset.theme === 'dark' || root.classList.contains('dark');
-          const next = !current;
-          setDarkMode(next);
-          applyTheme(next);
+          toggleDarkMode();
         }}
         className="fixed top-4 right-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-900 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 dark:border-gray-300 dark:bg-black dark:text-white"
         aria-label={isDarkMode ? 'Disable dark mode' : 'Enable dark mode'}
