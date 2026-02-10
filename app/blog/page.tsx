@@ -44,11 +44,18 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = await sanityFetch<BlogPostListItem[]>({
-    query: POSTS_QUERY,
-    revalidate: 600,
-    tags: ['post'],
-  })
+  let posts: BlogPostListItem[] = []
+  let hasError = false
+  try {
+    posts = await sanityFetch<BlogPostListItem[]>({
+      query: POSTS_QUERY,
+      revalidate: 600,
+      tags: ['post'],
+    })
+  } catch (error) {
+    console.error('Failed to load blog posts:', error)
+    hasError = true
+  }
 
   return (
     <div className="min-h-screen bg-transparent pb-24">
@@ -72,9 +79,13 @@ export default async function BlogPage() {
 
         {posts.length === 0 ? (
           <div className="mt-12 rounded-3xl border border-gray-200 bg-gray-50 p-6">
-            <p className="text-sm font-semibold text-gray-700">No posts yet</p>
+            <p className="text-sm font-semibold text-gray-700">
+              {hasError ? 'Blog is temporarily unavailable' : 'No posts yet'}
+            </p>
             <p className="mt-2 text-sm text-gray-600">
-              Publish your first article in Sanity Studio to see it here.
+              {hasError
+                ? 'Please refresh the page in a moment.'
+                : 'Publish your first article in Sanity Studio to see it here.'}
             </p>
           </div>
         ) : (

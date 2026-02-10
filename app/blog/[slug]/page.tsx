@@ -31,16 +31,21 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
     }
   }
 
-  const post = await sanityFetch<BlogPost | null>({
-    query: POST_QUERY,
-    params: {slug: resolvedParams.slug},
-    revalidate: 600,
-    tags: [`post:${resolvedParams.slug}`],
-  })
+  let post: BlogPost | null = null
+  try {
+    post = await sanityFetch<BlogPost | null>({
+      query: POST_QUERY,
+      params: {slug: resolvedParams.slug},
+      revalidate: 600,
+      tags: [`post:${resolvedParams.slug}`],
+    })
+  } catch (error) {
+    console.error('Failed to load blog metadata:', error)
+  }
 
   if (!post) {
     return {
-      title: 'Post not found - Temp Mail Lab',
+      title: 'Blog temporarily unavailable - Temp Mail Lab',
     }
   }
 
@@ -128,15 +133,39 @@ export default async function BlogPostPage({params}: PageProps) {
     notFound()
   }
 
-  const post = await sanityFetch<BlogPost | null>({
-    query: POST_QUERY,
-    params: {slug: resolvedParams.slug},
-    revalidate: 600,
-    tags: [`post:${resolvedParams.slug}`],
-  })
+  let post: BlogPost | null = null
+  try {
+    post = await sanityFetch<BlogPost | null>({
+      query: POST_QUERY,
+      params: {slug: resolvedParams.slug},
+      revalidate: 600,
+      tags: [`post:${resolvedParams.slug}`],
+    })
+  } catch (error) {
+    console.error('Failed to load blog post:', error)
+  }
 
   if (!post) {
-    notFound()
+    return (
+      <div className="min-h-screen bg-transparent pb-24">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
+            <Link href="/blog" className="hover:text-gray-900 transition">
+              Back to Blog
+            </Link>
+            <span>Temp Mail Lab Journal</span>
+          </div>
+
+          <h1 className="mt-6 text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+            Blog temporarily unavailable
+          </h1>
+
+          <p className="mt-6 text-gray-600 text-base">
+            We could not load this article right now. Please refresh the page in a moment.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   const heroImage = post.mainImage
