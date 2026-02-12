@@ -69,8 +69,8 @@ export const metadata: Metadata = {
     images: [`${baseUrl}/twitter-image.png`],
   },
   icons: {
-    icon: '/Temp%20Mail%20Lab%20Favicon%20.png',
-    apple: '/Temp%20Mail%20Lab%20Favicon%20.png',
+    icon: '/Temp_Mail_Lab.png',
+    apple: '/Temp_Mail_Lab.png',
   },
 }
 
@@ -108,6 +108,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <JsonLd />
+        <link rel="icon" href="/Temp_Mail_Lab.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/Temp_Mail_Lab.png" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {apiOrigin ? (
           <>
