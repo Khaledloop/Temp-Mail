@@ -1,6 +1,5 @@
 import {MetadataRoute} from 'next'
 
-import {SEO_SERVICES} from '@/utils/constants'
 import {sanityFetch} from '@/sanity/lib/client'
 import {POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 
@@ -17,13 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     /\/+$/,
     ''
   )
-
-  const serviceEntries: MetadataRoute.Sitemap = SEO_SERVICES.map((service) => ({
-    url: `${baseUrl}/temp-mail-for/${service.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
 
   const posts = await sanityFetch<PostSlugEntry[]>({
     query: POST_SLUGS_QUERY,
@@ -70,6 +62,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     ...blogEntries,
-    ...serviceEntries,
   ]
 }

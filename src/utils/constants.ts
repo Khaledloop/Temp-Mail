@@ -24,18 +24,6 @@ export const API_ENDPOINTS = {
   REFRESH_SESSION: '/api/refresh_session',
 } as const;
 
-// SEO service pages
-export const SEO_SERVICES = [
-  { slug: 'facebook', name: 'Facebook', description: 'Get a temporary email for Facebook registration' },
-  { slug: 'instagram', name: 'Instagram', description: 'Secure temporary email for Instagram signup' },
-  { slug: 'discord', name: 'Discord', description: 'Disposable email for Discord accounts' },
-  { slug: 'gmail', name: 'Gmail', description: 'Temporary email for Gmail and Google services' },
-  { slug: 'twitter', name: 'Twitter/X', description: 'Temporary email for Twitter and X' },
-  { slug: 'linkedin', name: 'LinkedIn', description: 'Disposable email for LinkedIn profiles' },
-  { slug: 'reddit', name: 'Reddit', description: 'Temporary email for Reddit accounts' },
-  { slug: 'twitch', name: 'Twitch', description: 'Disposable email for Twitch registration' },
-] as const;
-
 // UI constants
 export const UI = {
   SKELETON_ANIMATE_DURATION: 2000, // milliseconds
