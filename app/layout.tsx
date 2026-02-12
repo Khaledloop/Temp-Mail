@@ -127,7 +127,7 @@ export default function RootLayout({
         <Script
           src="https://gizokraijaw.net/vignette.min.js"
           data-zone="10603056"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </body>
     </html>

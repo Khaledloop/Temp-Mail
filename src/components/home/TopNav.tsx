@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useUiStore } from '@/store/uiStore';
 
 export function TopNav() {
@@ -9,6 +10,7 @@ export function TopNav() {
   const lastScroll = useRef(0);
   const ticking = useRef(false);
   const { isDarkMode, toggleDarkMode } = useUiStore();
+  const logoSrc = isDarkMode ? '/Temp-Mail-Lab.png' : '/Temp-Mail-Lab-Light.png';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -79,17 +81,14 @@ export function TopNav() {
           </div>
 
           <a href="/" className="flex items-center justify-center gap-2 sm:gap-3">
-            <img
-              src="/Temp-Mail-Lab-Light.png"
+            <Image
+              src={logoSrc}
               alt="Temp Mail Lab"
-              className="h-7 w-auto sm:h-9 dark:hidden"
-              loading="eager"
-            />
-            <img
-              src="/Temp-Mail-Lab.png"
-              alt="Temp Mail Lab"
-              className="h-7 w-auto sm:h-9 hidden dark:block"
-              loading="eager"
+              width={36}
+              height={36}
+              sizes="(min-width: 640px) 36px, 28px"
+              className="h-7 w-7 sm:h-9 sm:w-9"
+              priority
             />
             <span className="hidden sm:inline text-xs font-black tracking-[0.25em] uppercase text-gray-700 dark:text-gray-200">
               Temp Mail Lab

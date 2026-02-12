@@ -41,11 +41,11 @@ export function Footer() {
                 Support
               </a>
             ) : (
-              <span className="cursor-default text-gray-500 dark:text-gray-400">Support</span>
+              <span className="cursor-default text-gray-600 dark:text-gray-300">Support</span>
             )}
           </div>
         </div>
-        <div className="flex flex-col items-start justify-between gap-3 border-t border-gray-200/80 pt-6 text-xs text-gray-500 dark:border-white/10 dark:text-gray-400 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-3 border-t border-gray-200/80 pt-6 text-xs text-gray-600 dark:border-white/10 dark:text-gray-300 sm:flex-row sm:items-center">
           <span>(c) {year} Temp Mail Lab. All rights reserved.</span>
           <span>Built for privacy and search visibility.</span>
         </div>
