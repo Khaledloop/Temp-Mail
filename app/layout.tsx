@@ -125,8 +125,8 @@ export default function RootLayout({
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
         <Script
-          src="https://nap5k.com/tag.min.js"
-          data-zone="10602884"
+          src="https://gizokraijaw.net/vignette.min.js"
+          data-zone="10603056"
           strategy="afterInteractive"
         />
       </body>
