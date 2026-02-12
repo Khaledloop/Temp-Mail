@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { ThemeClient } from '@/components/theme/ThemeClient'
@@ -123,6 +124,11 @@ export default function RootLayout({
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
+        <Script
+          src="https://nap5k.com/tag.min.js"
+          data-zone="10602884"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
