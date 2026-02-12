@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
-import Script from 'next/script'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { ThemeClient } from '@/components/theme/ThemeClient'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
+import { DeferredVignette } from '@/components/ads/DeferredVignette'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -14,18 +14,6 @@ const manrope = Manrope({
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '')
-const apiOrigin = (() => {
-  const raw =
-    process.env.NEXT_PUBLIC_API_ORIGIN ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    ''
-  if (!raw) return ''
-  try {
-    return new URL(raw).origin
-  } catch {
-    return ''
-  }
-})()
 
 export const metadata: Metadata = {
   title: 'Temp Mail Lab - Your Temporary Email Address',
@@ -112,23 +100,13 @@ export default function RootLayout({
         <link rel="icon" href="/Temp_Mail_Lab.png" sizes="any" />
         <link rel="apple-touch-icon" href="/Temp_Mail_Lab.png" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        {apiOrigin ? (
-          <>
-            <link rel="preconnect" href={apiOrigin} crossOrigin="" />
-            <link rel="dns-prefetch" href={apiOrigin} />
-          </>
-        ) : null}
       </head>
       <body className={manrope.className}>
         <ThemeClient />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
-        <Script
-          src="https://gizokraijaw.net/vignette.min.js"
-          data-zone="10603056"
-          strategy="lazyOnload"
-        />
+        <DeferredVignette />
       </body>
     </html>
   )

@@ -10,7 +10,7 @@ export function TopNav() {
   const lastScroll = useRef(0);
   const ticking = useRef(false);
   const { isDarkMode, toggleDarkMode } = useUiStore();
-  const logoSrc = isDarkMode ? '/Temp-Mail-Lab.png' : '/Temp-Mail-Lab-Light.png';
+  const logoSrc = isDarkMode ? '/Temp-Mail-Lab-64.png' : '/Temp-Mail-Lab-Light-64.png';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
