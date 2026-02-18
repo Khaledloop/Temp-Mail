@@ -35,10 +35,12 @@ export function Hero({
   const [isCopying, setIsCopying] = useState(false);
   const [isRecoveryKeyCopying, setIsRecoveryKeyCopying] = useState(false);
   const [isRecoveryOpen, setIsRecoveryOpen] = useState(false);
+  const [isRecoveryClosePressed, setIsRecoveryClosePressed] = useState(false);
   const [recoveryKey, setRecoveryKey] = useState('');
   const [recoveryInput, setRecoveryInput] = useState('');
   const [recoveryLoading, setRecoveryLoading] = useState(false);
   const [isChangeOpen, setIsChangeOpen] = useState(false);
+  const [isChangeClosePressed, setIsChangeClosePressed] = useState(false);
   const [domainOptions, setDomainOptions] = useState<string[]>([]);
   const [domainLoading, setDomainLoading] = useState(false);
   const [localPart, setLocalPart] = useState('');
@@ -65,22 +67,39 @@ export function Hero({
 
     try {
       if (typeof document === 'undefined') return false;
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.setAttribute('readonly', '');
-      textArea.style.position = 'fixed';
-      textArea.style.opacity = '0';
-      textArea.style.pointerEvents = 'none';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      textArea.setSelectionRange(0, text.length);
+      const input = document.createElement('input');
+      input.value = text;
+      input.style.position = 'fixed';
+      input.style.top = '0';
+      input.style.left = '0';
+      input.style.opacity = '0';
+      input.style.pointerEvents = 'none';
+      document.body.appendChild(input);
+      input.focus();
+      input.select();
+      input.setSelectionRange(0, text.length);
       const didCopy = document.execCommand('copy');
-      document.body.removeChild(textArea);
+      document.body.removeChild(input);
       return didCopy;
     } catch {
       return false;
     }
+  };
+
+  const closeChangeModal = () => {
+    setIsChangeClosePressed(true);
+    setTimeout(() => {
+      setIsChangeOpen(false);
+      setIsChangeClosePressed(false);
+    }, 120);
+  };
+
+  const closeRecoveryModal = () => {
+    setIsRecoveryClosePressed(true);
+    setTimeout(() => {
+      setIsRecoveryOpen(false);
+      setIsRecoveryClosePressed(false);
+    }, 120);
   };
 
   const handleCopyEmail = async () => {
@@ -335,7 +354,7 @@ export function Hero({
       {isChangeOpen && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
-          onClick={() => setIsChangeOpen(false)}
+          onClick={closeChangeModal}
         >
           <div
             className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
@@ -344,8 +363,12 @@ export function Hero({
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
-                onClick={() => setIsChangeOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 active:bg-red-600 active:text-white active:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
+                onClick={closeChangeModal}
+                className={`group ml-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 font-black shadow-sm border transition transform hover:scale-105 hover:shadow-md dark:bg-white/10 dark:border-white/10 dark:hover:bg-white/20 ${
+                  isChangeClosePressed
+                    ? 'bg-red-600 text-white border-red-600'
+                    : 'bg-white text-gray-900 border-gray-200 hover:text-red-600 hover:border-red-600 dark:text-white'
+                }`}
                 aria-label="Close"
               >
                 <svg
@@ -446,7 +469,7 @@ export function Hero({
       {isRecoveryOpen && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
-          onClick={() => setIsRecoveryOpen(false)}
+          onClick={closeRecoveryModal}
         >
           <div
             className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
@@ -455,8 +478,12 @@ export function Hero({
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
-                onClick={() => setIsRecoveryOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 active:bg-red-600 active:text-white active:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
+                onClick={closeRecoveryModal}
+                className={`group ml-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 font-black shadow-sm border transition transform hover:scale-105 hover:shadow-md dark:bg-white/10 dark:border-white/10 dark:hover:bg-white/20 ${
+                  isRecoveryClosePressed
+                    ? 'bg-red-600 text-white border-red-600'
+                    : 'bg-white text-gray-900 border-gray-200 hover:text-red-600 hover:border-red-600 dark:text-white'
+                }`}
                 aria-label="Close"
               >
                 <svg
