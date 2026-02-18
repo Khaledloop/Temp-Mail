@@ -33,6 +33,7 @@ export function Hero({
   const { tempMailAddress } = useAuthStore();
   const { addToast } = useUiStore();
   const [isCopying, setIsCopying] = useState(false);
+  const [isRecoveryKeyCopying, setIsRecoveryKeyCopying] = useState(false);
   const [isRecoveryOpen, setIsRecoveryOpen] = useState(false);
   const [recoveryKey, setRecoveryKey] = useState('');
   const [recoveryInput, setRecoveryInput] = useState('');
@@ -50,13 +51,46 @@ export function Hero({
     return <HeroSkeleton />;
   }
 
+  const copyTextToClipboard = async (text: string): Promise<boolean> => {
+    if (!text) return false;
+
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // Continue to fallback for mobile/unsupported clipboard cases.
+    }
+
+    try {
+      if (typeof document === 'undefined') return false;
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('readonly', '');
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      textArea.style.pointerEvents = 'none';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      textArea.setSelectionRange(0, text.length);
+      const didCopy = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return didCopy;
+    } catch {
+      return false;
+    }
+  };
+
   const handleCopyEmail = async () => {
     try {
       setIsCopying(true);
       const email = tempMailAddress || 'test@example.com';
-      
-      // Use native clipboard API
-      await navigator.clipboard.writeText(email);
+      const didCopy = await copyTextToClipboard(email);
+      if (!didCopy) {
+        throw new Error('Clipboard copy failed');
+      }
       
       addToast({
         message: 'Email copied to clipboard!',
@@ -64,8 +98,8 @@ export function Hero({
         duration: 2000,
       });
       
-      // Reset button after 1.5 seconds
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Keep success state visible for touch devices.
+      await new Promise(resolve => setTimeout(resolve, 2200));
       setIsCopying(false);
     } catch (error) {
       console.error('Copy error:', error);
@@ -311,7 +345,7 @@ export function Hero({
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
                 onClick={() => setIsChangeOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 active:bg-red-600 active:text-white active:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
                 aria-label="Close"
               >
                 <svg
@@ -324,7 +358,7 @@ export function Hero({
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="lucide lucide-x h-4 w-4 text-gray-900"
+                  className="lucide lucide-x h-4 w-4 text-current"
                 >
                   <path d="M18 6 6 18"></path>
                   <path d="m6 6 12 12"></path>
@@ -422,7 +456,7 @@ export function Hero({
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
                 onClick={() => setIsRecoveryOpen(false)}
-                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-gray-900 font-black shadow-sm border border-gray-200 hover:shadow-md transition transform hover:scale-105 hover:text-red-600 hover:border-red-600 active:bg-red-600 active:text-white active:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
                 aria-label="Close"
               >
                 <svg
@@ -435,7 +469,7 @@ export function Hero({
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="lucide lucide-x h-4 w-4 text-gray-900"
+                  className="lucide lucide-x h-4 w-4 text-current"
                 >
                   <path d="M18 6 6 18"></path>
                   <path d="m6 6 12 12"></path>
@@ -459,12 +493,29 @@ export function Hero({
                   <button
                     onClick={async () => {
                       if (!recoveryKey) return;
-                      await navigator.clipboard.writeText(recoveryKey);
-                      addToast({ message: 'Recovery key copied', type: 'success', duration: 1500 });
+                      try {
+                        setIsRecoveryKeyCopying(true);
+                        const didCopy = await copyTextToClipboard(recoveryKey);
+                        if (!didCopy) {
+                          throw new Error('Clipboard copy failed');
+                        }
+                        addToast({ message: 'Recovery key copied', type: 'success', duration: 2000 });
+                        await new Promise(resolve => setTimeout(resolve, 2200));
+                      } catch (error) {
+                        console.error('Recovery key copy error:', error);
+                        addToast({ message: 'Failed to copy recovery key', type: 'error', duration: 3000 });
+                      } finally {
+                        setIsRecoveryKeyCopying(false);
+                      }
                     }}
-                    className="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-900 transition-all duration-300 hover:border-gray-400 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 dark:border-white/10 dark:text-white dark:hover:border-white/20 dark:hover:bg-white/10"
+                    disabled={isRecoveryKeyCopying || !recoveryKey}
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 ${
+                      isRecoveryKeyCopying
+                        ? 'border-emerald-700 bg-emerald-700 text-white'
+                        : 'border-gray-300 text-gray-900 hover:border-gray-400 dark:border-white/10 dark:text-white dark:hover:border-white/20 dark:hover:bg-white/10'
+                    }`}
                   >
-                    Copy
+                    {isRecoveryKeyCopying ? 'Copied' : 'Copy'}
                   </button>
                 </div>
               </div>
