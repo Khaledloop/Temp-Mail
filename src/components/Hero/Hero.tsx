@@ -35,12 +35,10 @@ export function Hero({
   const [isCopying, setIsCopying] = useState(false);
   const [isRecoveryKeyCopying, setIsRecoveryKeyCopying] = useState(false);
   const [isRecoveryOpen, setIsRecoveryOpen] = useState(false);
-  const [isRecoveryClosePressed, setIsRecoveryClosePressed] = useState(false);
   const [recoveryKey, setRecoveryKey] = useState('');
   const [recoveryInput, setRecoveryInput] = useState('');
   const [recoveryLoading, setRecoveryLoading] = useState(false);
   const [isChangeOpen, setIsChangeOpen] = useState(false);
-  const [isChangeClosePressed, setIsChangeClosePressed] = useState(false);
   const [domainOptions, setDomainOptions] = useState<string[]>([]);
   const [domainLoading, setDomainLoading] = useState(false);
   const [localPart, setLocalPart] = useState('');
@@ -86,21 +84,6 @@ export function Hero({
     }
   };
 
-  const closeChangeModal = () => {
-    setIsChangeClosePressed(true);
-    setTimeout(() => {
-      setIsChangeOpen(false);
-      setIsChangeClosePressed(false);
-    }, 120);
-  };
-
-  const closeRecoveryModal = () => {
-    setIsRecoveryClosePressed(true);
-    setTimeout(() => {
-      setIsRecoveryOpen(false);
-      setIsRecoveryClosePressed(false);
-    }, 120);
-  };
 
   const handleCopyEmail = async () => {
     try {
@@ -276,7 +259,6 @@ export function Hero({
             <div className="px-4 pb-4 sm:pb-0 sm:pr-4 sm:pl-2">
               <button
                 onClick={handleCopyEmail}
-                disabled={isCopying}
                 className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-4 py-2.5 shadow-md transition-all duration-300 ease-out font-bold text-sm group ${
                   isCopying
                     ? 'bg-emerald-700 text-white shadow-lg scale-105'
@@ -354,7 +336,7 @@ export function Hero({
       {isChangeOpen && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
-          onClick={closeChangeModal}
+          onClick={() => setIsChangeOpen(false)}
         >
           <div
             className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
@@ -363,12 +345,8 @@ export function Hero({
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Change Email</h3>
               <button
-                onClick={closeChangeModal}
-                className={`group ml-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 font-black shadow-sm border transition transform hover:scale-105 hover:shadow-md dark:bg-white/10 dark:border-white/10 dark:hover:bg-white/20 ${
-                  isChangeClosePressed
-                    ? 'bg-red-600 text-white border-red-600'
-                    : 'bg-white text-gray-900 border-gray-200 hover:text-red-600 hover:border-red-600 dark:text-white'
-                }`}
+                onClick={() => setIsChangeOpen(false)}
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 font-black text-gray-900 shadow-sm border border-gray-200 transition transform hover:scale-105 hover:shadow-md hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"}
                 aria-label="Close"
               >
                 <svg
@@ -469,7 +447,7 @@ export function Hero({
       {isRecoveryOpen && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 sm:p-6 backdrop-blur animate-fadeIn overflow-y-auto"
-          onClick={closeRecoveryModal}
+          onClick={() => setIsRecoveryOpen(false)}
         >
           <div
             className="w-full max-w-lg rounded-2xl sm:rounded-3xl border border-gray-200/80 bg-white/95 p-5 sm:p-7 shadow-[0_35px_90px_-40px_rgba(15,23,42,0.55)] ring-1 ring-black/5 animate-slideUp transition-all duration-300 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-md dark:border-white/10 dark:bg-[#0d0d0d] dark:ring-white/10 dark:shadow-[0_45px_110px_-55px_rgba(0,0,0,0.9)]"
@@ -478,12 +456,8 @@ export function Hero({
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-gray-900">Recover Email</h3>
               <button
-                onClick={closeRecoveryModal}
-                className={`group ml-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 font-black shadow-sm border transition transform hover:scale-105 hover:shadow-md dark:bg-white/10 dark:border-white/10 dark:hover:bg-white/20 ${
-                  isRecoveryClosePressed
-                    ? 'bg-red-600 text-white border-red-600'
-                    : 'bg-white text-gray-900 border-gray-200 hover:text-red-600 hover:border-red-600 dark:text-white'
-                }`}
+                onClick={() => setIsRecoveryOpen(false)}
+                className="group ml-4 inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 font-black text-gray-900 shadow-sm border border-gray-200 transition transform hover:scale-105 hover:shadow-md hover:text-red-600 hover:border-red-600 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"}
                 aria-label="Close"
               >
                 <svg
@@ -535,8 +509,7 @@ export function Hero({
                         setIsRecoveryKeyCopying(false);
                       }
                     }}
-                    disabled={isRecoveryKeyCopying || !recoveryKey}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 ${
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 ${
                       isRecoveryKeyCopying
                         ? 'border-emerald-700 bg-emerald-700 text-white'
                         : 'border-gray-300 text-gray-900 hover:border-gray-400 dark:border-white/10 dark:text-white dark:hover:border-white/20 dark:hover:bg-white/10'
@@ -571,3 +544,5 @@ export function Hero({
     </div>
   );
 }
+
+

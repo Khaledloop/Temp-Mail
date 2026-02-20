@@ -41,25 +41,42 @@ export async function sanityFetch<TResponse, TParams extends QueryParams = Query
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 8000)
   try {
-    const response = await fetch(url.toString(), {
-      headers: readToken ? {Authorization: `Bearer ${readToken}`} : undefined,
-      cache: 'force-cache',
-      next: {
-        revalidate,
-        tags,
-      },
-      signal: controller.signal,
-    })
+    const headers = readToken ? {Authorization: `Bearer ${readToken}`} : undefined
 
-    if (!response.ok) {
-      const errorBody = await response.text().catch(() => '')
-      throw new Error(
-        `Sanity fetch failed (${response.status} ${response.statusText}) ${errorBody}`
-      )
+    const runFetch = async (
+      init: RequestInit & {next?: {revalidate?: number; tags?: string[]}}
+    ) => {
+      const response = await fetch(url.toString(), init)
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => '')
+        throw new Error(
+          `Sanity fetch failed (${response.status} ${response.statusText}) ${errorBody}`
+        )
+      }
+      const json = (await response.json()) as {result: TResponse}
+      return json.result
     }
 
-    const json = (await response.json()) as {result: TResponse}
-    return json.result
+    // First attempt: use Next.js cache + tags.
+    try {
+      return await runFetch({
+        headers,
+        cache: 'force-cache',
+        next: {
+          revalidate,
+          tags,
+        },
+        signal: controller.signal,
+      })
+    } catch (error) {
+      // Fallback: retry without Next.js cache hints (better for some edge runtimes).
+      console.warn('Sanity fetch failed with cache; retrying without cache.', error)
+      return await runFetch({
+        headers,
+        cache: 'no-store',
+        signal: controller.signal,
+      })
+    }
   } finally {
     clearTimeout(timeoutId)
   }
