@@ -58,8 +58,14 @@ export const metadata: Metadata = {
     images: [`${baseUrl}/twitter-image.png`],
   },
   icons: {
-    icon: '/Temp_Mail_Lab.png',
-    apple: '/Temp_Mail_Lab.png',
+    icon: [
+      {url: '/favicon.ico'},
+      {url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png'},
+      {url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png'},
+      {url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png'},
+      {url: '/icon-192x192.png', sizes: '192x192', type: 'image/png'},
+    ],
+    apple: [{url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png'}],
   },
 }
 
@@ -97,8 +103,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <JsonLd />
-        <link rel="icon" href="/Temp_Mail_Lab.png" sizes="any" />
-        <link rel="apple-touch-icon" href="/Temp_Mail_Lab.png" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={manrope.className}>
