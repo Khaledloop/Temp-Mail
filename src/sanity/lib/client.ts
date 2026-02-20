@@ -20,12 +20,13 @@ type SanityFetchOptions<TParams extends QueryParams> = {
   params?: TParams
   revalidate?: number
   tags?: string[]
+  cache?: RequestCache
 }
 
 export async function sanityFetch<TResponse, TParams extends QueryParams = QueryParams>(
   options: SanityFetchOptions<TParams>
 ): Promise<TResponse> {
-  const {query, params, revalidate = 300, tags = []} = options
+  const {query, params, revalidate = 300, tags = [], cache = 'force-cache'} = options
   const resolvedParams = params ?? ({} as TParams)
 
   const origin = readToken
@@ -59,13 +60,16 @@ export async function sanityFetch<TResponse, TParams extends QueryParams = Query
 
     // First attempt: use Next.js cache + tags.
     try {
+      const useNextCache = cache !== 'no-store'
       return await runFetch({
         headers,
-        cache: 'force-cache',
-        next: {
-          revalidate,
-          tags,
-        },
+        cache,
+        next: useNextCache
+          ? {
+              revalidate,
+              tags,
+            }
+          : undefined,
         signal: controller.signal,
       })
     } catch (error) {

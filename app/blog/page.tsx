@@ -12,7 +12,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 )
 
 export const runtime = 'edge'
-export const revalidate = 600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Blog - Temp Mail Lab',
@@ -48,8 +48,7 @@ export default async function BlogPage() {
   try {
     posts = await sanityFetch<BlogPostListItem[]>({
       query: POSTS_QUERY,
-      revalidate: 600,
-      tags: ['post'],
+      cache: 'no-store',
     })
   } catch (error) {
     console.error('Failed to load blog posts:', error)
