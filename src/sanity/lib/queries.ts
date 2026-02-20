@@ -4,6 +4,7 @@ export const POSTS_QUERY = defineQuery(
   `*[_type == "post" && defined(slug.current) && defined(publishedAt) && !(_id in path("drafts.**")) && (!defined(seo.noIndex) || seo.noIndex != true)]
     | order(publishedAt desc) {
       _id,
+      _updatedAt,
       title,
       "slug": slug.current,
       excerpt,
@@ -18,6 +19,7 @@ export const POSTS_QUERY = defineQuery(
 export const POST_QUERY = defineQuery(
   `*[_type == "post" && slug.current == $slug && defined(publishedAt) && !(_id in path("drafts.**"))][0]{
       _id,
+      _updatedAt,
       title,
       "slug": slug.current,
       excerpt,

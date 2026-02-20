@@ -1,10 +1,11 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import type {Metadata} from 'next'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
 
 import {sanityFetch} from '@/sanity/lib/client'
-import {POST_QUERY} from '@/sanity/lib/queries'
+import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 import {urlForImage} from '@/sanity/lib/image'
 import type {BlogPost} from '@/sanity/types'
 
@@ -14,13 +15,40 @@ type PageProps = {
   }>
 }
 
-export const runtime = 'edge'
-export const dynamic = 'force-dynamic'
+type PostSlugEntry = {
+  slug: string
+}
+
+export const revalidate = 600
+export const dynamicParams = true
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(
   /\/+$/,
   ''
 )
+
+function toAbsoluteCanonical(value: string | undefined, fallback: string): string {
+  if (!value) return fallback
+  try {
+    return new URL(value, `${baseUrl}/`).toString()
+  } catch {
+    return fallback
+  }
+}
+
+export async function generateStaticParams() {
+  try {
+    const posts = await sanityFetch<PostSlugEntry[]>({
+      query: POST_SLUGS_QUERY,
+      revalidate: 3600,
+      tags: ['post'],
+    })
+    return posts.map((post) => ({slug: post.slug}))
+  } catch (error) {
+    console.error('Failed to generate static params for blog posts:', error)
+    return []
+  }
+}
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const resolvedParams = await params
@@ -44,19 +72,29 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: 'Blog temporarily unavailable - Temp Mail Lab',
+      title: 'Post not found - Temp Mail Lab',
+      robots: {index: false, follow: false},
     }
   }
 
   const title = post.seo?.metaTitle || post.title
   const description = post.seo?.metaDescription || post.excerpt
-  const canonical = post.seo?.canonicalUrl || `${baseUrl}/blog/${post.slug}`
+  const canonical = toAbsoluteCanonical(
+    post.seo?.canonicalUrl,
+    `${baseUrl}/blog/${post.slug}`
+  )
   const ogImage = post.seo?.openGraphImage || post.mainImage
   const ogUrl = ogImage ? urlForImage(ogImage).width(1200).height(630).fit('crop').url() : null
 
   return {
     title,
     description,
+    keywords: [
+      'temporary email',
+      'disposable email',
+      'email privacy',
+      ...(post.categories || []),
+    ],
     alternates: {canonical},
     robots: post.seo?.noIndex ? {index: false, follow: false} : {index: true, follow: true},
     openGraph: {
@@ -145,53 +183,74 @@ export default async function BlogPostPage({params}: PageProps) {
   }
 
   if (!post) {
-    return (
-      <div className="min-h-screen bg-transparent pb-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-            <a href="/blog" className="hover:text-gray-900 transition">
-              Back to Blog
-            </a>
-            <span>Temp Mail Lab Journal</span>
-          </div>
-
-          <h1 className="mt-6 text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-            Blog temporarily unavailable
-          </h1>
-
-          <p className="mt-6 text-gray-600 text-base">
-            We could not load this article right now. Please refresh the page in a moment.
-          </p>
-        </div>
-      </div>
-    )
+    notFound()
   }
 
   const heroImage = post.mainImage
     ? urlForImage(post.mainImage).width(1600).height(900).fit('crop').url()
     : null
-  const jsonLd = {
+  const canonical = toAbsoluteCanonical(
+    post.seo?.canonicalUrl,
+    `${baseUrl}/blog/${post.slug}`
+  )
+  const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
     image: heroImage ? [heroImage] : undefined,
     datePublished: post.publishedAt,
-    author: post.author ? { '@type': 'Person', name: post.author } : undefined,
-    mainEntityOfPage: `${baseUrl}/blog/${post.slug}`,
+    dateModified: post._updatedAt || post.publishedAt,
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+    articleSection: post.categories || undefined,
+    author: post.author ? {'@type': 'Person', name: post.author} : {'@type': 'Organization', name: 'Temp Mail Lab'},
+    publisher: {
+      '@type': 'Organization',
+      name: 'Temp Mail Lab',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/icon-192x192.png`,
+      },
+    },
+    mainEntityOfPage: canonical,
+  }
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${baseUrl}/blog`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: canonical,
+      },
+    ],
   }
 
   return (
     <div className="min-h-screen bg-transparent pb-24">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}
+        dangerouslySetInnerHTML={{__html: JSON.stringify([articleJsonLd, breadcrumbJsonLd])}}
       />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-          <a href="/blog" className="hover:text-gray-900 transition-colors dark:hover:text-white">
+          <Link href="/blog" className="hover:text-gray-900 transition-colors dark:hover:text-white">
             Back to Blog
-          </a>
+          </Link>
           <span>Temp Mail Lab Journal</span>
         </div>
 

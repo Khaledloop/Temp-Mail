@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useUiStore } from '@/store/uiStore';
 
 export function TopNav() {
@@ -80,7 +81,7 @@ export function TopNav() {
             </button>
           </div>
 
-          <a href="/" className="flex items-center justify-center gap-2 sm:gap-3">
+          <Link href="/" className="flex items-center justify-center gap-2 sm:gap-3">
             <Image
               src={logoSrc}
               alt="Temp Mail Lab"
@@ -93,19 +94,19 @@ export function TopNav() {
             <span className="hidden sm:inline text-xs font-black tracking-[0.25em] uppercase text-gray-700 dark:text-gray-200">
               Temp Mail Lab
             </span>
-          </a>
+          </Link>
 
           <div className="flex items-center justify-end gap-3">
             <div className="hidden sm:flex flex-wrap items-center justify-center gap-4">
-              <a href="/blog" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              <Link href="/blog" className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Blog
-              </a>
-              <a href="/privacy" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              </Link>
+              <Link href="/privacy" className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Privacy
-              </a>
-              <a href="/terms" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              </Link>
+              <Link href="/terms" className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Terms
-              </a>
+              </Link>
             </div>
             <button
               type="button"
@@ -130,27 +131,27 @@ export function TopNav() {
           {menuOpen ? (
             <div className="sm:hidden absolute left-4 right-4 top-full mt-2 rounded-2xl border border-gray-200/80 bg-white/95 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.5)] ring-1 ring-black/5 backdrop-blur-md dark:border-white/10 dark:bg-[#0f0f0f] dark:ring-white/10">
               <div className="flex flex-col gap-3 px-4 py-4 text-[11px] font-bold tracking-[0.2em] uppercase text-gray-700 dark:text-gray-200">
-                <a
+                <Link
                   href="/blog"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
                   Blog
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/privacy"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
                   Privacy
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/terms"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
                   Terms
-                </a>
+                </Link>
               </div>
             </div>
           ) : null}

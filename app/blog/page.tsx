@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import type {Metadata} from 'next'
 
 import {sanityFetch} from '@/sanity/lib/client'
@@ -11,14 +12,23 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
   ''
 )
 
-export const runtime = 'edge'
 export const revalidate = 600
 
 export const metadata: Metadata = {
   title: 'Blog - Temp Mail Lab',
   description: 'Actionable guides, updates, and privacy insights for temporary email users.',
+  keywords: [
+    'temp mail blog',
+    'temporary email guides',
+    'disposable email privacy',
+    'avoid spam email',
+    'email privacy tips',
+  ],
   alternates: {
     canonical: `${baseUrl}/blog`,
+    types: {
+      'application/rss+xml': `${baseUrl}/blog/rss.xml`,
+    },
   },
   openGraph: {
     title: 'Blog - Temp Mail Lab',
@@ -27,7 +37,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: `${baseUrl}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Temp Mail Lab Blog',
@@ -38,7 +48,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Blog - Temp Mail Lab',
     description: 'Actionable guides, updates, and privacy insights for temporary email users.',
-    images: [`${baseUrl}/twitter-image.png`],
+    images: [`${baseUrl}/twitter-image`],
   },
 }
 
@@ -71,9 +81,9 @@ export default async function BlogPage() {
               Practical guidance on disposable email, privacy, and staying safe online.
             </p>
           </div>
-          <a href="/" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors dark:text-gray-300 dark:hover:text-white">
+          <Link href="/" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors dark:text-gray-300 dark:hover:text-white">
             Back to Home
-          </a>
+          </Link>
         </div>
 
         {posts.length === 0 ? (
@@ -95,7 +105,7 @@ export default async function BlogPage() {
                 : null
 
               return (
-                <a
+                <Link
                   key={post._id}
                   href={`/blog/${post.slug}`}
                   className="group block rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black/40"
@@ -136,7 +146,7 @@ export default async function BlogPage() {
                     <span className="font-semibold">{post.author || 'Temp Mail Lab'}</span>
                     <span className="font-semibold uppercase tracking-widest">Read</span>
                   </div>
-                </a>
+                </Link>
               )
             })}
           </div>

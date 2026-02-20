@@ -15,10 +15,39 @@ const manrope = Manrope({
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '')
 
+const siteName = 'Temp Mail Lab'
+const siteDescription =
+  'Generate a free temporary email address in seconds. Private, disposable inboxes to avoid spam and protect your identity online.'
+
 export const metadata: Metadata = {
-  title: 'Temp Mail Lab - Your Temporary Email Address',
-  description: 'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required. Privacy-focused disposable email.',
+  title: {
+    default: 'Temp Mail Lab - Free Temporary Email Address',
+    template: '%s | Temp Mail Lab',
+  },
+  description: siteDescription,
+  applicationName: siteName,
+  authors: [{name: 'Temp Mail Lab Team', url: baseUrl}],
+  creator: siteName,
+  publisher: siteName,
+  category: 'Technology',
+  keywords: [
+    'temp mail',
+    'temporary email',
+    'disposable email',
+    'anonymous email',
+    'anti spam email',
+    'privacy email tool',
+  ],
   metadataBase: new URL(baseUrl),
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+  },
   robots: {
     index: true,
     follow: true,
@@ -31,31 +60,32 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: baseUrl,
+    canonical: '/',
+    types: {
+      'application/rss+xml': `${baseUrl}/blog/rss.xml`,
+    },
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: baseUrl,
-    siteName: 'Temp Mail Lab',
-    title: 'Temp Mail Lab - Your Temporary Email Address',
-    description:
-      'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online. No signup required.',
+    siteName,
+    title: 'Temp Mail Lab - Free Temporary Email Address',
+    description: siteDescription,
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Temp Mail Lab - Temporary Email Service',
+        alt: 'Temp Mail Lab - Disposable email inbox',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Temp Mail Lab - Your Temporary Email Address',
-    description:
-      'Instantly generate a free, secure, and anonymous temporary email address to protect your privacy online.',
-    images: [`${baseUrl}/twitter-image.png`],
+    title: 'Temp Mail Lab - Free Temporary Email Address',
+    description: siteDescription,
+    images: ['/twitter-image'],
   },
   icons: {
     icon: [

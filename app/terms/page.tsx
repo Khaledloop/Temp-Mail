@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     type: 'article',
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: `${baseUrl}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Temp Mail Lab Terms of Service',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Terms of Service - Temp Mail Lab',
     description: 'Our terms of service.',
-    images: [`${baseUrl}/twitter-image.png`],
+    images: [`${baseUrl}/twitter-image`],
   },
 };
 

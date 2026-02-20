@@ -1,6 +1,7 @@
 "use client"
 
 import {useEffect, useState} from 'react'
+import Link from 'next/link'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -16,26 +17,26 @@ export function Footer() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 text-sm sm:px-6 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <a
+            <Link
               href="/"
               className="text-xs font-black tracking-[0.3em] uppercase text-gray-700 transition-colors hover:text-gray-950 dark:text-gray-200 dark:hover:text-white"
             >
               Temp Mail Lab
-            </a>
+            </Link>
             <p className="mt-2 max-w-md text-sm text-gray-600 dark:text-gray-400">
               Private, fast, and disposable email for safer sign-ups.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
-            <a href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            <Link href="/blog" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Blog
-            </a>
-            <a href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            </Link>
+            <Link href="/privacy" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Privacy
-            </a>
-            <a href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Terms
-            </a>
+            </Link>
             {supportHref ? (
               <a href={supportHref} className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
                 Support

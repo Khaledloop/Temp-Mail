@@ -16,12 +16,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     /\/+$/,
     ''
   )
+  const now = new Date()
 
   const posts = await sanityFetch<PostSlugEntry[]>({
     query: POST_SLUGS_QUERY,
     revalidate: 3600,
     tags: ['post'],
   })
+  const latestPostDate =
+    posts.length > 0
+      ? new Date(
+          posts.reduce((latest, post) => {
+            const value = post._updatedAt || post.publishedAt || ''
+            return value > latest ? value : latest
+          }, '')
+        )
+      : now
 
   const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
@@ -33,31 +43,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date(),
+      lastModified: latestPostDate,
       changeFrequency: 'weekly',
       priority: 0.6,
     },
     {
+      url: `${baseUrl}/blog/rss.xml`,
+      lastModified: latestPostDate,
+      changeFrequency: 'hourly',
+      priority: 0.4,
+    },
+    {
       url: `${baseUrl}/llms.txt`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.3,
     },

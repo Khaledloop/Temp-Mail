@@ -1,5 +1,24 @@
+import type { Metadata } from 'next';
 import { HomeClient } from '@/components/home/HomeClient';
 import { SeoContent } from '@/components/home/SeoContent';
+
+const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
+
+export const metadata: Metadata = {
+  title: 'Free Temporary Email Address',
+  description:
+    'Create an anonymous temporary email inbox instantly. No signup, no personal data, and automatic cleanup after 30 days.',
+  alternates: {
+    canonical: baseUrl,
+  },
+  keywords: [
+    'temp mail',
+    'free temporary email',
+    'disposable inbox',
+    'anonymous inbox',
+    'avoid spam',
+  ],
+};
 
 export default function HomePage() {
   const features = [

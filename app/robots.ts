@@ -8,11 +8,24 @@ export default function robots(): MetadataRoute.Robots {
     .replace(/\/+$/, '')
 
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/admin', '/studio'],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin', '/studio', '/api/revalidate'],
+      },
+      {
+        userAgent: ['Googlebot', 'Bingbot', 'DuckDuckBot'],
+        allow: '/',
+        disallow: ['/admin', '/studio', '/api/revalidate'],
+      },
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'CCBot', 'Google-Extended'],
+        allow: '/',
+        disallow: ['/admin', '/studio', '/api/revalidate'],
+      },
+    ],
+    sitemap: [`${baseUrl}/sitemap.xml`],
+    host: baseUrl,
   }
 }

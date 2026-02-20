@@ -3,6 +3,7 @@ import type {PortableTextBlock} from '@portabletext/types'
 
 export type BlogPostListItem = {
   _id: string
+  _updatedAt?: string
   title: string
   slug: string
   excerpt: string

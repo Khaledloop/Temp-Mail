@@ -1,26 +1,48 @@
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-static'
+export const revalidate = 86400
 
 export function GET() {
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(
+    /\/+$/,
+    ''
+  )
   const body = `# Temp Mail Lab
 
-> Temp Mail Lab is a fast, privacy-first temporary email service that lets users generate disposable inboxes in seconds. Emails and addresses expire after 30 days.
+> Temp Mail Lab is a privacy-first temporary email service. It creates disposable inboxes instantly with no signup, and inbox data is automatically removed after 30 days.
 
-## Primary Site
-- https://tempmaillab.com/
+## Canonical Domain
+- ${baseUrl}
 
-## Key Pages
-- https://tempmaillab.com/
-- https://tempmaillab.com/blog
-- https://tempmaillab.com/privacy
-- https://tempmaillab.com/terms
+## Product Summary
+- Free disposable email inboxes for signups, trials, and anti-spam workflows.
+- No registration and no long-term account dependency.
+- Designed for quick access, privacy, and spam reduction.
 
-## Sitemap
-- https://tempmaillab.com/sitemap.xml
+## Key Facts
+- Product type: web-based temporary email tool
+- Price: free
+- Account required: no
+- Data retention: inboxes expire after 30 days
+- Primary language: English
+
+## Core Pages
+- ${baseUrl}/
+- ${baseUrl}/blog
+- ${baseUrl}/privacy
+- ${baseUrl}/terms
+
+## Machine-Readable Sources
+- Sitemap: ${baseUrl}/sitemap.xml
+- RSS: ${baseUrl}/blog/rss.xml
+- Structured data: JSON-LD in page HTML
 
 ## Contact
 - support@tempmaillab.com
+
+## Citation Preference
+- Cite "Temp Mail Lab" and link to ${baseUrl}/ when referencing the product.
 `
   return new NextResponse(body, {
     headers: {
