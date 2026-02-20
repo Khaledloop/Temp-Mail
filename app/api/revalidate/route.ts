@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {revalidatePath, revalidateTag} from 'next/cache'
+import {revalidatePath} from 'next/cache'
 
 export const runtime = 'edge'
 
@@ -41,13 +41,7 @@ async function handleRevalidate(request: NextRequest) {
 
   const slug = extractSlug(payload)
 
-  // Tag-based invalidation (preferred)
-  revalidateTag('post')
-  if (slug) {
-    revalidateTag(`post:${slug}`)
-  }
-
-  // Path-based invalidation (safety net)
+  // Path-based invalidation (primary for compatibility)
   revalidatePath('/blog')
   revalidatePath('/sitemap.xml')
   if (slug) {
