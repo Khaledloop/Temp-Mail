@@ -187,7 +187,13 @@ export default async function BlogPostPage({params}: PageProps) {
   }
 
   const heroImage = post.mainImage
-    ? urlForImage(post.mainImage).width(1600).height(900).fit('crop').url()
+    ? urlForImage(post.mainImage)
+        .width(1200)
+        .height(675)
+        .fit('crop')
+        .quality(68)
+        .auto('format')
+        .url()
     : null
   const canonical = toAbsoluteCanonical(
     post.seo?.canonicalUrl,
@@ -248,7 +254,11 @@ export default async function BlogPostPage({params}: PageProps) {
       />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between flex-wrap gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-          <Link href="/blog" className="hover:text-gray-900 transition-colors dark:hover:text-white">
+          <Link
+            href="/blog"
+            prefetch={false}
+            className="hover:text-gray-900 transition-colors dark:hover:text-white"
+          >
             Back to Blog
           </Link>
           <span>Temp Mail Lab Journal</span>
@@ -276,6 +286,7 @@ export default async function BlogPostPage({params}: PageProps) {
               src={heroImage}
               alt={post.title}
               fill
+              quality={68}
               className="object-cover"
               sizes="(min-width: 1024px) 768px, 100vw"
               priority

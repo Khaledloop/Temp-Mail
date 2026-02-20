@@ -81,7 +81,11 @@ export default async function BlogPage() {
               Practical guidance on disposable email, privacy, and staying safe online.
             </p>
           </div>
-          <Link href="/" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors dark:text-gray-300 dark:hover:text-white">
+          <Link
+            href="/"
+            prefetch={false}
+            className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors dark:text-gray-300 dark:hover:text-white"
+          >
             Back to Home
           </Link>
         </div>
@@ -99,26 +103,50 @@ export default async function BlogPage() {
           </div>
         ) : (
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {posts.map((post) => {
+            {posts.map((post, index) => {
+              const isPriority = index === 0
               const imageUrl = post.mainImage
-                ? urlForImage(post.mainImage).width(800).height(520).fit('crop').url()
+                ? urlForImage(post.mainImage)
+                    .width(640)
+                    .height(384)
+                    .fit('crop')
+                    .quality(60)
+                    .auto('format')
+                    .url()
                 : null
+              const blurDataUrl = post.mainImage
+                ? urlForImage(post.mainImage)
+                    .width(24)
+                    .height(14)
+                    .fit('crop')
+                    .blur(30)
+                    .auto('format')
+                    .url()
+                : undefined
 
               return (
                 <Link
                   key={post._id}
                   href={`/blog/${post.slug}`}
+                  prefetch={false}
                   className="group block rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black/40"
                   aria-label={`Read ${post.title}`}
                 >
                   {imageUrl ? (
-                    <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-gray-100">
+                    <div className="overflow-hidden rounded-2xl bg-gray-100">
                       <Image
                         src={imageUrl}
                         alt={post.title}
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                        sizes="(min-width: 1280px) 320px, (min-width: 768px) 45vw, 90vw"
+                        width={640}
+                        height={384}
+                        quality={60}
+                        priority={isPriority}
+                        loading={isPriority ? 'eager' : 'lazy'}
+                        fetchPriority={isPriority ? 'high' : 'auto'}
+                        placeholder={blurDataUrl ? 'blur' : 'empty'}
+                        blurDataURL={blurDataUrl}
+                        className="h-48 w-full object-cover transition duration-500 group-hover:scale-105"
+                        sizes="(min-width: 1536px) 26vw, (min-width: 1280px) 30vw, (min-width: 768px) 46vw, 94vw"
                       />
                     </div>
                   ) : (

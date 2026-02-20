@@ -81,7 +81,7 @@ export function TopNav() {
             </button>
           </div>
 
-          <Link href="/" className="flex items-center justify-center gap-2 sm:gap-3">
+          <Link href="/" prefetch={false} className="flex items-center justify-center gap-2 sm:gap-3">
             <Image
               src={logoSrc}
               alt="Temp Mail Lab"
@@ -98,13 +98,13 @@ export function TopNav() {
 
           <div className="flex items-center justify-end gap-3">
             <div className="hidden sm:flex flex-wrap items-center justify-center gap-4">
-              <Link href="/blog" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              <Link href="/blog" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Blog
               </Link>
-              <Link href="/privacy" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              <Link href="/privacy" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Privacy
               </Link>
-              <Link href="/terms" className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              <Link href="/terms" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
                 Terms
               </Link>
             </div>
@@ -133,6 +133,7 @@ export function TopNav() {
               <div className="flex flex-col gap-3 px-4 py-4 text-[11px] font-bold tracking-[0.2em] uppercase text-gray-700 dark:text-gray-200">
                 <Link
                   href="/blog"
+                  prefetch={false}
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
@@ -140,6 +141,7 @@ export function TopNav() {
                 </Link>
                 <Link
                   href="/privacy"
+                  prefetch={false}
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
@@ -147,6 +149,7 @@ export function TopNav() {
                 </Link>
                 <Link
                   href="/terms"
+                  prefetch={false}
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex transition-colors hover:text-gray-950 active:scale-95 dark:hover:text-white"
                 >
