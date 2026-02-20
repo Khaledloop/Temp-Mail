@@ -35,7 +35,8 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
     post = await sanityFetch<BlogPost | null>({
       query: POST_QUERY,
       params: {slug: resolvedParams.slug},
-      cache: 'no-store',
+      revalidate: 600,
+      tags: [`post:${resolvedParams.slug}`, 'post'],
     })
   } catch (error) {
     console.error('Failed to load blog metadata:', error)
@@ -136,7 +137,8 @@ export default async function BlogPostPage({params}: PageProps) {
     post = await sanityFetch<BlogPost | null>({
       query: POST_QUERY,
       params: {slug: resolvedParams.slug},
-      cache: 'no-store',
+      revalidate: 600,
+      tags: [`post:${resolvedParams.slug}`, 'post'],
     })
   } catch (error) {
     console.error('Failed to load blog post:', error)

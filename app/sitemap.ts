@@ -3,7 +3,7 @@ import {MetadataRoute} from 'next'
 import {sanityFetch} from '@/sanity/lib/client'
 import {POST_SLUGS_QUERY} from '@/sanity/lib/queries'
 
-export const dynamic = 'force-static'
+export const revalidate = 600
 
 type PostSlugEntry = {
   slug: string
