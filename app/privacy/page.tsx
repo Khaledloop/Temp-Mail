@@ -6,16 +6,22 @@ import type { Metadata } from 'next';
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
+const privacyDescription =
+  "Read Temp Mail Lab's Privacy Policy to understand what data we collect, how temporary inbox emails are stored and deleted after 30 days, and how to contact us.";
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Temp Mail Lab',
-  description: 'Our privacy policy and how we handle your data.',
+  description: privacyDescription,
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: {
     canonical: `${baseUrl}/privacy`,
   },
   openGraph: {
     title: 'Privacy Policy - Temp Mail Lab',
-    description: 'Our privacy policy and how we handle your data.',
+    description: privacyDescription,
     url: `${baseUrl}/privacy`,
     type: 'article',
     images: [
@@ -30,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Privacy Policy - Temp Mail Lab',
-    description: 'Our privacy policy and how we handle your data.',
+    description: privacyDescription,
     images: [`${baseUrl}/twitter-image`],
   },
 };

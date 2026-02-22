@@ -126,15 +126,35 @@ const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({value}) => {
       if (!value) return null
-      const imageUrl = urlForImage(value).width(1200).height(720).fit('max').url()
+      const imageUrl = urlForImage(value)
+        .width(900)
+        .height(540)
+        .fit('max')
+        .quality(58)
+        .format('webp')
+        .auto('format')
+        .url()
+      const blurDataUrl = urlForImage(value)
+        .width(24)
+        .height(14)
+        .fit('crop')
+        .blur(35)
+        .format('webp')
+        .auto('format')
+        .url()
       return (
         <figure className="my-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-gray-100">
+          <div className="overflow-hidden rounded-2xl bg-gray-100">
             <Image
               src={imageUrl}
               alt={value.alt || 'Blog image'}
-              fill
-              className="object-cover"
+              width={900}
+              height={540}
+              unoptimized
+              quality={58}
+              placeholder="blur"
+              blurDataURL={blurDataUrl}
+              className="h-auto w-full object-cover"
               sizes="(min-width: 1024px) 768px, 100vw"
             />
           </div>
@@ -188,10 +208,21 @@ export default async function BlogPostPage({params}: PageProps) {
 
   const heroImage = post.mainImage
     ? urlForImage(post.mainImage)
-        .width(1200)
-        .height(675)
+        .width(820)
+        .height(462)
         .fit('crop')
-        .quality(68)
+        .quality(48)
+        .format('webp')
+        .auto('format')
+        .url()
+    : null
+  const heroBlurImage = post.mainImage
+    ? urlForImage(post.mainImage)
+        .width(24)
+        .height(14)
+        .fit('crop')
+        .blur(40)
+        .format('webp')
         .auto('format')
         .url()
     : null
@@ -281,14 +312,18 @@ export default async function BlogPostPage({params}: PageProps) {
         </div>
 
         {heroImage ? (
-          <div className="mt-10 relative aspect-[16/9] overflow-hidden rounded-[2rem] bg-gray-100">
+          <div className="mt-10 overflow-hidden rounded-[2rem] bg-gray-100">
             <Image
               src={heroImage}
               alt={post.title}
-              fill
-              quality={68}
-              className="object-cover"
-              sizes="(min-width: 1024px) 768px, 100vw"
+              width={820}
+              height={462}
+              unoptimized
+              quality={48}
+              placeholder={heroBlurImage ? 'blur' : 'empty'}
+              blurDataURL={heroBlurImage || undefined}
+              className="h-auto w-full object-cover"
+              sizes="(min-width: 1280px) 665px, (min-width: 1024px) 66vw, 94vw"
               priority
             />
           </div>

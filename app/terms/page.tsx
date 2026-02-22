@@ -6,16 +6,22 @@ import type { Metadata } from 'next';
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
+const termsDescription =
+  'Read Temp Mail Lab Terms of Service to understand acceptable use, account and content limitations, liability disclaimers, and how to contact our legal team.';
 
 export const metadata: Metadata = {
   title: 'Terms of Service - Temp Mail Lab',
-  description: 'Our terms of service.',
+  description: termsDescription,
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: {
     canonical: `${baseUrl}/terms`,
   },
   openGraph: {
     title: 'Terms of Service - Temp Mail Lab',
-    description: 'Our terms of service.',
+    description: termsDescription,
     url: `${baseUrl}/terms`,
     type: 'article',
     images: [
@@ -30,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Terms of Service - Temp Mail Lab',
-    description: 'Our terms of service.',
+    description: termsDescription,
     images: [`${baseUrl}/twitter-image`],
   },
 };

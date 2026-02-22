@@ -2,10 +2,8 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { ThemeClient } from '@/components/theme/ThemeClient'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
-import { DeferredVignette } from '@/components/ads/DeferredVignette'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -138,11 +136,9 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={manrope.className}>
-        <ThemeClient />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
-        <DeferredVignette />
       </body>
     </html>
   )

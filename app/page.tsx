@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { HomeClient } from '@/components/home/HomeClient';
 import { SeoContent } from '@/components/home/SeoContent';
+import { DeferredVignette } from '@/components/ads/DeferredVignette';
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
 
@@ -56,6 +57,7 @@ export default function HomePage() {
       <div className="py-12">
         <SeoContent />
       </div>
+      <DeferredVignette />
     </div>
   );
 }

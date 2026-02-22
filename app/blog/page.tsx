@@ -107,10 +107,11 @@ export default async function BlogPage() {
               const isPriority = index === 0
               const imageUrl = post.mainImage
                 ? urlForImage(post.mainImage)
-                    .width(640)
-                    .height(384)
+                    .width(560)
+                    .height(336)
                     .fit('crop')
-                    .quality(60)
+                    .quality(52)
+                    .format('webp')
                     .auto('format')
                     .url()
                 : null
@@ -120,6 +121,7 @@ export default async function BlogPage() {
                     .height(14)
                     .fit('crop')
                     .blur(30)
+                    .format('webp')
                     .auto('format')
                     .url()
                 : undefined
@@ -137,16 +139,17 @@ export default async function BlogPage() {
                       <Image
                         src={imageUrl}
                         alt={post.title}
-                        width={640}
-                        height={384}
-                        quality={60}
+                        width={560}
+                        height={336}
+                        unoptimized
+                        quality={52}
                         priority={isPriority}
                         loading={isPriority ? 'eager' : 'lazy'}
                         fetchPriority={isPriority ? 'high' : 'auto'}
                         placeholder={blurDataUrl ? 'blur' : 'empty'}
                         blurDataURL={blurDataUrl}
                         className="h-48 w-full object-cover transition duration-500 group-hover:scale-105"
-                        sizes="(min-width: 1536px) 26vw, (min-width: 1280px) 30vw, (min-width: 768px) 46vw, 94vw"
+                        sizes="(min-width: 1536px) 22vw, (min-width: 1280px) 26vw, (min-width: 1024px) 30vw, (min-width: 768px) 44vw, 94vw"
                       />
                     </div>
                   ) : (
