@@ -266,7 +266,7 @@ export function Hero({
                 }`}
                 aria-label="Copy email"
               >
-                <svg className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                 </svg>
                 <span>{isCopying ? 'Copied' : 'Copy'}</span>
@@ -276,15 +276,15 @@ export function Hero({
         </div>
 
         {/* small actions under the pill */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-3 mt-6 sm:flex sm:flex-wrap sm:justify-center sm:gap-4">
           {/* Refresh Button - Simple */}
           <button
             onClick={onFetchEmails}
             disabled={!onFetchEmails}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 sm:gap-2 rounded-2xl bg-white/85 px-4 py-2 sm:px-6 sm:py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
-              className="h-5 w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
+              className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -292,34 +292,39 @@ export function Hero({
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
             </svg>
-            <span className="text-sm">Refresh</span>
+            <span className="text-[13px] sm:text-sm leading-tight whitespace-nowrap">Refresh</span>
           </button>
 
           {/* Change Email Button */}
           <button
             onClick={openChangeModal}
             disabled={changeLoading}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 sm:gap-2 rounded-2xl bg-white/85 px-4 py-2 sm:px-6 sm:py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
-            <svg 
-              className={`h-5 w-5 transition-transform duration-500 ${changeLoading ? 'animate-spin' : 'group-hover:rotate-180'}`}
+            <svg
+              className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ${changeLoading ? 'animate-spin' : 'group-hover:scale-110'}`}
+              xmlns="http://www.w3.org/2000/svg"
               fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 12h8m-4-4v8m9-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
-            <span className="text-sm">Change Email</span>
+            <span className="text-[13px] sm:text-sm leading-tight whitespace-nowrap">Change Email</span>
           </button>
 
           {/* Recover Email Button */}
           <button
             onClick={openRecoveryModal}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/85 px-6 py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
+            className="inline-flex col-span-2 mx-auto w-1/2 sm:col-auto sm:mx-0 sm:w-auto items-center justify-center gap-1.5 sm:gap-2 rounded-2xl bg-white/85 px-4 py-2 sm:px-6 sm:py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
-              className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" 
+              className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-12 transition-transform duration-300" 
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2" 
@@ -327,7 +332,7 @@ export function Hero({
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-4a10 10 0 11-20 0 10 10 0 0120 0z"/>
             </svg>
-            <span className="text-sm">Recovery Key</span>
+            <span className="text-[13px] sm:text-sm leading-tight whitespace-nowrap">Recovery Key</span>
           </button>
 
         </div>
@@ -544,6 +549,8 @@ export function Hero({
     </div>
   );
 }
+
+
 
 
 

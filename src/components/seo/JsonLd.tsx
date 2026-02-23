@@ -74,34 +74,42 @@ export function JsonLd() {
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'What is a temporary email address?',
+            name: 'How long does a Temp Mail Lab address stay active?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'A temporary email address is a short-lived inbox you can use to receive messages without sharing your personal email.',
+              text: 'Each generated address and its inbox stay available for up to 30 days, then data is removed automatically.',
             },
           },
           {
             '@type': 'Question',
-            name: 'How long does the email address last?',
+            name: 'How long are received messages kept?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Temporary email addresses are automatically deleted after 30 days. You can generate a new address at any time with just one click.',
+              text: 'Messages in the temporary inbox are retained within the same 30-day lifecycle of the address.',
             },
           },
           {
             '@type': 'Question',
-            name: 'Do I need to sign up to use Temp Mail Lab?',
+            name: 'Do I need to sign up or share personal data?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No signup is required. Temp Mail Lab is completely anonymous and instant. Simply visit our site, generate a temporary email, and start receiving emails immediately.',
+              text: 'No. Temp Mail Lab creates a disposable inbox instantly with no signup and no personal profile setup.',
             },
           },
           {
             '@type': 'Question',
-            name: 'When should I use a temporary email?',
+            name: 'What is the recovery key and why should I save it?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Use it for sign-ups, trials, and services you do not plan to use long-term. For critical accounts, use your personal email.',
+              text: 'The recovery key lets you restore access to the same temporary inbox. Save it securely because it grants inbox access.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'When should I avoid using a temporary email?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Do not use it for banking, legal, or critical long-term accounts. Use your permanent personal email for those services.',
             },
           },
         ],

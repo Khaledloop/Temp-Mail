@@ -68,8 +68,6 @@ export function HomeClient() {
     bootstrap();
   }, [tempMailAddress, fetchEmails]);
 
-  // Theme is managed globally by ThemeClient in the root layout.
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     let cancelled = false;
@@ -116,36 +114,56 @@ export function HomeClient() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
         {showInbox ? (
-          <div className="bg-white/85 rounded-[2.5rem] shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35)] p-8 sm:p-12 mb-12 border border-gray-200/80 ring-1 ring-black/5 backdrop-blur-md content-visibility-auto dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_45px_90px_-40px_rgba(0,0,0,0.9)]">
-            <div className="mb-12 border-b border-gray-200/80 pb-8 dark:border-white/10">
-              <div className="flex items-center gap-4">
-                <div className="bg-brand-600 p-3 rounded-2xl shadow-md ring-1 ring-white/40 dark:bg-white/15 dark:ring-white/20">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-black text-gray-900 tracking-tight">
-                    Inbox
-                  </h2>
-                  <div
-                    className={`flex items-center gap-2 mt-1 min-h-[16px] transition-opacity duration-300 ${
-                      isRefreshing ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    aria-hidden={!isRefreshing}
-                  >
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full bg-brand-600 ${isRefreshing ? 'animate-pulse' : ''}`}
-                    ></span>
-                    <p className="text-[10px] font-black text-gray-700 uppercase tracking-widest">
-                      Checking for mail...
-                    </p>
+          <div className="bg-white/85 rounded-[2.5rem] shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35)] p-6 sm:p-8 mb-10 border border-gray-200/80 ring-1 ring-black/5 backdrop-blur-md content-visibility-auto dark:bg-white/5 dark:border-white/10 dark:ring-white/10 dark:shadow-[0_45px_90px_-40px_rgba(0,0,0,0.9)]">
+            <div className="mb-4 border-b border-gray-200/80 pb-4 dark:border-white/10">
+              <div className="flex w-full items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="bg-brand-600 p-3 rounded-2xl shadow-md ring-1 ring-white/40 dark:bg-white/15 dark:ring-white/20">
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
+                  </div>
+                  <div className="pt-1">
+                    <h2 className="text-3xl font-black text-gray-900 tracking-tight leading-none">
+                      Inbox
+                    </h2>
+                    <div
+                      className={`flex items-center gap-2 mt-1 min-h-[16px] transition-opacity duration-300 ${
+                        isRefreshing ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      aria-hidden={!isRefreshing}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full bg-brand-600 ${isRefreshing ? 'animate-pulse' : ''}`}
+                      ></span>
+                      <p className="text-[10px] font-black text-gray-700 uppercase tracking-widest">
+                        Checking for mail...
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleFetchEmails}
+                  disabled={isRefreshing || isLoading}
+                  className="group mt-1 inline-flex shrink-0 items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-0.5 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/20"
+                >
+                  <svg
+                    className={`h-4 w-4 transition-transform duration-500 ease-in-out ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span>Refresh</span>
+                </button>
               </div>
             </div>
 
-            <div className="min-h-[300px]">
+            <div className="min-h-[200px]">
               <InboxList
                 isLoading={isLoading}
                 isRefreshing={isRefreshing}
@@ -167,3 +185,5 @@ export function HomeClient() {
     </>
   );
 }
+
+
