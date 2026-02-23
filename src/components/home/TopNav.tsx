@@ -1,14 +1,55 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useUiStore } from '@/store/uiStore'
 
 export function TopNav() {
   const { isDarkMode, toggleDarkMode } = useUiStore()
+  const [hidden, setHidden] = useState(false)
+  const lastScroll = useRef(0)
+  const ticking = useRef(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    lastScroll.current = window.scrollY || document.documentElement.scrollTop || 0
+
+    const update = () => {
+      const current = Math.max(0, window.scrollY || document.documentElement.scrollTop || 0)
+      const delta = current - lastScroll.current
+      const scrollingDown = delta > 2
+      const scrollingUp = delta < -1
+
+      if (current <= 20) {
+        setHidden(false)
+      } else if (scrollingDown) {
+        setHidden(true)
+      } else if (scrollingUp) {
+        setHidden(false)
+      }
+
+      lastScroll.current = current
+      ticking.current = false
+    }
+
+    const onScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(update)
+        ticking.current = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40">
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
+        hidden ? '-translate-y-full pointer-events-none' : 'translate-y-0'
+      }`}
+    >
       <div className="bg-white/85 border-b border-gray-200/80 backdrop-blur-md dark:bg-black/55 dark:border-white/10">
         <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" prefetch={false} className="inline-flex items-center gap-3">
