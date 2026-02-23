@@ -12,17 +12,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/studio', '/api/revalidate'],
+        disallow: ['/api/revalidate'],
       },
       {
         userAgent: ['Googlebot', 'Bingbot', 'DuckDuckBot'],
         allow: '/',
-        disallow: ['/studio', '/api/revalidate'],
+        disallow: ['/api/revalidate'],
       },
       {
         userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'CCBot', 'Google-Extended'],
         allow: '/',
-        disallow: ['/studio', '/api/revalidate'],
+        disallow: ['/api/revalidate'],
       },
     ],
     sitemap: [`${baseUrl}/sitemap.xml`],
