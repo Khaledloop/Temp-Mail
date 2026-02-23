@@ -3,7 +3,7 @@
  */
 
 // Polling interval for fetching emails (in milliseconds)
-export const EMAIL_POLL_INTERVAL = 7000; // 7 seconds
+export const EMAIL_POLL_INTERVAL = 10000; // 10 seconds
 
 // Session TTL (time-to-live) in milliseconds
 export const SESSION_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days

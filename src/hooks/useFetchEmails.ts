@@ -14,6 +14,9 @@ export const useFetchEmails = () => {
   const hasFetchedRef = useRef(false);
   const seenIdsRef = useRef<Set<string>>(new Set());
   const inFlightRef = useRef(false);
+  const lastFetchAtRef = useRef(0);
+
+  const FETCH_DEDUPE_WINDOW_MS = 900;
 
   /**
    * Fetch emails list for current session
@@ -30,6 +33,12 @@ export const useFetchEmails = () => {
       return;
     }
 
+    const now = Date.now();
+    if (now - lastFetchAtRef.current < FETCH_DEDUPE_WINDOW_MS) {
+      return;
+    }
+
+    lastFetchAtRef.current = now;
     inFlightRef.current = true;
     setLoading(true);
     setRefreshing(true);

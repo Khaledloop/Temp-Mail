@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTempMail } from '@/hooks/useTempMail';
 import { useFetchEmails } from '@/hooks/useFetchEmails';
@@ -29,11 +29,22 @@ export function HomeClient() {
   const { isEmailViewerOpen, openEmailViewer, addToast } = useUiStore();
   const [pollResetSignal, setPollResetSignal] = useState(0);
   const [showInbox, setShowInbox] = useState(false);
+  const manualRefreshLockRef = useRef(false);
 
   const handleAutoFetch = useCallback(() => fetchEmails({ source: 'auto' }), [fetchEmails]);
   const handleFetchEmails = useCallback(async () => {
-    await fetchEmails({ source: 'manual' });
+    if (manualRefreshLockRef.current) {
+      return;
+    }
+
+    manualRefreshLockRef.current = true;
     setPollResetSignal((value) => value + 1);
+
+    try {
+      await fetchEmails({ source: 'manual' });
+    } finally {
+      manualRefreshLockRef.current = false;
+    }
   }, [fetchEmails]);
 
   const handleSelectEmail = useCallback(
@@ -103,6 +114,7 @@ export function HomeClient() {
         <div className="max-w-5xl mx-auto">
           <Hero
             isLoading={isLoading}
+            isRefreshing={isRefreshing}
             onFetchEmails={handleFetchEmails}
             onChangeEmail={changeEmailCustom}
             onGetRecoveryKey={getRecoveryKey}

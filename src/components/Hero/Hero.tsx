@@ -20,6 +20,7 @@ interface HeroProps {
   onRecoverEmail?: (key: string) => Promise<unknown>;
   onGetDomains?: () => Promise<string[]>;
   isLoading?: boolean;
+  isRefreshing?: boolean;
 }
 
 export function Hero({
@@ -29,6 +30,7 @@ export function Hero({
   onRecoverEmail,
   onGetDomains,
   isLoading = false,
+  isRefreshing = false,
 }: HeroProps) {
   const { tempMailAddress } = useAuthStore();
   const { addToast } = useUiStore();
@@ -280,11 +282,11 @@ export function Hero({
           {/* Refresh Button - Simple */}
           <button
             onClick={onFetchEmails}
-            disabled={!onFetchEmails}
+            disabled={!onFetchEmails || isLoading || isRefreshing}
             className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 sm:gap-2 rounded-2xl bg-white/85 px-4 py-2 sm:px-6 sm:py-3 text-gray-900 font-bold shadow-sm border border-gray-200/80 ring-1 ring-black/5 hover:shadow-lg hover:scale-105 hover:-translate-y-1 hover:bg-white active:scale-95 transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed group dark:bg-white/10 dark:text-white dark:border-white/10 dark:ring-white/10 dark:hover:bg-white/15"
           >
             <svg 
-              className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-180 transition-transform duration-500 ease-in-out"
+              className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-500 ease-in-out ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180'}`}
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
