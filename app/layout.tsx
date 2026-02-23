@@ -4,6 +4,7 @@ import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
+import { ThemeClient } from '@/components/theme/ThemeClient'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -136,6 +137,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={manrope.className}>
+        <ThemeClient />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />
@@ -143,3 +145,4 @@ export default function RootLayout({
     </html>
   )
 }
+
