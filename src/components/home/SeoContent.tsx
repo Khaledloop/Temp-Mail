@@ -39,7 +39,7 @@ export function SeoContent() {
               Temp Mail Lab: Free Temp Mail with Recovery Key
             </h2>
             <p className="text-base sm:text-lg leading-8">
-              Temp Mail Lab helps you create a temporary email address instantly so you can protect your primary inbox from spam, unwanted subscriptions, and risky signups. This type of service is also called <strong>throwaway email</strong>, <strong>10 minute mail</strong>, <strong>tempmail</strong>, <strong>trash mail</strong>, and <strong>fake mail</strong>. It is designed for privacy-first users, QA teams, and anyone who needs fast email verification without long-term exposure.
+              Temp Mail Lab helps you generate a temporary email address instantly to protect your primary inbox from spam, unwanted subscriptions, and risky signups. It is designed for privacy-first users, QA teams, and anyone who needs fast email verification without long-term exposure.
             </p>
           </section>
 

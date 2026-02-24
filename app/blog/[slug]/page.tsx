@@ -22,10 +22,63 @@ type PostSlugEntry = {
 export const revalidate = 600
 export const dynamicParams = true
 
+const BRAND_NAME = 'Temp Mail Lab'
+const MAX_META_TITLE_LENGTH = 65
+const MAX_META_DESCRIPTION_LENGTH = 160
+const MIN_META_DESCRIPTION_LENGTH = 120
+
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(
   /\/+$/,
   ''
 )
+
+function normalizeWhitespace(value: string | undefined | null): string {
+  return (value || '').replace(/\s+/g, ' ').trim()
+}
+
+function trimAtWordBoundary(value: string, maxLength: number): string {
+  const clean = normalizeWhitespace(value)
+  if (!clean) return ''
+  if (clean.length <= maxLength) return clean
+
+  const sliced = clean.slice(0, maxLength - 1)
+  const lastSpace = sliced.lastIndexOf(' ')
+  const cutoff = lastSpace > Math.floor(maxLength * 0.55) ? lastSpace : sliced.length
+  return `${sliced.slice(0, cutoff).trim()}…`
+}
+
+function buildSerpTitle(post: BlogPost): string {
+  const preferred = normalizeWhitespace(post.seo?.metaTitle) || normalizeWhitespace(post.title)
+  if (!preferred) return `${BRAND_NAME} Blog`
+
+  const withBrand = preferred.toLowerCase().includes(BRAND_NAME.toLowerCase())
+    ? preferred
+    : `${preferred} | ${BRAND_NAME}`
+
+  return trimAtWordBoundary(withBrand, MAX_META_TITLE_LENGTH)
+}
+
+function buildSerpDescription(post: BlogPost): string {
+  const preferred = normalizeWhitespace(post.seo?.metaDescription) || normalizeWhitespace(post.excerpt)
+  const fallback =
+    'Get practical temporary email tips, privacy guidance, and step-by-step workflows from Temp Mail Lab.'
+
+  if (!preferred) return fallback
+  if (
+    preferred.length >= MIN_META_DESCRIPTION_LENGTH &&
+    preferred.length <= MAX_META_DESCRIPTION_LENGTH
+  ) {
+    return preferred
+  }
+  if (preferred.length > MAX_META_DESCRIPTION_LENGTH) {
+    return trimAtWordBoundary(preferred, MAX_META_DESCRIPTION_LENGTH)
+  }
+
+  return trimAtWordBoundary(
+    `${preferred} Learn how to protect your inbox and use temporary email safely with Temp Mail Lab.`,
+    MAX_META_DESCRIPTION_LENGTH
+  )
+}
 
 function toAbsoluteCanonical(value: string | undefined, fallback: string): string {
   if (!value) return fallback
@@ -54,7 +107,7 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const resolvedParams = await params
   if (!resolvedParams?.slug) {
     return {
-      title: 'Post not found - Temp Mail Lab',
+      title: {absolute: `Post not found | ${BRAND_NAME}`},
     }
   }
 
@@ -72,13 +125,13 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: 'Post not found - Temp Mail Lab',
+      title: {absolute: `Post not found | ${BRAND_NAME}`},
       robots: {index: false, follow: false},
     }
   }
 
-  const title = post.seo?.metaTitle || post.title
-  const description = post.seo?.metaDescription || post.excerpt
+  const title = buildSerpTitle(post)
+  const description = buildSerpDescription(post)
   const canonical = toAbsoluteCanonical(
     post.seo?.canonicalUrl,
     `${baseUrl}/blog/${post.slug}`
@@ -87,7 +140,9 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const ogUrl = ogImage ? urlForImage(ogImage).width(1200).height(630).fit('crop').url() : null
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     keywords: [
       'temporary email',

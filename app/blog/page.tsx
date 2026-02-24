@@ -15,8 +15,9 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 export const revalidate = 600
 
 export const metadata: Metadata = {
-  title: 'Blog - Temp Mail Lab',
-  description: 'Actionable guides, updates, and privacy insights for temporary email users.',
+  title: 'Blog',
+  description:
+    'Read practical temporary email guides from Temp Mail Lab, including privacy tips, recovery-key workflows, anti-spam setup, and verification best practices.',
   keywords: [
     'temp mail blog',
     'temporary email guides',
@@ -31,8 +32,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Blog - Temp Mail Lab',
-    description: 'Actionable guides, updates, and privacy insights for temporary email users.',
+    title: 'Temp Mail Blog | Temp Mail Lab',
+    description:
+      'Read practical temporary email guides from Temp Mail Lab, including privacy tips, recovery-key workflows, anti-spam setup, and verification best practices.',
     url: `${baseUrl}/blog`,
     type: 'website',
     images: [
@@ -46,8 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog - Temp Mail Lab',
-    description: 'Actionable guides, updates, and privacy insights for temporary email users.',
+    title: 'Temp Mail Blog | Temp Mail Lab',
+    description:
+      'Read practical temporary email guides from Temp Mail Lab, including privacy tips, recovery-key workflows, anti-spam setup, and verification best practices.',
     images: [`${baseUrl}/twitter-image`],
   },
 }

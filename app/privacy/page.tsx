@@ -7,10 +7,10 @@ import type { Metadata } from 'next';
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '');
 const privacyDescription =
-  "Read Temp Mail Lab's Privacy Policy to understand what data we collect, how temporary inbox emails are stored and deleted after 30 days, and how to contact us.";
+  "Read Temp Mail Lab's Privacy Policy to learn exactly what data is processed, how temporary inbox messages are retained for up to 30 days, when they are deleted, and how to request support.";
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Temp Mail Lab',
+  title: 'Privacy Policy',
   description: privacyDescription,
   robots: {
     index: true,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     canonical: `${baseUrl}/privacy`,
   },
   openGraph: {
-    title: 'Privacy Policy - Temp Mail Lab',
+    title: 'Privacy Policy | Temp Mail Lab',
     description: privacyDescription,
     url: `${baseUrl}/privacy`,
     type: 'article',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Privacy Policy - Temp Mail Lab',
+    title: 'Privacy Policy | Temp Mail Lab',
     description: privacyDescription,
     images: [`${baseUrl}/twitter-image`],
   },
@@ -83,13 +83,13 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <section>
+        <section id="contact">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Contact Us
           </h2>
           <p>
-            If you have questions about this Privacy Policy, please contact us
-            at privacy@tempmaillab.com
+            If you have questions about this Privacy Policy, contact us at
+            {' '}privacy [at] tempmaillab [dot] com.
           </p>
         </section>
       </div>

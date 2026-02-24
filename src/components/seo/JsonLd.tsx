@@ -21,7 +21,7 @@ export function JsonLd() {
         contactPoint: {
           '@type': 'ContactPoint',
           contactType: 'customer support',
-          email: 'support@tempmaillab.com',
+          url: `${baseUrl}/privacy#contact`,
         },
       },
       {
