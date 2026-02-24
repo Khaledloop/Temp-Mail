@@ -36,10 +36,10 @@ export function SeoContent() {
         <div className="max-w-none text-gray-700 space-y-10 dark:text-gray-300">
           <section className="space-y-4">
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-950 dark:text-gray-100">
-              Temp Mail Lab: Secure Temporary Email, Fast and Practical
+              Temp Mail Lab: Free Temp Mail with Recovery Key
             </h2>
             <p className="text-base sm:text-lg leading-8">
-              Temp Mail Lab helps you create a disposable email address instantly so you can protect your primary inbox from spam, unwanted subscriptions, and risky signups. It is designed for privacy-first users, QA teams, and anyone who needs quick email verification without long-term exposure.
+              Temp Mail Lab helps you create a temporary email address instantly so you can protect your primary inbox from spam, unwanted subscriptions, and risky signups. This type of service is also called <strong>throwaway email</strong>, <strong>10 minute mail</strong>, <strong>tempmail</strong>, <strong>trash mail</strong>, and <strong>fake mail</strong>. It is designed for privacy-first users, QA teams, and anyone who needs fast email verification without long-term exposure.
             </p>
           </section>
 
@@ -48,10 +48,10 @@ export function SeoContent() {
               Key Features That Matter
             </h3>
             <ul className="space-y-3 text-base sm:text-lg leading-8 list-disc pl-6 marker:text-gray-500 dark:marker:text-gray-400">
-              <li><strong>Instant inbox creation:</strong> Generate a temporary email in seconds with no signup.</li>
+              <li><strong>Instant inbox creation:</strong> Generate free temp mail in seconds with no signup.</li>
               <li><strong>30-day inbox lifecycle:</strong> Address and messages stay available for up to 30 days, then auto-delete.</li>
-              <li><strong>Recovery key access:</strong> Restore inbox access later using your recovery key.</li>
-              <li><strong>Spam reduction:</strong> Keep your personal email clean by isolating one-time registrations.</li>
+              <li><strong>Recovery key access:</strong> Restore inbox access later using your recovery key (30-day restore).</li>
+              <li><strong>Spam reduction:</strong> Keep your personal email clean by isolating one-time registrations and verification emails.</li>
               <li><strong>Cross-device usage:</strong> Open the same inbox from desktop or mobile browser.</li>
             </ul>
           </section>
@@ -74,7 +74,7 @@ export function SeoContent() {
               Best Use Cases
             </h3>
             <p className="text-base sm:text-lg leading-8">
-              Use Temp Mail Lab for social signups, software trials, marketplace registrations, test environments, and short-term verification flows. For mission-critical accounts like banking, legal, or healthcare services, always use a permanent email account you control long term.
+              Use Temp Mail Lab for social signups, software trials, marketplace registrations, QA test environments, OTP and email verification flows, and short-term privacy protection. For mission-critical accounts like banking, legal, or healthcare services, always use a permanent email account you control long term.
             </p>
           </section>
         </div>
