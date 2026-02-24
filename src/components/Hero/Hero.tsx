@@ -229,15 +229,14 @@ export function Hero({
       <div className="text-center space-y-3">
         <div className="flex flex-col items-center gap-3">
           <span className="inline-flex items-center rounded-full bg-brand-600/95 px-4 py-1.5 text-[10px] font-black text-white tracking-widest uppercase shadow-md ring-1 ring-white/30 dark:bg-white/15 dark:text-white dark:border dark:border-white/10">
-            Temporary Email Address
+            Temp Mail + Recovery Key
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-950 tracking-tighter leading-tight dark:text-white">
             Temp Mail <span className="text-brand-600 dark:text-brand-500">Lab</span>
           </h1>
         </div>
         <p className="text-sm text-gray-600 font-medium max-w-md mx-auto leading-relaxed dark:text-gray-400">
-          Forget about spam and hacking robots. Keep your real mailbox clean and secure. 
-          Expires in 30 days.
+          Create an anonymous inbox instantly and use your Recovery Key to restore access for up to 30 days.
         </p>
       </div>
 

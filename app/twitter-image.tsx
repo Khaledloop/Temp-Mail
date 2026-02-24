@@ -1,7 +1,7 @@
 import {ImageResponse} from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'Temp Mail Lab - Disposable inboxes in seconds'
+export const alt = 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab'
 export const size = {
   width: 1200,
   height: 628,
@@ -46,13 +46,13 @@ export default function TwitterImage() {
 
         <div style={{display: 'flex', flexDirection: 'column', gap: 14}}>
           <div style={{fontSize: 62, lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.03em'}}>
-            Disposable Email.
+            Free Temp Mail.
           </div>
           <div style={{fontSize: 62, lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.03em'}}>
-            Zero Signup.
+            Recovery Key.
           </div>
           <div style={{fontSize: 28, color: '#cbd5e1', maxWidth: 900}}>
-            Create an anonymous inbox instantly and keep your personal email private.
+            Restore inbox access for up to 30 days with no signup.
           </div>
         </div>
 

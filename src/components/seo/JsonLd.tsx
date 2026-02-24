@@ -39,8 +39,9 @@ export function JsonLd() {
         '@type': 'WebPage',
         '@id': `${baseUrl}#webpage`,
         url: baseUrl,
-        name: 'Temp Mail Lab - Free Temporary Email Address',
-        description: 'Generate an anonymous temporary inbox in seconds with no signup required.',
+        name: 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab',
+        description:
+          'Create a free temp mail inbox instantly and restore access with a Recovery Key for up to 30 days.',
         isPartOf: {
           '@id': `${baseUrl}#website`,
         },
@@ -55,9 +56,9 @@ export function JsonLd() {
       {
         '@type': 'SoftwareApplication',
         '@id': `${baseUrl}#app`,
-        name: 'Temp Mail Lab - Temporary Email Address',
+        name: 'Free Temp Mail with Recovery Key (30-Day Restore)',
         description:
-          'Instantly generate a free and anonymous temporary email address to protect your privacy online. No signup required.',
+          'Instantly generate free temp mail and recover the same inbox for up to 30 days using a Recovery Key. No signup required.',
         applicationCategory: 'UtilityApplication',
         operatingSystem: 'Web',
         isAccessibleForFree: true,

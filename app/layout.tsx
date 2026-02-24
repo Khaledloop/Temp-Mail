@@ -16,11 +16,11 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
 
 const siteName = 'Temp Mail Lab'
 const siteDescription =
-  'Generate a free temporary email address in seconds. Private, disposable inboxes to avoid spam and protect your identity online.'
+  'Generate free temp mail in seconds and use a Recovery Key to restore inbox access for up to 30 days. Private disposable inboxes with no signup.'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Temp Mail Lab - Free Temporary Email Address',
+    default: 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab',
     template: '%s | Temp Mail Lab',
   },
   description: siteDescription,
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName,
-    title: 'Temp Mail Lab - Free Temporary Email Address',
+    title: 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab',
     description: siteDescription,
     images: [
       {
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Temp Mail Lab - Free Temporary Email Address',
+    title: 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab',
     description: siteDescription,
     images: ['/twitter-image'],
   },

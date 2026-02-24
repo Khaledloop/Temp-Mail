@@ -4,21 +4,38 @@ import { SeoContent } from '@/components/home/SeoContent';
 import { DeferredVignette } from '@/components/ads/DeferredVignette';
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
+const homeSeoTitle = 'Free Temp Mail with Recovery Key (30-Day Restore)';
+const homeSeoDescription =
+  'Create a free temp mail inbox instantly with a Recovery Key for 30-day restore. No signup, no personal data, and automatic cleanup.';
 
 export const metadata: Metadata = {
-  title: 'Free Temporary Email Address',
-  description:
-    'Create an anonymous temporary email inbox instantly. No signup, no personal data, and automatic cleanup after 30 days.',
+  title: homeSeoTitle,
+  description: homeSeoDescription,
   alternates: {
     canonical: baseUrl,
   },
   keywords: [
+    'free temp mail',
+    'temp mail with recovery key',
+    '30-day restore temp mail',
     'temp mail',
     'free temporary email',
     'disposable inbox',
     'anonymous inbox',
     'avoid spam',
   ],
+  openGraph: {
+    title: `${homeSeoTitle} | Temp Mail Lab`,
+    description: homeSeoDescription,
+    url: baseUrl,
+    siteName: 'Temp Mail Lab',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${homeSeoTitle} | Temp Mail Lab`,
+    description: homeSeoDescription,
+  },
 };
 
 export default function HomePage() {

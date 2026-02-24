@@ -1,7 +1,7 @@
 import {ImageResponse} from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'Temp Mail Lab - Free Temporary Email Address'
+export const alt = 'Free Temp Mail with Recovery Key (30-Day Restore) | Temp Mail Lab'
 export const size = {
   width: 1200,
   height: 630,
@@ -56,10 +56,10 @@ export default function OpenGraphImage() {
 
         <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
           <div style={{fontSize: 66, fontWeight: 800, lineHeight: 1.04, letterSpacing: '-0.03em'}}>
-            Free Temporary Email Address
+            Free Temp Mail
           </div>
           <div style={{fontSize: 30, color: '#334155', maxWidth: 980}}>
-            Instant disposable inboxes with no signup. Protect your real email from spam.
+            Recovery Key included. Restore inbox access for up to 30 days.
           </div>
         </div>
 
