@@ -61,6 +61,20 @@ export function JsonLd() {
         applicationCategory: 'UtilityApplication',
         operatingSystem: 'Web',
         isAccessibleForFree: true,
+        featureList: [
+          'Instant disposable inbox',
+          'No signup required',
+          'Recovery Key inbox restore for up to 30 days',
+          'Cross-session and cross-device restoration',
+          'Automatic inbox expiration',
+        ],
+        additionalProperty: [
+          {
+            '@type': 'PropertyValue',
+            name: 'Recovery Key retention window',
+            value: 'Up to 30 days',
+          },
+        ],
         offers: {
           '@type': 'Offer',
           price: '0',
