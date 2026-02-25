@@ -237,6 +237,22 @@ const portableTextComponents: PortableTextComponents = {
     bullet: ({children}) => <ul className="list-disc pl-6 space-y-2">{children}</ul>,
     number: ({children}) => <ol className="list-decimal pl-6 space-y-2">{children}</ol>,
   },
+  marks: {
+    link: ({children, value}) => {
+      const href = typeof value?.href === 'string' ? value.href : '#'
+      const isExternal = href.startsWith('http')
+      return (
+        <a
+          href={href}
+          className="font-semibold text-blue-700 underline decoration-blue-500/60 underline-offset-2 transition-colors hover:text-blue-800 dark:text-blue-300 dark:decoration-blue-300/60 dark:hover:text-blue-200"
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {children}
+        </a>
+      )
+    },
+  },
 }
 
 export default async function BlogPostPage({params}: PageProps) {
@@ -386,7 +402,7 @@ export default async function BlogPostPage({params}: PageProps) {
 
         <p className="mt-8 text-lg text-gray-700 leading-relaxed">{post.excerpt}</p>
 
-        <article className="prose prose-lg max-w-none text-gray-700 mt-10">
+        <article className="prose prose-lg max-w-none text-gray-700 mt-10 dark:prose-invert dark:text-gray-200">
           <PortableText value={post.body} components={portableTextComponents} />
         </article>
 
