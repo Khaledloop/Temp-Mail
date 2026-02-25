@@ -21,6 +21,12 @@ export function Footer() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
+            <Link href="/tools" prefetch={false} className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+              Tools
+            </Link>
+            <Link href="/tools/password-generator" prefetch={false} className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
+              Password Generator
+            </Link>
             <Link href="/blog" prefetch={false} className="transition-colors hover:text-gray-900 dark:hover:text-gray-100">
               Blog
             </Link>

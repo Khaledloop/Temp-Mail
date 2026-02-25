@@ -71,6 +71,9 @@ export function TopNav() {
 
             <div className="flex items-center gap-2 sm:gap-3">
               <nav className="hidden sm:flex items-center gap-6 text-[12px] font-bold tracking-[0.2em] uppercase text-gray-700 dark:text-gray-200">
+                <Link href="/tools" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
+                  Tools
+                </Link>
                 <Link href="/blog" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
                   Blog
                 </Link>
@@ -128,6 +131,9 @@ export function TopNav() {
           {menuOpen ? (
             <div className="sm:hidden mt-2 rounded-xl border border-gray-200/80 bg-white/95 p-2 shadow-lg ring-1 ring-black/5 dark:border-white/10 dark:bg-[#0f0f0f] dark:ring-white/10">
               <nav className="flex flex-col text-[12px] font-bold tracking-[0.18em] uppercase text-gray-700 dark:text-gray-200">
+                <Link href="/tools" prefetch={false} onClick={() => setMenuOpen(false)} className="rounded-md px-3 py-2 transition-colors hover:bg-gray-100 hover:text-gray-950 dark:hover:bg-white/10 dark:hover:text-white">
+                  Tools
+                </Link>
                 <Link href="/blog" prefetch={false} onClick={() => setMenuOpen(false)} className="rounded-md px-3 py-2 transition-colors hover:bg-gray-100 hover:text-gray-950 dark:hover:bg-white/10 dark:hover:text-white">
                   Blog
                 </Link>
