@@ -45,7 +45,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
   const displayDateTime = formatEmailDateTime(email.timestamp);
 
   const iframeCsp =
-    "default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; font-src https: data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+    "default-src 'none'; script-src 'none'; connect-src 'none'; img-src https: data:; media-src 'none'; child-src 'none'; object-src 'none'; style-src 'unsafe-inline'; font-src https: data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 
   return (
     <div className="flex flex-col h-full min-h-0 bg-white rounded-2xl shadow-lg animate-slideUp overflow-hidden border border-gray-200">
@@ -105,7 +105,7 @@ export function EmailViewer({ email, onClose }: EmailViewerProps) {
           <iframe
             title="Email content"
             className="h-full w-full rounded-xl border border-gray-200 bg-white"
-            sandbox="allow-popups"
+            sandbox=""
             referrerPolicy="no-referrer"
             srcDoc={`<!doctype html><html><head><meta charset="utf-8" />
               <meta http-equiv="Content-Security-Policy" content="${iframeCsp}" />

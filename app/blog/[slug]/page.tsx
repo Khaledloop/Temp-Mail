@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import type {Metadata} from 'next'
@@ -44,7 +44,7 @@ function trimAtWordBoundary(value: string, maxLength: number): string {
   const sliced = clean.slice(0, maxLength - 1)
   const lastSpace = sliced.lastIndexOf(' ')
   const cutoff = lastSpace > Math.floor(maxLength * 0.55) ? lastSpace : sliced.length
-  return `${sliced.slice(0, cutoff).trim()}…`
+  return `${sliced.slice(0, cutoff).trim()}...`
 }
 
 function buildSerpTitle(post: BlogPost): string {
@@ -422,3 +422,4 @@ export default async function BlogPostPage({params}: PageProps) {
     </div>
   )
 }
+

@@ -5,6 +5,8 @@
 
 import DOMPurify from 'isomorphic-dompurify';
 
+const MAX_EMAIL_CONTENT_LENGTH = 500_000;
+
 const ALLOWED_TAGS = [
   'html', 'body',
   'p', 'br', 'b', 'i', 'em', 'strong', 'a',
@@ -26,6 +28,13 @@ const FORBID_TAGS = ['script', 'iframe', 'object', 'embed', 'form', 'base'];
 const ALLOWED_URI_REGEXP = /^(?:(?:https?|mailto|tel):|#|\/|\.\/|\.\.\/|\/\/|data:image\/)/i;
 
 let hooksInstalled = false;
+
+function limitEmailContent(value: string): string {
+  if (value.length <= MAX_EMAIL_CONTENT_LENGTH) {
+    return value;
+  }
+  return value.slice(0, MAX_EMAIL_CONTENT_LENGTH);
+}
 
 function ensureDomPurifyHooks() {
   if (hooksInstalled) return;
@@ -87,7 +96,7 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
   try {
     ensureDomPurifyHooks();
 
-    let normalizedHTML = String(dirtyHTML || '');
+    let normalizedHTML = limitEmailContent(String(dirtyHTML || ''));
     for (let i = 0; i < 2; i += 1) {
       const hasEscapedTags = /&lt;[a-z!/][^&]*&gt;/i.test(normalizedHTML) || /&amp;lt;/.test(normalizedHTML);
       const hasRealTags = /<\s*[a-z!/]/i.test(normalizedHTML);
@@ -128,7 +137,7 @@ export function sanitizeEmailHTML(dirtyHTML: string): string {
  */
 export function stripHTMLTags(html: string): string {
   try {
-    const source = String(html || '');
+    const source = limitEmailContent(String(html || ''));
     const withoutBlocks = source
       .replace(/<!--[\s\S]*?-->/g, ' ')
       .replace(/<\s*(script|style|head|title|meta|noscript)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, ' ');
@@ -159,7 +168,7 @@ export function stripHTMLTags(html: string): string {
 
 export function decodeQuotedPrintableIfNeeded(input: string): string {
   if (!input) return input;
-  const raw = String(input);
+  const raw = limitEmailContent(String(input));
   if (!/=\r?\n|=\s*\r?\n|=([0-9A-F]{2})/i.test(raw)) return raw;
 
   const normalized = raw.replace(/=(?:\s*\r?\n)/g, '');

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -238,6 +238,7 @@ export function PasswordGeneratorClient() {
   ]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     buildValue();
   }, [buildValue]);
 
@@ -274,7 +275,7 @@ export function PasswordGeneratorClient() {
           <Link href="/" prefetch={false} className="hover:text-gray-900 dark:hover:text-white">
             Home
           </Link>
-          <span className="mx-2">›</span>
+          <span className="mx-2">{'>'}</span>
           <Link
             href="/tools"
             prefetch={false}
@@ -282,7 +283,7 @@ export function PasswordGeneratorClient() {
           >
             Tools
           </Link>
-          <span className="mx-2">›</span>
+          <span className="mx-2">{'>'}</span>
           <span className="text-gray-700 dark:text-gray-300">Password Generator</span>
         </div>
 
@@ -825,3 +826,4 @@ export function PasswordGeneratorClient() {
     </div>
   );
 }
+

@@ -3,7 +3,7 @@
 [[headers]]
 path = "/*"
 [headers.values]
-  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.tempmail.example.com https://www.google-analytics.com https://*.workers.dev https://cloudflareinsights.com https://*.api.sanity.io https://cdn.sanity.io; frame-src 'self' https://googleads.g.doubleclick.net; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://static.cloudflareinsights.com https://gizokraijaw.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.narsub.shop https://www.google-analytics.com https://cloudflareinsights.com https://*.api.sanity.io https://cdn.sanity.io https://gizokraijaw.net; frame-src 'self' https://googleads.g.doubleclick.net; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
   X-Content-Type-Options = "nosniff"
   X-Frame-Options = "DENY"
   X-XSS-Protection = "1; mode=block"
@@ -12,6 +12,7 @@ path = "/*"
   Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
   Cross-Origin-Opener-Policy = "same-origin-allow-popups"
   Cross-Origin-Resource-Policy = "same-origin"
+  Origin-Agent-Cluster = "?1"
   X-Permitted-Cross-Domain-Policies = "none"
 
 [[headers]]

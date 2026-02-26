@@ -86,7 +86,7 @@ export default function TermsPage() {
             Disclaimer
           </h2>
           <p>
-            The materials on Temp Mail Lab's website are provided for educational
+            The materials on Temp Mail Lab&apos;s website are provided for educational
             purposes only. Temp Mail Lab makes no warranties, expressed or implied,
             and hereby disclaims and negates all other warranties including,
             without limitation, implied warranties or conditions of

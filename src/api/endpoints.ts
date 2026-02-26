@@ -10,13 +10,13 @@ export const API_ROUTES = {
   
   // Email operations
   INBOX: '/api/inbox',
-  EMAIL_DETAIL: (emailId: string) => `/api/email/${emailId}`,
-  DELETE_EMAIL: (emailId: string) => `/api/email/${emailId}`,
-  MARK_READ: (emailId: string) => `/api/email/${emailId}/read`,
+  EMAIL_DETAIL: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}`,
+  DELETE_EMAIL: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}`,
+  MARK_READ: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}/read`,
   
   // Optional features
   SEARCH_EMAILS: '/api/search',
-  GET_ATTACHMENTS: (emailId: string) => `/api/email/${emailId}/attachments`,
+  GET_ATTACHMENTS: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}/attachments`,
 } as const;
 
 /**

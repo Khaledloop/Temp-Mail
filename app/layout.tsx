@@ -5,6 +5,7 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
 import { ThemeClient } from '@/components/theme/ThemeClient'
+import { ToastViewport } from '@/components/common/ToastViewport'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -13,6 +14,7 @@ const manrope = Manrope({
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
   .replace(/\/+$/, '')
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim()
 
 const siteName = 'Temp Mail Lab'
 const siteDescription =
@@ -46,6 +48,7 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+    other: bingSiteVerification ? {'msvalidate.01': bingSiteVerification} : undefined,
   },
   robots: {
     index: true,
@@ -138,6 +141,7 @@ export default function RootLayout({
       </head>
       <body className={manrope.className}>
         <ThemeClient />
+        <ToastViewport />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
         <Footer />

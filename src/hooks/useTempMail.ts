@@ -26,7 +26,6 @@ export const useTempMail = () => {
   const [hasHydrated, setHasHydrated] = useState(false);
   const initInFlightRef = useRef<Promise<void> | null>(null);
   const lastInitAttemptRef = useRef(0);
-  const initFailedRef = useRef(false);
 
   /**
    * Initialize session on mount
@@ -54,10 +53,6 @@ export const useTempMail = () => {
         return; // Session still valid, no need to create new one
       }
 
-      if (initFailedRef.current) {
-        return;
-      }
-
       const now = Date.now();
       if (now - lastInitAttemptRef.current < INIT_COOLDOWN_MS) {
         return;
@@ -83,9 +78,8 @@ export const useTempMail = () => {
           });
         } catch (error) {
           console.error('Failed to create session:', error);
-          initFailedRef.current = true;
           addToast({ 
-            message: 'Failed to create session. Please refresh the page.', 
+            message: 'Failed to create session. Retrying shortly.', 
             type: 'error', 
             duration: 3000 
           });

@@ -7,9 +7,16 @@ import { apiClient } from '@/api/client';
 import { playNewEmailSound } from '@/utils/notifications';
 
 export const useFetchEmails = () => {
-  const [loading, setLoading] = useState(false);
   const [messageLoading, setMessageLoading] = useState(false);
-  const { setEmails, emails, setRefreshing, removeEmail } = useInboxStore();
+  const {
+    setEmails,
+    emails,
+    isLoading,
+    setLoading,
+    setRefreshing,
+    setError,
+    removeEmail,
+  } = useInboxStore();
   const { tempMailAddress } = useAuthStore();
   const hasFetchedRef = useRef(false);
   const seenIdsRef = useRef<Set<string>>(new Set());
@@ -42,38 +49,34 @@ export const useFetchEmails = () => {
     inFlightRef.current = true;
     setLoading(true);
     setRefreshing(true);
+    setError(null);
     try {
       // Call getInbox - Authorization header added automatically by interceptor
       const emails = await apiClient.getInbox();
 
-      if (Array.isArray(emails)) {
-        if (hasFetchedRef.current && source !== 'init') {
-          const newIds = emails
-            .map((email) => email.id)
-            .filter((id) => !seenIdsRef.current.has(id));
+      if (hasFetchedRef.current && source !== 'init') {
+        const newIds = emails
+          .map((email) => email.id)
+          .filter((id) => !seenIdsRef.current.has(id));
 
-          if (newIds.length > 0) {
-            void playNewEmailSound();
-          }
+        if (newIds.length > 0) {
+          void playNewEmailSound();
         }
-
-        seenIdsRef.current = new Set(emails.map((email) => email.id));
-        hasFetchedRef.current = true;
-
-        setEmails(emails);
-      } else {
-        console.warn('Invalid inbox response:', emails);
-        setEmails([]);
       }
+
+      seenIdsRef.current = new Set(emails.map((email) => email.id));
+      hasFetchedRef.current = true;
+      setEmails(emails);
     } catch (error) {
       console.error('Failed to fetch emails:', error);
-      setEmails([]);
+      const message = error instanceof Error ? error.message : 'Failed to fetch emails';
+      setError(message);
     } finally {
       setLoading(false);
       setRefreshing(false);
       inFlightRef.current = false;
     }
-  }, [tempMailAddress, setEmails, setRefreshing]);
+  }, [tempMailAddress, setEmails, setLoading, setRefreshing, setError]);
 
   /**
    * Fetch single message details
@@ -107,7 +110,7 @@ export const useFetchEmails = () => {
   );
 
   return {
-    loading,
+    loading: isLoading,
     messageLoading,
     emails,
     fetchEmails,

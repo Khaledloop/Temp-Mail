@@ -89,9 +89,17 @@ export function Hero({
 
   const handleCopyEmail = async () => {
     try {
+      if (!tempMailAddress) {
+        addToast({
+          message: 'Email address is not ready yet',
+          type: 'warning',
+          duration: 2000,
+        });
+        return;
+      }
+
       setIsCopying(true);
-      const email = tempMailAddress || 'test@example.com';
-      const didCopy = await copyTextToClipboard(email);
+      const didCopy = await copyTextToClipboard(tempMailAddress);
       if (!didCopy) {
         throw new Error('Clipboard copy failed');
       }

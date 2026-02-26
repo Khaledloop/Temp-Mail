@@ -1,8 +1,9 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import type { ApiError, NewSessionResponse } from '@/types';
+import type { ApiError, Email, NewSessionResponse } from '@/types';
 import { useAuthStore } from '@/store/authStore';
 import { useInboxStore } from '@/store/inboxStore';
 import { getFallbackDomains } from '@/utils/domains';
+import { API_ENDPOINTS } from '@/utils/constants';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tempmail.example.com';
 
@@ -96,7 +97,7 @@ class ApiClient {
    */
   async createNewSession(): Promise<NewSessionResponse> {
     const response = await this.axiosInstance.post<BackendNewSessionResponse>(
-      '/api/new_session'
+      API_ENDPOINTS.NEW_SESSION
     );
 
     const expiresAt = new Date(
@@ -116,15 +117,9 @@ class ApiClient {
    * Authorization header is automatically added by interceptor
    * Returns array of messages with: id, from, subject, timestamp, body
    */
-  async getInbox(): Promise<any[]> {
-    try {
-      const response = await this.axiosInstance.get<any[]>('/api/inbox');
-      // Ensure we return an array
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (error) {
-      console.error('Error fetching inbox:', error);
-      return [];
-    }
+  async getInbox(): Promise<Email[]> {
+    const response = await this.axiosInstance.get<Email[]>(API_ENDPOINTS.INBOX);
+    return Array.isArray(response.data) ? response.data : [];
   }
 
   /**
@@ -132,9 +127,9 @@ class ApiClient {
    * 
    * Returns full message object with: id, from, subject, timestamp, body
    */
-  async getMessage(messageId: string): Promise<any> {
+  async getMessage(messageId: string): Promise<Email> {
     try {
-      const response = await this.axiosInstance.get(`/api/message/${messageId}`);
+      const response = await this.axiosInstance.get(API_ENDPOINTS.EMAIL_DETAIL(messageId));
       return response.data;
     } catch (error) {
       console.error('Error fetching message:', error);
@@ -147,7 +142,7 @@ class ApiClient {
    */
   async deleteMessage(messageId: string): Promise<void> {
     try {
-      await this.axiosInstance.delete(`/api/message/${messageId}`);
+      await this.axiosInstance.delete(API_ENDPOINTS.DELETE_EMAIL(messageId));
     } catch (error) {
       console.error('Error deleting message:', error);
       throw error;

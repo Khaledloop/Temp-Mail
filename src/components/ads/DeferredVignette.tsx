@@ -3,14 +3,23 @@
 import { useEffect, useState } from 'react'
 import Script from 'next/script'
 
-const VIGNETTE_SRC = 'https://gizokraijaw.net/vignette.min.js'
-const VIGNETTE_ZONE = '10603056'
+const ENABLE_VIGNETTE = process.env.NEXT_PUBLIC_ENABLE_VIGNETTE === 'true'
+const VIGNETTE_SRC = process.env.NEXT_PUBLIC_VIGNETTE_SRC || ''
+const VIGNETTE_ZONE = process.env.NEXT_PUBLIC_VIGNETTE_ZONE || ''
+
+function isSafeVignetteConfig(): boolean {
+  if (!ENABLE_VIGNETTE) return false
+  if (!/^https:\/\/[a-z0-9.-]+\/[^\s]+$/i.test(VIGNETTE_SRC)) return false
+  if (!/^\d+$/.test(VIGNETTE_ZONE)) return false
+  return true
+}
 
 export function DeferredVignette() {
+  const safeConfig = isSafeVignetteConfig()
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (ready) return
+    if (!safeConfig || ready) return
 
     const trigger = () => {
       setReady(true)
@@ -42,9 +51,9 @@ export function DeferredVignette() {
     window.addEventListener('keydown', onKey)
 
     return cleanup
-  }, [ready])
+  }, [ready, safeConfig])
 
-  if (!ready) return null
+  if (!safeConfig || !ready) return null
 
   return (
     <Script

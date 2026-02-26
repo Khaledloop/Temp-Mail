@@ -19,7 +19,7 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "preview": "opennextjs-cloudflare build --config wrangler.frontend.jsonc && opennextjs-cloudflare preview --config wrangler.frontend.jsonc",
     "deploy": "opennextjs-cloudflare build --config wrangler.frontend.jsonc && opennextjs-cloudflare deploy --config wrangler.frontend.jsonc",
     "upload": "opennextjs-cloudflare build --config wrangler.frontend.jsonc && opennextjs-cloudflare upload --config wrangler.frontend.jsonc",

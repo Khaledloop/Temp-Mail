@@ -19,8 +19,8 @@ export const STORAGE_KEYS = {
 export const API_ENDPOINTS = {
   NEW_SESSION: '/api/new_session',
   INBOX: '/api/inbox',
-  EMAIL_DETAIL: (emailId: string) => `/api/email/${emailId}`,
-  DELETE_EMAIL: (emailId: string) => `/api/email/${emailId}`,
+  EMAIL_DETAIL: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}`,
+  DELETE_EMAIL: (emailId: string) => `/api/message/${encodeURIComponent(emailId)}`,
   REFRESH_SESSION: '/api/refresh_session',
 } as const;
 
