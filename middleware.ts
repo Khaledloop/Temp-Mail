@@ -5,6 +5,7 @@ const CANONICAL_HOST = 'tempmaillab.com'
 const LEGACY_HOSTS = new Set(['temp-mail-6xq.pages.dev'])
 const MAX_PATH_LENGTH = 2048
 const MAX_QUERY_LENGTH = 4096
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 const API_ORIGIN = (() => {
   const raw = process.env.NEXT_PUBLIC_API_URL?.trim()
@@ -37,6 +38,9 @@ const CONNECT_SRC = [
   'https://cloudflareinsights.com',
   'https://*.api.sanity.io',
   'https://cdn.sanity.io',
+  ...(!IS_PRODUCTION
+    ? ['http://localhost:*', 'http://127.0.0.1:*', 'ws://localhost:*', 'ws://127.0.0.1:*']
+    : []),
   ...(VIGNETTE_ORIGIN ? [VIGNETTE_ORIGIN] : []),
   API_ORIGIN,
 ]
@@ -49,11 +53,11 @@ const CONTENT_SECURITY_POLICY = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data: https:",
   "style-src 'self' 'unsafe-inline'",
-  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://securepubads.g.doubleclick.net https://static.cloudflareinsights.com${VIGNETTE_ORIGIN ? ` ${VIGNETTE_ORIGIN}` : ''}`,
+  `script-src 'self' 'unsafe-inline'${IS_PRODUCTION ? '' : " 'unsafe-eval'"} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://securepubads.g.doubleclick.net https://static.cloudflareinsights.com${VIGNETTE_ORIGIN ? ` ${VIGNETTE_ORIGIN}` : ''}`,
   `connect-src ${CONNECT_SRC.join(' ')}`,
   "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
   "form-action 'self'",
-  'upgrade-insecure-requests',
+  ...(IS_PRODUCTION ? ['upgrade-insecure-requests'] : []),
 ].join('; ')
 
 const SECURITY_HEADERS = {

@@ -814,13 +814,29 @@ export function PasswordGeneratorClient() {
             Strong credentials reduce account takeovers. Temporary email reduces data
             exposure during signups. Use both for safer online onboarding.
           </p>
-          <Link
-            href="/"
-            prefetch={false}
-            className="mt-6 inline-flex rounded-full bg-brand-700 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:-translate-y-0.5 hover:bg-brand-800 hover:shadow-lg dark:bg-brand-600 dark:hover:bg-brand-500"
-          >
-            Use Temp Mail Lab
-          </Link>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/"
+              prefetch={false}
+              className="inline-flex rounded-full bg-brand-700 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:-translate-y-0.5 hover:bg-brand-800 hover:shadow-lg dark:bg-brand-600 dark:hover:bg-brand-500"
+            >
+              Use Temp Mail Lab
+            </Link>
+            <Link
+              href="/tools/gmail-dot-generator"
+              prefetch={false}
+              className="inline-flex rounded-full border border-gray-300/90 bg-white px-6 py-3 text-sm font-black uppercase tracking-widest text-gray-900 transition hover:-translate-y-0.5 hover:bg-gray-100 dark:border-white/20 dark:bg-transparent dark:text-gray-100 dark:hover:bg-white/10"
+            >
+              Try Gmail Dot Generator
+            </Link>
+            <Link
+              href="/tools"
+              prefetch={false}
+              className="inline-flex rounded-full border border-gray-300/90 bg-white px-6 py-3 text-sm font-black uppercase tracking-widest text-gray-900 transition hover:-translate-y-0.5 hover:bg-gray-100 dark:border-white/20 dark:bg-transparent dark:text-gray-100 dark:hover:bg-white/10"
+            >
+              Explore All Tools
+            </Link>
+          </div>
         </section>
       </div>
     </div>
