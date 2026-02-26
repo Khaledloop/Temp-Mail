@@ -5,7 +5,7 @@ import type {Metadata} from 'next'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
 
 import {sanityFetch} from '@/sanity/lib/client'
-import {POST_QUERY, POST_SLUGS_QUERY} from '@/sanity/lib/queries'
+import {POST_QUERY} from '@/sanity/lib/queries'
 import {urlForImage} from '@/sanity/lib/image'
 import type {BlogPost} from '@/sanity/types'
 
@@ -15,12 +15,8 @@ type PageProps = {
   }>
 }
 
-type PostSlugEntry = {
-  slug: string
-}
-
-export const revalidate = 600
-export const dynamicParams = true
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 const BRAND_NAME = 'Temp Mail Lab'
 const MAX_META_TITLE_LENGTH = 65
@@ -86,20 +82,6 @@ function toAbsoluteCanonical(value: string | undefined, fallback: string): strin
     return new URL(value, `${baseUrl}/`).toString()
   } catch {
     return fallback
-  }
-}
-
-export async function generateStaticParams() {
-  try {
-    const posts = await sanityFetch<PostSlugEntry[]>({
-      query: POST_SLUGS_QUERY,
-      revalidate: 3600,
-      tags: ['post'],
-    })
-    return posts.map((post) => ({slug: post.slug}))
-  } catch (error) {
-    console.error('Failed to generate static params for blog posts:', error)
-    return []
   }
 }
 

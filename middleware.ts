@@ -77,7 +77,7 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   return response
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const hostHeader = request.headers.get('host')?.toLowerCase() || ''
   const host = hostHeader.split(':')[0] || ''
 
