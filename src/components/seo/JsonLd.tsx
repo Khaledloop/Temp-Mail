@@ -1,7 +1,7 @@
 /**
- * JSON-LD Structured Data for SEO + GEO (LLM discoverability)
+ * Base JSON-LD rendered globally on all pages.
+ * Keep this limited to site-level entities only.
  */
-
 export function JsonLd() {
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
 
@@ -35,6 +35,28 @@ export function JsonLd() {
         },
         inLanguage: 'en-US',
       },
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(graph),
+      }}
+    />
+  );
+}
+
+/**
+ * Home-page specific JSON-LD.
+ * This avoids FAQPage duplication on tool pages.
+ */
+export function HomeJsonLd() {
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
+  const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
       {
         '@type': 'WebPage',
         '@id': `${baseUrl}#webpage`,

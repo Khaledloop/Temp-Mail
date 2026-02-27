@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { HomeClient } from '@/components/home/HomeClient';
 import { SeoContent } from '@/components/home/SeoContent';
 import { DeferredVignette } from '@/components/ads/DeferredVignette';
+import { HomeJsonLd } from '@/components/seo/JsonLd';
 
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
 const homeSeoTitle = 'Free Temp Mail with Recovery Key (30-Day Restore)';
@@ -48,6 +49,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-transparent pb-24">
+      <HomeJsonLd />
       <HomeClient />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative z-10">
