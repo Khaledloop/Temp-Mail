@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   title: 'Terms of Service',
   description: termsDescription,
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
   },
   alternates: {
     canonical: `${baseUrl}/terms`,

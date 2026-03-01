@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: privacyDescription,
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
   },
   alternates: {
     canonical: `${baseUrl}/privacy`,

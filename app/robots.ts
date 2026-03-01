@@ -19,17 +19,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/privacy', '/terms'],
       },
       {
         userAgent: ['Googlebot', 'Bingbot', 'DuckDuckBot'],
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/privacy', '/terms'],
       },
       {
         userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'CCBot', 'Google-Extended'],
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/privacy', '/terms'],
       },
     ],
     sitemap: [`${baseUrl}/sitemap.xml`],
