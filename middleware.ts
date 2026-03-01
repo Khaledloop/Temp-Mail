@@ -28,6 +28,7 @@ const VIGNETTE_ORIGIN = (() => {
   }
 })()
 const MONETAG_ORIGIN = 'https://nap5k.com'
+const MONETAG_CONNECT_ORIGINS = ['https://jhnwr.com', 'https://*.jhnwr.com']
 
 const CONNECT_SRC = [
   "'self'",
@@ -44,6 +45,7 @@ const CONNECT_SRC = [
     : []),
   ...(VIGNETTE_ORIGIN ? [VIGNETTE_ORIGIN] : []),
   MONETAG_ORIGIN,
+  ...MONETAG_CONNECT_ORIGINS,
   API_ORIGIN,
 ]
 
