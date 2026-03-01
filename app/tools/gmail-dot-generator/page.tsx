@@ -12,7 +12,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 const pageUrl = `${baseUrl}/tools/gmail-dot-generator`;
 const pageTitle = 'Free Gmail Dot Generator';
 const pageDescription =
-  'Generate Gmail dot variations instantly with a client-side Gmail Dot Generator. Create dot-only aliases, optional googlemail variants, and +tag combinations for QA testing, signup segmentation, and inbox filtering.';
+  'Generate Gmail dot variations instantly in your browser. Create dot aliases, optional googlemail variants, and +tag combinations for QA testing and signups.';
 
 export const metadata: Metadata = {
   title: pageTitle,

@@ -7,7 +7,7 @@ import { HomeJsonLd } from '@/components/seo/JsonLd';
 const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').replace(/\/+$/, '');
 const homeSeoTitle = 'Free Temp Mail with Recovery Key (30-Day Restore)';
 const homeSeoDescription =
-  'Create a free temporary email inbox instantly with a Recovery Key for up to 30-day restore. No signup required, no personal profile needed, and automatic inbox cleanup for better privacy.';
+  'Create a free temporary email inbox in seconds, receive verification emails, and restore access with a Recovery Key for up to 30 days. No signup required.';
 
 export const metadata: Metadata = {
   title: homeSeoTitle,

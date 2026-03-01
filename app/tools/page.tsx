@@ -9,14 +9,14 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 export const metadata: Metadata = {
   title: 'Tools',
   description:
-    'Explore free privacy and security tools by Temp Mail Lab, including Gmail Dot Generator and Password Generator for testing, safer signups, and stronger credentials.',
+    "Explore Temp Mail Lab's free privacy tools, including Gmail Dot Generator and Password Generator for testing signups, safer workflows, and stronger passwords.",
   alternates: {
     canonical: `${baseUrl}/tools`,
   },
   openGraph: {
     title: 'Tools | Temp Mail Lab',
     description:
-      'Explore free privacy and security tools by Temp Mail Lab, including Gmail Dot Generator and Password Generator for testing, safer signups, and stronger credentials.',
+      "Explore Temp Mail Lab's free privacy tools, including Gmail Dot Generator and Password Generator for testing signups, safer workflows, and stronger passwords.",
     url: `${baseUrl}/tools`,
     type: 'website',
   },
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tools | Temp Mail Lab',
     description:
-      'Explore free privacy and security tools by Temp Mail Lab, including Gmail Dot Generator and Password Generator for testing, safer signups, and stronger credentials.',
+      "Explore Temp Mail Lab's free privacy tools, including Gmail Dot Generator and Password Generator for testing signups, safer workflows, and stronger passwords.",
   },
 };
 

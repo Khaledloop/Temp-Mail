@@ -77,6 +77,15 @@ export function SeoContent() {
               Use Temp Mail Lab for social signups, software trials, marketplace registrations, QA test environments, OTP and email verification flows, and short-term privacy protection. For mission-critical accounts like banking, legal, or healthcare services, always use a permanent email account you control long term.
             </p>
           </section>
+
+          <section className="space-y-4">
+            <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-gray-950 dark:text-gray-100">
+              Acceptable Use Policy
+            </h3>
+            <p className="text-base sm:text-lg leading-8">
+              Temp Mail Lab is provided for legitimate privacy and testing scenarios. It must not be used for phishing, fraud, credential abuse, malware delivery, or harassment. Accounts and traffic patterns linked to abuse may be restricted, and confirmed abuse reports are investigated.
+            </p>
+          </section>
         </div>
       </article>
 

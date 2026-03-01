@@ -9,7 +9,7 @@ const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com').
 const pageUrl = `${baseUrl}/tools/password-generator`;
 const pageTitle = 'Free Password Generator';
 const pageDescription =
-  'Generate secure passwords and passphrases instantly with a privacy-first password generator. Local browser generation, entropy score, and practical security guidance.';
+  'Generate strong passwords and passphrases instantly in your browser. Private local generation with entropy scoring and practical security guidance.';
 
 export const metadata: Metadata = {
   title: pageTitle,
