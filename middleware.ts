@@ -28,10 +28,18 @@ const VIGNETTE_ORIGIN = (() => {
   }
 })()
 const MONETAG_ORIGIN = 'https://5gvci.com'
-const MONETAG_CONNECT_ORIGINS = ['https://jhnwr.com', 'https://*.jhnwr.com']
+const MONETAG_CONNECT_ORIGINS = [
+  'https://jhnwr.com',
+  'https://*.jhnwr.com',
+  'https://zdzhk.com',
+  'https://*.zdzhk.com',
+  'https://dawac.com',
+  'https://*.dawac.com',
+]
 
 const CONNECT_SRC = [
   "'self'",
+  'https:',
   'https://www.google-analytics.com',
   'https://region1.google-analytics.com',
   'https://stats.g.doubleclick.net',

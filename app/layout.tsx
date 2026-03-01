@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { DeferredMonetagInPagePush } from '@/components/ads/DeferredMonetagInPagePush'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
 import { ThemeClient } from '@/components/theme/ThemeClient'
@@ -139,10 +138,14 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          src="https://5gvci.com/act/files/tag.min.js?z=10668095"
+          data-cfasync="false"
+          async
+        />
       </head>
       <body className={manrope.className}>
         <ThemeClient />
-        <DeferredMonetagInPagePush />
         <ToastViewport />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
