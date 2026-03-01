@@ -6,13 +6,6 @@ export const revalidate = 3600 // Revalidate every hour
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://tempmaillab.com')
     .replace(/\/+$/, '')
-  const host = (() => {
-    try {
-      return new URL(baseUrl).host
-    } catch {
-      return 'tempmaillab.com'
-    }
-  })()
 
   return {
     rules: [
@@ -33,6 +26,5 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [`${baseUrl}/sitemap.xml`],
-    host,
   }
 }
