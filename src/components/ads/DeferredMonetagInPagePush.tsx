@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react'
 
-const MONETAG_SRC = 'https://nap5k.com/tag.min.js'
-const MONETAG_ZONE = '10602884'
+const MONETAG_SRC = 'https://5gvci.com/act/files/tag.min.js?z=10668095'
 const MONETAG_SCRIPT_ID = 'monetag-inpage-push'
 const FALLBACK_DELAY_MS = 8000
 
@@ -40,7 +39,7 @@ export function DeferredMonetagInPagePush() {
 
       try {
         const srcUrl = new URL(MONETAG_SRC)
-        if (srcUrl.protocol !== 'https:' || srcUrl.hostname !== 'nap5k.com') return
+        if (srcUrl.protocol !== 'https:' || srcUrl.hostname !== '5gvci.com') return
       } catch {
         return
       }
@@ -51,10 +50,10 @@ export function DeferredMonetagInPagePush() {
       loaded = true
       const script = document.createElement('script')
       script.id = MONETAG_SCRIPT_ID
-      script.dataset.zone = MONETAG_ZONE
       script.src = MONETAG_SRC
       script.async = true
       script.defer = true
+      script.setAttribute('data-cfasync', 'false')
       script.referrerPolicy = 'strict-origin-when-cross-origin'
       parent.appendChild(script)
     }

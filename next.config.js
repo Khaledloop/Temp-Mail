@@ -19,7 +19,7 @@ const resolvedVignetteOrigin = (() => {
     return '';
   }
 })();
-const monetagOrigin = 'https://nap5k.com';
+const monetagOrigin = 'https://5gvci.com';
 const monetagConnectOrigins = ['https://jhnwr.com', 'https://*.jhnwr.com'];
 
 const ContentSecurityPolicy = [
