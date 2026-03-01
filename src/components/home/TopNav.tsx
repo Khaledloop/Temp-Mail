@@ -70,17 +70,17 @@ export function TopNav() {
             </Link>
 
             <div className="flex items-center gap-2 sm:gap-3">
-              <nav className="hidden sm:flex items-center gap-6 text-[12px] font-bold tracking-[0.2em] uppercase text-gray-700 dark:text-gray-200">
-                <Link href="/tools" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
+              <nav className="hidden sm:flex h-6 items-center gap-6 text-[12px] font-bold tracking-[0.2em] uppercase leading-none text-gray-700 dark:text-gray-200">
+                <Link href="/tools" prefetch={false} className="leading-none transition-colors hover:text-gray-950 dark:hover:text-white">
                   Tools
                 </Link>
-                <Link href="/blog" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
+                <Link href="/blog" prefetch={false} className="leading-none transition-colors hover:text-gray-950 dark:hover:text-white">
                   Blog
                 </Link>
-                <Link href="/privacy" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
+                <Link href="/privacy" prefetch={false} className="leading-none transition-colors hover:text-gray-950 dark:hover:text-white">
                   Privacy
                 </Link>
-                <Link href="/terms" prefetch={false} className="transition-colors hover:text-gray-950 dark:hover:text-white">
+                <Link href="/terms" prefetch={false} className="leading-none transition-colors hover:text-gray-950 dark:hover:text-white">
                   Terms
                 </Link>
               </nav>
@@ -90,13 +90,13 @@ export function TopNav() {
                 onClick={toggleDarkMode}
                 aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                 title={isDarkMode ? 'Light mode' : 'Dark mode'}
-                className={`relative inline-flex h-7 w-14 sm:h-8 sm:w-16 items-center rounded-full border p-1 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 ${
+                className={`relative inline-flex h-[22px] w-[44px] shrink-0 self-center items-center rounded-full border p-[2px] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 sm:h-6 sm:w-12 ${
                   isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300/80 bg-white/90'
                 }`}
               >
                 <span
-                  className={`inline-flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full shadow-sm transition-transform duration-300 ${
-                    isDarkMode ? 'translate-x-0 bg-white text-gray-900' : 'translate-x-7 sm:translate-x-8 bg-gray-950 text-white'
+                  className={`inline-flex h-4 w-4 items-center justify-center rounded-full shadow-sm transition-transform duration-300 ${
+                    isDarkMode ? 'translate-x-0 bg-white text-gray-900' : 'translate-x-[22px] sm:translate-x-6 bg-gray-950 text-white'
                   }`}
                 >
                   {isDarkMode ? (
