@@ -27,6 +27,7 @@ const VIGNETTE_ORIGIN = (() => {
     return ''
   }
 })()
+const MONETAG_ORIGIN = 'https://nap5k.com'
 
 const CONNECT_SRC = [
   "'self'",
@@ -42,6 +43,7 @@ const CONNECT_SRC = [
     ? ['http://localhost:*', 'http://127.0.0.1:*', 'ws://localhost:*', 'ws://127.0.0.1:*']
     : []),
   ...(VIGNETTE_ORIGIN ? [VIGNETTE_ORIGIN] : []),
+  MONETAG_ORIGIN,
   API_ORIGIN,
 ]
 
@@ -53,7 +55,7 @@ const CONTENT_SECURITY_POLICY = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data: https:",
   "style-src 'self' 'unsafe-inline'",
-  `script-src 'self' 'unsafe-inline'${IS_PRODUCTION ? '' : " 'unsafe-eval'"} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://securepubads.g.doubleclick.net https://static.cloudflareinsights.com${VIGNETTE_ORIGIN ? ` ${VIGNETTE_ORIGIN}` : ''}`,
+  `script-src 'self' 'unsafe-inline'${IS_PRODUCTION ? '' : " 'unsafe-eval'"} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://securepubads.g.doubleclick.net https://static.cloudflareinsights.com${VIGNETTE_ORIGIN ? ` ${VIGNETTE_ORIGIN}` : ''} ${MONETAG_ORIGIN}`,
   `connect-src ${CONNECT_SRC.join(' ')}`,
   "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
   "form-action 'self'",

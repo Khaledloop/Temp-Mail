@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { DeferredMonetagInPagePush } from '@/components/ads/DeferredMonetagInPagePush'
 import { Footer } from '@/components/common/Footer'
 import { TopNav } from '@/components/home/TopNav'
 import { ThemeClient } from '@/components/theme/ThemeClient'
@@ -141,6 +142,7 @@ export default function RootLayout({
       </head>
       <body className={manrope.className}>
         <ThemeClient />
+        <DeferredMonetagInPagePush />
         <ToastViewport />
         <TopNav />
         <main className="pt-16 sm:pt-20">{children}</main>
